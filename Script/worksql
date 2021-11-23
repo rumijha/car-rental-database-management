@@ -1,0 +1,36 @@
+
+SELECT * FROM MOCKDATA;
+
+SELECT CUST_ID_SEQ.CURRVAL FROM DUAL;
+
+-- drop sequence CUST_ID_SEQ;
+
+/*CREATE SEQUENCE CUST_ID_SEQ
+     START WITH 1001
+     INCREMENT BY 1
+     ORDER;
+*/
+
+--SELECT * FROM USER_SEQUENCES;
+
+INSERT INTO CUSTOMERS (CUSTOMER_ID, FIRST_NAME, LAST_NAME, EMAIL_ID, CONTACT, LICENSE_NUMBER, PASSPORT_NUMBER, CUSTOMER_TYPE)
+select CUST_ID_SEQ.NEXTVAL, first_name, last_name, email_id, 
+decode(length(to_number(SUBSTR(replace(contact,'-',''), -10))),9,CONTACT_9.NEXTVAL,8,CONTACT_9.NEXTVAL,7,CONTACT_9.NEXTVAL, 6,CONTACT_9.NEXTVAL, to_number(SUBSTR(replace(contact,'-',''), -10))) as CONTACT, 
+license_number, passport_number, decode(customer_type,'True','STUDENT','EMPLOYEE') as CUSTOMER_TYPE
+from MOCKDATA 
+;
+
+select * from customers;
+
+
+insert into CUSTOMERS (CUSTOMER_ID)
+values (1233,
+(select first_name
+from mockdata)
+);
+
+
+/* select first_name, last_name, email_id, 
+decode(length(to_number(SUBSTR(replace(contact,'-',''), -10))),9,6123456789,8,6666123456,7,6666123456, to_number(SUBSTR(replace(contact,'-',''), -10))) as CONTACT, 
+license_number, passport_number, decode(customer_type,'True','Student','Employee')
+from mockdata; */
