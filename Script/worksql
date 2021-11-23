@@ -34,3 +34,7 @@ from mockdata)
 decode(length(to_number(SUBSTR(replace(contact,'-',''), -10))),9,6123456789,8,6666123456,7,6666123456, to_number(SUBSTR(replace(contact,'-',''), -10))) as CONTACT, 
 license_number, passport_number, decode(customer_type,'True','Student','Employee')
 from mockdata; */
+
+
+select (date_of_birth) from customers where customer_id = 2000;
+
