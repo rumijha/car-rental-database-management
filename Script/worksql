@@ -46,15 +46,21 @@ select * from customers;
 
 -- Insert Customers Address from MockAddr
 
-/* INSERT INTO customer_address (ADDRESS_ID, ADDRESS_LINE1, ADDRESS_LINE2, CITY_STATE, CITY, CUSTOMER_ID, ZIP_CODE, ADDRESS_TYPE)
+/*
+INSERT INTO customer_address (ADDRESS_ID, ADDRESS_LINE1, ADDRESS_LINE2, CITY_STATE, CITY, CUSTOMER_ID, ZIP_CODE, ADDRESS_TYPE)
 select  ADDRESS_ID_SEQ.NEXTVAL, ADDRESS_LINE1, ADDRESS_LINE2 , CITY_STATE, CITY, 
 CUST_ID_FOR_ADDR_SEQ.NEXTVAL, SUBSTR(ZIP_CODE, -6) as ZIPCODE,
 decode(ADDRESS_TYPE, 'False','HOME','True','OFFICE') as ADDRESS_TYPE 
 from MOCKADDR;
 */
 
-select count(*) from CUSTOMER_ADDRESS;
 
+-- This test should return 10k records
+/* 
+select count(*) 
+from CUSTOMERS, CUSTOMER_ADDRESS
+where CUSTOMERS.CUSTOMER_ID = CUSTOMER_ADDRESS.CUSTOMER_ID;
+*/
 
 /* select first_name, last_name, email_id, 
 decode(length(to_number(SUBSTR(replace(contact,'-',''), -10))),9,6123456789,8,6666123456,7,6666123456, to_number(SUBSTR(replace(contact,'-',''), -10))) as CONTACT, 
