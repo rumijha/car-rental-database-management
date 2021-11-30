@@ -214,3 +214,118 @@ from (select summary, MAINTENANCE_DATE, MAINTENANCE_COST from MOCKDATA order by 
 select MAINTENANCE_ID_SEQ.CURRVAL from dual;
 */
 
+
+CREATE SEQUENCE TRANS_ID_SEQ
+     START WITH 501
+     INCREMENT BY 1
+     ORDER;
+     
+CREATE SEQUENCE TEMP_CUST_ID
+     START WITH 1001
+     INCREMENT BY 1
+     CYCLE
+     ORDER;
+
+CREATE SEQUENCE TEMP_CARS_AT_PICKUP_ID
+     START WITH 9001
+     INCREMENT BY 1
+     CYCLE
+     ORDER;
+
+
+--INSERT INTO RIDE_TRANSACTION
+select count(*)
+from  
+(SELECT VIOLATION_ID
+FROM   (
+    SELECT VIOLATION_ID
+    FROM   VIOLATIONS
+    ORDER BY DBMS_RANDOM.RANDOM)
+WHERE  rownum < 15) e,
+(SELECT RECORD_DATE
+FROM   (
+    SELECT add_months(LOGIN_TIME,1) as RECORD_DATE
+    FROM   ACTIVITY
+    ORDER BY DBMS_RANDOM.RANDOM)
+WHERE  rownum < 107) p where ROWNUM < 500;
+
+select count(*) from MOCKDATA;
+
+
+
+select cars_at_pickup_id
+from (
+select cars_at_pickup_id from cars_at_pickup
+order by DBMS_RANDOM.RANDOM);
+
+
+select CUSTOMER_ID
+from (
+select CUSTOMER_ID from CUSTOMERS
+order by DBMS_RANDOM.RANDOM);
+
+
+select cars_at_pickup_id, CUSTOMER_ID
+from  (
+select cars_at_pickup_id, CUSTOMER_ID
+from (
+select cars_at_pickup_id
+from cars_at_pickup
+order by DBMS_RANDOM.RANDOM),
+(
+select CUSTOMER_ID
+from CUSTOMERS
+order by DBMS_RANDOM.RANDOM ) where ROWNUM < 200
+) order by DBMS_RANDOM.RANDOM;
+
+select cars_at_pickup_id, CUSTOMER_ID
+from (
+select cars_at_pickup_id
+from cars_at_pickup
+order by DBMS_RANDOM.RANDOM),
+(
+select CUSTOMER_ID
+from CUSTOMERS
+order by DBMS_RANDOM.RANDOM) where ROWNUM < 100;
+
+
+SET SERVEROUTPUT ON;
+
+DECLARE
+    CURSOR C1 is select CARS_AT_PICKUP_ID from CARS_AT_PICKUP order by DBMS_RANDOM.RANDOM;
+    CURSOR C2 is select CUSTOMER_ID from CUSTOMERS order by DBMS_RANDOM.RANDOM;
+    TYPE PICKUP IS VARRAY(10000) OF CARS_AT_PICKUP.CARS_AT_PICKUP_ID%TYPE;
+    TYPE CUST IS VARRAY(10500) OF CUSTOMERS.CUSTOMER_ID%TYPE;
+    X_NUMBER PICKUP := PICKUP();
+    Y_NUMBER CUST := CUST();
+    indexX NUMBER := 1;
+    indexY NUMBER := 1;
+BEGIN
+    for i in C1 loop
+        X_NUMBER.EXTEND;
+        X_NUMBER(indexX) := i.CARS_AT_PICKUP_ID;
+        indexX := indexX + 1;
+    end loop;
+    
+    for i in C2 loop
+        Y_NUMBER.EXTEND;
+        Y_NUMBER(indexY) := i.CUSTOMER_ID;
+        indexY := indexY + 1;
+    end loop;
+    
+    for i in X_NUMBER.FIRST .. X_NUMBER.LAST loop
+        dbms_output.put_line(X_NUMBER(i));
+    end loop;
+  --  for i in Y_NUMBER.FIRST .. Y_NUMBER.LAST loop
+  --      dbms_output.put_line(Y_NUMBER(i));
+  --  end loop;
+END;
+
+
+select count(*) from customers where customer_id >11000;
+
+
+
+
+
+
