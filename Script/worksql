@@ -214,3 +214,204 @@ from (select summary, MAINTENANCE_DATE, MAINTENANCE_COST from MOCKDATA order by 
 select MAINTENANCE_ID_SEQ.CURRVAL from dual;
 */
 
+
+-- RIDE TRANSACTION 
+
+CREATE SEQUENCE TRANS_ID_SEQ
+     START WITH 501
+     INCREMENT BY 1
+     ORDER;
+     
+CREATE SEQUENCE TEMP_CUST_ID
+     START WITH 1001
+     INCREMENT BY 1
+     CYCLE
+     ORDER;
+
+CREATE SEQUENCE TEMP_CARS_AT_PICKUP_ID
+     START WITH 9001
+     INCREMENT BY 1
+     CYCLE
+     ORDER;
+
+
+-- INSERT INTO RIDE_TRANSACTION
+/*
+select count(*)
+from  
+(SELECT VIOLATION_ID
+FROM   (
+    SELECT VIOLATION_ID
+    FROM   VIOLATIONS
+    ORDER BY DBMS_RANDOM.RANDOM)
+WHERE  rownum < 15) e,
+(SELECT RECORD_DATE
+FROM   (
+    SELECT add_months(LOGIN_TIME,1) as RECORD_DATE
+    FROM   ACTIVITY
+    ORDER BY DBMS_RANDOM.RANDOM)
+WHERE  rownum < 107) p where ROWNUM < 500;
+*/
+
+select count(*) from MOCKDATA;
+
+
+
+select cars_at_pickup_id
+from (
+select cars_at_pickup_id from cars_at_pickup
+order by DBMS_RANDOM.RANDOM);
+
+
+select CUSTOMER_ID
+from (
+select CUSTOMER_ID from CUSTOMERS
+order by DBMS_RANDOM.RANDOM);
+
+
+select cars_at_pickup_id, CUSTOMER_ID
+from  (
+select cars_at_pickup_id, CUSTOMER_ID
+from (
+select cars_at_pickup_id
+from cars_at_pickup
+order by DBMS_RANDOM.RANDOM),
+(
+select CUSTOMER_ID
+from CUSTOMERS
+order by DBMS_RANDOM.RANDOM ) where ROWNUM < 200
+) order by DBMS_RANDOM.RANDOM;
+
+select cars_at_pickup_id, CUSTOMER_ID
+from (
+select cars_at_pickup_id
+from cars_at_pickup
+order by DBMS_RANDOM.RANDOM),
+(
+select CUSTOMER_ID
+from CUSTOMERS
+order by DBMS_RANDOM.RANDOM) where ROWNUM < 100;
+
+
+SET SERVEROUTPUT ON;
+
+DECLARE
+    CURSOR C1 is select CARS_AT_PICKUP_ID from CARS_AT_PICKUP ;
+    CURSOR C2 is select CUSTOMER_ID from CUSTOMERS order by DBMS_RANDOM.RANDOM;
+    CURSOR C3 is select START_TIME from MOCKDATA order by DBMS_RANDOM.RANDOM;
+    CURSOR C4 is select DISTANCE from MOCKDATA order by DBMS_RANDOM.RANDOM;
+    
+    TYPE PICKUP IS VARRAY(20000) OF CARS_AT_PICKUP.CARS_AT_PICKUP_ID%TYPE;
+    TYPE CUST IS VARRAY(20500) OF CUSTOMERS.CUSTOMER_ID%TYPE;
+    TYPE START_TIME_TYPE IS VARRAY(1000000) OF MOCKDATA.START_TIME%TYPE;
+    TYPE DISTANCE_TYPE IS VARRAY(1000000) OF MOCKDATA.DISTANCE%TYPE;
+    
+    PICKUP_ARR PICKUP := PICKUP();
+    CUST_ARR CUST := CUST();
+    START_TIME_ARR START_TIME_TYPE := START_TIME_TYPE();
+    DISTANCE_ARR DISTANCE_TYPE := DISTANCE_TYPE();
+     
+    PICKUP_INDEX NUMBER := 1;
+    CUST_INDEX NUMBER := 1;
+    START_TIME_INDEX NUMBER := 1;
+    DISTANCE_INDEX NUMBER := 1;
+    
+    DB_CAR_ID CARS_AT_PICKUP.CAR_ID%TYPE;
+    
+BEGIN
+    for i in C1 loop
+        PICKUP_ARR.EXTEND;
+        PICKUP_ARR(PICKUP_INDEX) := i.CARS_AT_PICKUP_ID;
+        PICKUP_INDEX := PICKUP_INDEX + 1;
+    end loop;
+    
+    for i in C2 loop
+        CUST_ARR.EXTEND;
+        CUST_ARR(CUST_INDEX) := i.CUSTOMER_ID;
+        CUST_INDEX := CUST_INDEX + 1;
+    end loop;
+    
+    for i in C3 loop
+        START_TIME_ARR.EXTEND;
+        START_TIME_ARR(START_TIME_INDEX) := i.START_TIME;
+        START_TIME_INDEX := START_TIME_INDEX + 1;
+    end loop;
+    
+    for i in C4 loop
+        DISTANCE_ARR.EXTEND;
+        DISTANCE_ARR(DISTANCE_INDEX) := i.DISTANCE;
+        DISTANCE_INDEX := DISTANCE_INDEX + 1;
+    end loop;
+          
+    PICKUP_INDEX := 1;
+    CUST_INDEX := 1;
+    START_TIME_INDEX := 1;
+    DISTANCE_INDEX := 1;
+    
+    for i in 1 .. 25000 loop
+    
+        if PICKUP_INDEX >= 50 then
+            PICKUP_INDEX := 1;
+        end if;    
+        if CUST_INDEX >= 10000 then
+            CUST_INDEX := 1;
+        end if;
+        
+        select CAR_ID into DB_CAR_ID from CARS_AT_PICKUP where CARS_AT_PICKUP_ID = PICKUP_ARR(PICKUP_INDEX);
+        
+        insert into RIDE_TRANSACTION values (
+            TRANS_ID_SEQ.NEXTVAL,
+            CUST_ARR(CUST_INDEX),
+            PICKUP_ARR(PICKUP_INDEX),
+            START_TIME_ARR(START_TIME_INDEX),
+            START_TIME_ARR(START_TIME_INDEX) + 2/24,
+            START_TIME_ARR(START_TIME_INDEX) + 4/24,
+            DB_CAR_ID,
+            DISTANCE_ARR(DISTANCE_INDEX),
+            'COMPLETED');
+        
+     /*   dbms_output.put_line(
+        TRANS_ID_SEQ.NEXTVAL || ' ' || 
+        CUST_ARR(CUST_INDEX) || ' '|| 
+        PICKUP_ARR(PICKUP_INDEX) || ' ' || 
+        to_char(START_TIME_ARR(START_TIME_INDEX),'DD-MM-YYYY HH:MI:SS') || ' '|| 
+        to_char(START_TIME_ARR(START_TIME_INDEX) + 2/24,'DD-MM-YYYY HH:MI:SS') || ' ' || 
+        to_char(START_TIME_ARR(START_TIME_INDEX) + 4/24,'DD-MM-YYYY HH:MI:SS') ||' '|| 
+        DB_CAR_ID || ' ' || 
+        DISTANCE_ARR(DISTANCE_INDEX));
+       */ 
+        
+        PICKUP_INDEX := PICKUP_INDEX + 1;
+        CUST_INDEX := CUST_INDEX + 1;
+        DISTANCE_INDEX := DISTANCE_INDEX + 1;
+        START_TIME_INDEX := START_TIME_INDEX + 1;
+    end loop;
+    
+   -- dbms_output.put_line(to_char(sysdate, 'DD-MON-YYYY HH:MI:SS'));
+   -- dbms_output.put_line(to_char(sysdate+1/24, 'DD-MON-YYYY HH:MI:SS')); 
+END;
+
+select * from user_sequences;
+
+select TRANS_ID_SEQ.CURRVAL from dual;
+
+/*
+DROP SEQUENCE TRANS_ID_SEQ;
+
+CREATE SEQUENCE TRANS_ID_SEQ
+ START WITH 101
+ INCREMENT BY 1
+ ORDER;
+ */
+ 
+
+-- delete from RIDE_TRANSACTION;
+
+select count(*) from RIDE_TRANSACTION;
+
+select car_type, count(car_type) from car where car_id in (select car_id from RIDE_TRANSACTION) group by car_type;
+
+select car.car_type, sum(p.count_trans)/(select count(*) from RIDE_TRANSACTION) *100 || '%' as Average_Rides
+from car, (select car_id, count(trans_id) as count_trans from RIDE_TRANSACTION group by car_id) p
+where car.car_id = p.car_id
+group by car.car_type;
