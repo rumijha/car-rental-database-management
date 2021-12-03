@@ -296,40 +296,128 @@ order by DBMS_RANDOM.RANDOM) where ROWNUM < 100;
 SET SERVEROUTPUT ON;
 
 DECLARE
-    CURSOR C1 is select CARS_AT_PICKUP_ID from CARS_AT_PICKUP order by DBMS_RANDOM.RANDOM;
+    CURSOR C1 is select CARS_AT_PICKUP_ID from CARS_AT_PICKUP ;
     CURSOR C2 is select CUSTOMER_ID from CUSTOMERS order by DBMS_RANDOM.RANDOM;
-    TYPE PICKUP IS VARRAY(10000) OF CARS_AT_PICKUP.CARS_AT_PICKUP_ID%TYPE;
-    TYPE CUST IS VARRAY(10500) OF CUSTOMERS.CUSTOMER_ID%TYPE;
-    X_NUMBER PICKUP := PICKUP();
-    Y_NUMBER CUST := CUST();
-    indexX NUMBER := 1;
-    indexY NUMBER := 1;
+    CURSOR C3 is select START_TIME from MOCKDATA order by DBMS_RANDOM.RANDOM;
+    CURSOR C4 is select DISTANCE from MOCKDATA order by DBMS_RANDOM.RANDOM;
+    
+    TYPE PICKUP IS VARRAY(20000) OF CARS_AT_PICKUP.CARS_AT_PICKUP_ID%TYPE;
+    TYPE CUST IS VARRAY(20500) OF CUSTOMERS.CUSTOMER_ID%TYPE;
+    TYPE START_TIME_TYPE IS VARRAY(1000000) OF MOCKDATA.START_TIME%TYPE;
+    TYPE DISTANCE_TYPE IS VARRAY(1000000) OF MOCKDATA.DISTANCE%TYPE;
+    
+    PICKUP_ARR PICKUP := PICKUP();
+    CUST_ARR CUST := CUST();
+    START_TIME_ARR START_TIME_TYPE := START_TIME_TYPE();
+    DISTANCE_ARR DISTANCE_TYPE := DISTANCE_TYPE();
+     
+    PICKUP_INDEX NUMBER := 1;
+    CUST_INDEX NUMBER := 1;
+    START_TIME_INDEX NUMBER := 1;
+    DISTANCE_INDEX NUMBER := 1;
+    
+    DB_CAR_ID CARS_AT_PICKUP.CAR_ID%TYPE;
+    
 BEGIN
     for i in C1 loop
-        X_NUMBER.EXTEND;
-        X_NUMBER(indexX) := i.CARS_AT_PICKUP_ID;
-        indexX := indexX + 1;
+        PICKUP_ARR.EXTEND;
+        PICKUP_ARR(PICKUP_INDEX) := i.CARS_AT_PICKUP_ID;
+        PICKUP_INDEX := PICKUP_INDEX + 1;
     end loop;
     
     for i in C2 loop
-        Y_NUMBER.EXTEND;
-        Y_NUMBER(indexY) := i.CUSTOMER_ID;
-        indexY := indexY + 1;
+        CUST_ARR.EXTEND;
+        CUST_ARR(CUST_INDEX) := i.CUSTOMER_ID;
+        CUST_INDEX := CUST_INDEX + 1;
     end loop;
     
-    for i in X_NUMBER.FIRST .. X_NUMBER.LAST loop
-        dbms_output.put_line(X_NUMBER(i));
+        for i in C3 loop
+        START_TIME_ARR.EXTEND;
+        START_TIME_ARR(START_TIME_INDEX) := i.START_TIME;
+        START_TIME_INDEX := START_TIME_INDEX + 1;
     end loop;
-  --  for i in Y_NUMBER.FIRST .. Y_NUMBER.LAST loop
-  --      dbms_output.put_line(Y_NUMBER(i));
-  --  end loop;
+    
+        for i in C4 loop
+        DISTANCE_ARR.EXTEND;
+        DISTANCE_ARR(DISTANCE_INDEX) := i.DISTANCE;
+        DISTANCE_INDEX := DISTANCE_INDEX + 1;
+    end loop;
+    
+        
+    PICKUP_INDEX := 1;
+    CUST_INDEX := 1;
+    START_TIME_INDEX := 1;
+    DISTANCE_INDEX := 1;
+    
+    for i in 1 .. 25000 loop
+    
+        if PICKUP_INDEX >= 50 then
+            PICKUP_INDEX := 1;
+        end if;
+        
+        if CUST_INDEX >= 10000 then
+            CUST_INDEX := 1;
+        end if;
+        
+        select CAR_ID into DB_CAR_ID from CARS_AT_PICKUP where CARS_AT_PICKUP_ID = PICKUP_ARR(PICKUP_INDEX);
+        
+        insert into RIDE_TRANSACTION values (
+            TRANS_ID_SEQ.NEXTVAL,
+            CUST_ARR(CUST_INDEX),
+            PICKUP_ARR(PICKUP_INDEX),
+            START_TIME_ARR(START_TIME_INDEX),
+            START_TIME_ARR(START_TIME_INDEX) + 2/24,
+            START_TIME_ARR(START_TIME_INDEX) + 4/24,
+            DB_CAR_ID,
+            DISTANCE_ARR(DISTANCE_INDEX),
+            'COMPLETED');
+        
+     /*   dbms_output.put_line(
+        TRANS_ID_SEQ.NEXTVAL || ' ' || 
+        CUST_ARR(CUST_INDEX) || ' '|| 
+        PICKUP_ARR(PICKUP_INDEX) || ' ' || 
+        to_char(START_TIME_ARR(START_TIME_INDEX),'DD-MM-YYYY HH:MI:SS') || ' '|| 
+        to_char(START_TIME_ARR(START_TIME_INDEX) + 2/24,'DD-MM-YYYY HH:MI:SS') || ' ' || 
+        to_char(START_TIME_ARR(START_TIME_INDEX) + 4/24,'DD-MM-YYYY HH:MI:SS') ||' '|| 
+        DB_CAR_ID || ' ' || 
+        DISTANCE_ARR(DISTANCE_INDEX));
+       */ 
+        
+        PICKUP_INDEX := PICKUP_INDEX + 1;
+        CUST_INDEX := CUST_INDEX + 1;
+        DISTANCE_INDEX := DISTANCE_INDEX + 1;
+        START_TIME_INDEX := START_TIME_INDEX + 1;
+
+    end loop;
+    
+   -- dbms_output.put_line(to_char(sysdate, 'DD-MON-YYYY HH:MI:SS'));
+   -- dbms_output.put_line(to_char(sysdate+1/24, 'DD-MON-YYYY HH:MI:SS'));
+  
 END;
 
 
 select count(*) from customers where customer_id >11000;
 
+select car_id from car;
 
 
+select * from user_sequences;
 
+select TRANS_ID_SEQ.CURRVAL from dual;
 
+DROP SEQUENCE TRANS_ID_SEQ;
 
+CREATE SEQUENCE TRANS_ID_SEQ
+ START WITH 101
+ INCREMENT BY 1
+ ORDER;
+ 
+select * from RIDE_TRANSACTION;
+
+delete from RIDE_TRANSACTION;
+
+select count(*) from RIDE_TRANSACTION;
+
+select car_type, count(car_type) from car where car_id in (select car_id from RIDE_TRANSACTION) group by car_type;
+
+select car.car_id, count(RIDE_TRANSACTION.trans_id) from car, RIDE_TRANSACTION where car.car_id =RIDE_TRANSACTION.car_id  group by car.car_id;
