@@ -331,19 +331,18 @@ BEGIN
         CUST_INDEX := CUST_INDEX + 1;
     end loop;
     
-        for i in C3 loop
+    for i in C3 loop
         START_TIME_ARR.EXTEND;
         START_TIME_ARR(START_TIME_INDEX) := i.START_TIME;
         START_TIME_INDEX := START_TIME_INDEX + 1;
     end loop;
     
-        for i in C4 loop
+    for i in C4 loop
         DISTANCE_ARR.EXTEND;
         DISTANCE_ARR(DISTANCE_INDEX) := i.DISTANCE;
         DISTANCE_INDEX := DISTANCE_INDEX + 1;
     end loop;
-    
-        
+          
     PICKUP_INDEX := 1;
     CUST_INDEX := 1;
     START_TIME_INDEX := 1;
@@ -353,8 +352,7 @@ BEGIN
     
         if PICKUP_INDEX >= 50 then
             PICKUP_INDEX := 1;
-        end if;
-        
+        end if;    
         if CUST_INDEX >= 10000 then
             CUST_INDEX := 1;
         end if;
@@ -387,37 +385,33 @@ BEGIN
         CUST_INDEX := CUST_INDEX + 1;
         DISTANCE_INDEX := DISTANCE_INDEX + 1;
         START_TIME_INDEX := START_TIME_INDEX + 1;
-
     end loop;
     
    -- dbms_output.put_line(to_char(sysdate, 'DD-MON-YYYY HH:MI:SS'));
-   -- dbms_output.put_line(to_char(sysdate+1/24, 'DD-MON-YYYY HH:MI:SS'));
-  
+   -- dbms_output.put_line(to_char(sysdate+1/24, 'DD-MON-YYYY HH:MI:SS')); 
 END;
-
-
-select count(*) from customers where customer_id >11000;
-
-select car_id from car;
-
 
 select * from user_sequences;
 
 select TRANS_ID_SEQ.CURRVAL from dual;
 
+/*
 DROP SEQUENCE TRANS_ID_SEQ;
 
 CREATE SEQUENCE TRANS_ID_SEQ
  START WITH 101
  INCREMENT BY 1
  ORDER;
+ */
  
-select * from RIDE_TRANSACTION;
 
-delete from RIDE_TRANSACTION;
+-- delete from RIDE_TRANSACTION;
 
 select count(*) from RIDE_TRANSACTION;
 
 select car_type, count(car_type) from car where car_id in (select car_id from RIDE_TRANSACTION) group by car_type;
 
-select car.car_id, count(RIDE_TRANSACTION.trans_id) from car, RIDE_TRANSACTION where car.car_id =RIDE_TRANSACTION.car_id  group by car.car_id;
+select car.car_type, sum(p.count_trans)/(select count(*) from RIDE_TRANSACTION) *100 || '%' as Average_Rides
+from car, (select car_id, count(trans_id) as count_trans from RIDE_TRANSACTION group by car_id) p
+where car.car_id = p.car_id
+group by car.car_type;
