@@ -1,5 +1,5 @@
 --------------------------------------------------------
---  File created - Friday-December-03-2021   
+--  File created - Saturday-December-04-2021   
 --------------------------------------------------------
 --------------------------------------------------------
 --  DDL for Procedure MAIN
@@ -8,9 +8,51 @@ set define off;
 
   CREATE OR REPLACE EDITIONABLE PROCEDURE "ADMIN"."MAIN" AS 
 BEGIN
+--sanket
   PROC_INSERT_CUSTOMER('Vignesh', 'kumar', 'vignesh@northeastern.edu',6234459837,'123765sefgh','1234987ertyu','STUDENT',to_date('26-OCT-1997','DD-MON-YYYY'));
  --PROC_INSERT_CUSTOMER('Sanket', 'Sanap', 'sanap.s@northeastern.edu',6178494490,'123456asdfgh','12345qwertyu','STUDENT',to_date('26-OCT-1997','DD-MON-YYYY'));
  -- PROC_INSERT_CUSTOMER('Sanket', 'Sanap', 'sanap.s@northeastern.edu',6178494490,'123456asdfgh','12345qwertyu','STUDENT',to_date('26-OCT-1997','DD-MON-YYYY'));
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+--vignesh
+
+
+
+
+
+
+
+
+
+
+--aish
+
+
+
+
+
+
+
+
+
+--rumi
+
+
+
+
+
+
+
+
+
+
+--sanket
+
 END MAIN;
 
 /
