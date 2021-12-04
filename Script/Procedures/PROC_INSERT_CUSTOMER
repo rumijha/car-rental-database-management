@@ -1,0 +1,52 @@
+--------------------------------------------------------
+--  File created - Friday-December-03-2021   
+--------------------------------------------------------
+--------------------------------------------------------
+--  DDL for Procedure PROC_INSERT_CUSTOMER
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "ADMIN"."PROC_INSERT_CUSTOMER" (
+  vFIRST_NAME IN VARCHAR2, 
+  vLAST_NAME IN VARCHAR2, 
+  vEMAIL_ID IN VARCHAR2,
+  vCONTACT IN NUMBER, 
+  vLICENSE_NUMBER IN VARCHAR2,
+  vPASSPORT_NUMBER IN VARCHAR2, 
+  vCUSTOMER_TYPE IN VARCHAR2, 
+  vDATE_OF_BIRTH IN DATE 
+) 
+AS
+
+    INVALID EXCEPTION;
+    
+BEGIN
+
+   if PROCESS_CUSTOMER(trim(vFIRST_NAME),trim(vLAST_NAME),trim(vEMAIL_ID),vCONTACT,trim(vLICENSE_NUMBER),
+    trim(vPASSPORT_NUMBER),trim(vCUSTOMER_TYPE),vDATE_OF_BIRTH) = 'NO' then
+        raise INVALID;
+   end if;
+   
+    insert into customers values (
+       CUST_ID_SEQ.NEXTVAL,
+       trim(vFIRST_NAME),
+       trim(vLAST_NAME),
+       trim(vEMAIL_ID),
+       vCONTACT,
+       trim(vLICENSE_NUMBER),
+       trim(vPASSPORT_NUMBER),
+       trim(vCUSTOMER_TYPE),
+       vDATE_OF_BIRTH
+   );
+
+   dbms_output.put_line('Customer Inserted Successfully !!!');
+   commit;
+
+EXCEPTION
+    when INVALID then
+         dbms_output.put_line('Invalid Customer !!!');  
+
+    rollback;    
+END PROC_INSERT_CUSTOMER;
+
+/

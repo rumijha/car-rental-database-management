@@ -404,7 +404,6 @@ CREATE SEQUENCE TRANS_ID_SEQ
  ORDER;
  */
  
-
 -- delete from RIDE_TRANSACTION;
 
 select count(*) from RIDE_TRANSACTION;
@@ -415,3 +414,18 @@ select car.car_type, sum(p.count_trans)/(select count(*) from RIDE_TRANSACTION) 
 from car, (select car_id, count(trans_id) as count_trans from RIDE_TRANSACTION group by car_id) p
 where car.car_id = p.car_id
 group by car.car_type;
+
+
+set serveroutput on;
+
+begin
+    main();
+end;
+
+select decode(trunc((sysdate - DATE_OF_BIRTH)/365),35,'Yes','No') as Result, DATE_OF_BIRTH  from CUSTOMERS where CUSTOMER_ID = 11000;
+
+select * from customers where first_name = 'Vignesh';
+begin
+update customers set last_name = 'Kumar' where customer_id = 11004;
+commit;
+end;

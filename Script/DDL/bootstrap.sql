@@ -518,11 +518,88 @@ SET DEFINE OFF;
   ALTER TABLE "ADMIN"."VIOLATIONS_RECORDS" ADD CONSTRAINT "VIOLATION_ID_FK" FOREIGN KEY ("VIOLATION_ID")
 	  REFERENCES "ADMIN"."VIOLATIONS" ("VIOLATION_ID") ENABLE;
 
+
 ---------------------------------------------------------
 -- SEQUENCE FOR CUSTOMER_ID
 ---------------------------------------------------------
 
     CREATE SEQUENCE CUST_ID_SEQ
-    START WITH 1001
-    INCREMENT BY 1
-    ORDER;
+        START WITH 1001
+        INCREMENT BY 1
+        ORDER;
+
+---------------------------------------------------------
+-- SEQUENCE FOR ADDRESS_ID
+---------------------------------------------------------
+
+    CREATE SEQUENCE ADDRESS_ID_SEQ
+         START WITH 11111
+         INCREMENT BY 1
+         ORDER;
+
+---------------------------------------------------------
+-- SEQUENCE FOR ACTIVITY_ID
+---------------------------------------------------------
+
+    CREATE SEQUENCE ACTIVITY_ID_SEQ
+         START WITH 1
+         INCREMENT BY 1
+         ORDER;
+
+---------------------------------------------------------
+-- SEQUENCE FOR RECORD_ID_SEQ
+---------------------------------------------------------
+
+    CREATE SEQUENCE RECORD_ID_SEQ
+         START WITH 101
+         INCREMENT BY 1
+         ORDER;
+
+---------------------------------------------------------
+-- SEQUENCE FOR CARS_AT_PICKUP_ID_SEQ
+---------------------------------------------------------
+
+    CREATE SEQUENCE CARS_AT_PICKUP_ID_SEQ
+         START WITH 9000
+         INCREMENT BY 1
+         ORDER;
+
+---------------------------------------------------------
+-- SEQUENCE FOR INSURANCE_CAR_ID_SEQ
+---------------------------------------------------------
+
+    CREATE SEQUENCE INSURANCE_CAR_ID_SEQ
+         START WITH 50001
+         INCREMENT BY 1
+         ORDER;
+
+---------------------------------------------------------
+-- SEQUENCE FOR MAINTENANCE_ID_SEQ
+---------------------------------------------------------
+
+    CREATE SEQUENCE MAINTENANCE_ID_SEQ
+         START WITH 5000
+         INCREMENT BY 1
+         ORDER;
+
+---------------------------------------------------------
+-- SEQUENCE FOR PURCHASE_INSURANCE_ID_SEQ
+---------------------------------------------------------
+
+    CREATE SEQUENCE PURCHASE_INSURANCE_ID_SEQ
+         START WITH 1
+         INCREMENT BY 1
+         ORDER;
+         
+---------------------------------------------------------
+-- SEQUENCE FOR TRANS_ID_SEQ
+---------------------------------------------------------
+
+    CREATE SEQUENCE TRANS_ID_SEQ
+        START WITH 101
+        INCREMENT BY 1
+        ORDER;
+
+---------------------------------------------------------
+--
+---------------------------------------------------------
