@@ -609,4 +609,20 @@ SET DEFINE OFF;
          INCREMENT BY 1
          ORDER;
 
-----------------------------------------------------------
+---------------------------------------------------------
+-- SEQUENCE FOR PAYMENT_ID_SEQ
+---------------------------------------------------------
+    CREATE SEQUENCE PAY_ID_SEQ
+         START WITH 1
+         INCREMENT BY 1
+         ORDER;
+
+---------------------------------------------------------
+-- SEQUENCE FOR SUPPORT_ID_SEQ
+---------------------------------------------------------
+    CREATE SEQUENCE SUPPORT_ID_SEQ
+         START WITH 1
+         INCREMENT BY 1
+         ORDER;
+
+---------------------------------------------------------
