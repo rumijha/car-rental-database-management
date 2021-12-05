@@ -1,5 +1,5 @@
 --------------------------------------------------------
---  File created - Friday-December-03-2021   
+--  File created - Saturday-December-04-2021   
 --------------------------------------------------------
 --------------------------------------------------------
 --  DDL for Procedure PROC_INSERT_CUSTOMER
@@ -7,19 +7,18 @@
 set define off;
 
   CREATE OR REPLACE EDITIONABLE PROCEDURE "ADMIN"."PROC_INSERT_CUSTOMER" (
-  vFIRST_NAME IN VARCHAR2, 
-  vLAST_NAME IN VARCHAR2, 
-  vEMAIL_ID IN VARCHAR2,
-  vCONTACT IN NUMBER, 
-  vLICENSE_NUMBER IN VARCHAR2,
-  vPASSPORT_NUMBER IN VARCHAR2, 
-  vCUSTOMER_TYPE IN VARCHAR2, 
-  vDATE_OF_BIRTH IN DATE 
+  vCUSTOMER_ID IN CUSTOMERS.CUSTOMER_ID%type,
+  vFIRST_NAME IN CUSTOMERS.FIRST_NAME%type, 
+  vLAST_NAME IN CUSTOMERS.LAST_NAME%type, 
+  vEMAIL_ID IN CUSTOMERS.EMAIL_ID%type,
+  vCONTACT IN CUSTOMERS.CONTACT%type, 
+  vLICENSE_NUMBER IN CUSTOMERS.LICENSE_NUMBER%type,
+  vPASSPORT_NUMBER IN CUSTOMERS.PASSPORT_NUMBER%type, 
+  vCUSTOMER_TYPE IN CUSTOMERS.CUSTOMER_TYPE%type, 
+  vDATE_OF_BIRTH IN CUSTOMERS.DATE_OF_BIRTH%type 
 ) 
 AS
-
     INVALID EXCEPTION;
-    
 BEGIN
 
    if PROCESS_CUSTOMER(trim(vFIRST_NAME),trim(vLAST_NAME),trim(vEMAIL_ID),vCONTACT,trim(vLICENSE_NUMBER),
@@ -28,7 +27,7 @@ BEGIN
    end if;
    
     insert into customers values (
-       CUST_ID_SEQ.NEXTVAL,
+       vCUSTOMER_ID,
        trim(vFIRST_NAME),
        trim(vLAST_NAME),
        trim(vEMAIL_ID),
