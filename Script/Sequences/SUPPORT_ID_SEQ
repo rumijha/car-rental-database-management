@@ -1,0 +1,8 @@
+--------------------------------------------------------
+--  File created - Sunday-December-05-2021   
+--------------------------------------------------------
+--------------------------------------------------------
+--  DDL for Sequence SUPPORT_ID_SEQ
+--------------------------------------------------------
+
+   CREATE SEQUENCE  "ADMIN"."SUPPORT_ID_SEQ"  MINVALUE 1 MAXVALUE 1001 INCREMENT BY 1 START WITH 1002 NOCACHE  NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
