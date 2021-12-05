@@ -601,5 +601,12 @@ SET DEFINE OFF;
         ORDER;
 
 ---------------------------------------------------------
---
+-- SEQUENCE FOR VIOLATION_ID_SEQ
 ---------------------------------------------------------
+
+    CREATE SEQUENCE VIOLATION_ID_SEQ
+         START WITH 1
+         INCREMENT BY 1
+         ORDER;
+
+----------------------------------------------------------
