@@ -1,0 +1,8 @@
+--------------------------------------------------------
+--  File created - Friday-December-03-2021   
+--------------------------------------------------------
+--------------------------------------------------------
+--  DDL for Sequence MAINTENANCE_ID_SEQ
+--------------------------------------------------------
+
+   CREATE SEQUENCE  "ADMIN"."MAINTENANCE_ID_SEQ"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 5160 CACHE 20 ORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
