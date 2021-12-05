@@ -251,6 +251,11 @@ FROM   (
     FROM   ACTIVITY
     ORDER BY DBMS_RANDOM.RANDOM)
 WHERE  rownum < 107) p where ROWNUM < 500;
+
+    CREATE SEQUENCE VIOLATION_ID_SEQ
+         START WITH 1
+         INCREMENT BY 1
+         ORDER;
 */
 
 select count(*) from MOCKDATA;
@@ -432,11 +437,10 @@ end;
 
 
 --sanket
-
+set serveroutput on;
 begin
     main();
 end;
-
 
 
 
