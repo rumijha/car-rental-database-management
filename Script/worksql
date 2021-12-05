@@ -235,6 +235,7 @@ CREATE SEQUENCE TEMP_CARS_AT_PICKUP_ID
 
 --INSERT INTO RIDE_TRANSACTION
 
+
 /*
 
 select count(*)
@@ -326,10 +327,14 @@ BEGIN
     for i in X_NUMBER.FIRST .. X_NUMBER.LAST loop
         dbms_output.put_line(X_NUMBER(i));
     end loop;
+
+
+
   --  for i in Y_NUMBER.FIRST .. Y_NUMBER.LAST loop
   --      dbms_output.put_line(Y_NUMBER(i));
   --  end loop;
 END;
+
 
 
 
@@ -404,7 +409,6 @@ end;
 
 
 select count(*) from customers where customer_id >11000;
-
 select count(*) from customers where customer_id >11000;
 
 
