@@ -1,8 +1,0 @@
---------------------------------------------------------
---  File created - Friday-December-03-2021   
---------------------------------------------------------
---------------------------------------------------------
---  DDL for Sequence TRANS_ID_SEQ
---------------------------------------------------------
-
-   CREATE SEQUENCE  "ADMIN"."TRANS_ID_SEQ"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 50101 CACHE 20 ORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
