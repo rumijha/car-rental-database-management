@@ -13,6 +13,7 @@ set define off;
 ) AS 
     
     ex_INVALID_DESCRIPTION EXCEPTION;
+    ex_FAILURE EXCEPTION;
 BEGIN
     if  PROCESS_VIOLATION(trim(vDESCRIPTION)) = 'NO' then
         raise ex_INVALID_DESCRIPTION;
@@ -24,17 +25,18 @@ BEGIN
     );
     
     if SQL%ROWCOUNT != 1 then
-        dbms_output.put_line('Violations Data Could Not Be Inserted !!!');
         rollback;
+        raise ex_FAILURE;
     else 
-        dbms_output.put_line('Violations Data Inserted Successfully!!!');
+        dbms_output.put_line('Violations Data Inserted Successfully !!!');
     end if;
     
     commit;
 EXCEPTION
     when ex_INVALID_DESCRIPTION then
         dbms_output.put_line('Invalid Description!!! Description cannot be Empty or Null');
- 
+    when ex_FAILURE then
+        dbms_output.put_line('Violations Data Could Not Be Inserted !!!');
 END PROC_INSERT_VIOLATIONS;
 
 /
