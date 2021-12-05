@@ -19,7 +19,8 @@ BEGIN
 EXCEPTION
     when ex_INVALID_DESCRIPTION then
         RETURN 'NO';
-
+    when others then
+        RETURN 'NO';
 END PROCESS_VIOLATION;
 
 /
