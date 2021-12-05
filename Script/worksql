@@ -234,7 +234,9 @@ CREATE SEQUENCE TEMP_CARS_AT_PICKUP_ID
 
 
 --INSERT INTO RIDE_TRANSACTION
+
 /*
+
 select count(*)
 from  
 (SELECT VIOLATION_ID
@@ -330,6 +332,7 @@ BEGIN
 END;
 
 
+
 select * from user_sequences;
 
 select TRANS_ID_SEQ.CURRVAL from dual;
@@ -399,6 +402,8 @@ end;
 
 
 
+
+select count(*) from customers where customer_id >11000;
 
 select count(*) from customers where customer_id >11000;
 
