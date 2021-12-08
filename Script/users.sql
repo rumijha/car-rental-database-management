@@ -25,18 +25,30 @@ CREATE USER JESSY IDENTIFIED BY Blender12345;
 select * from dba_users where username in ('HARRY', 'JARVIS', 'PETER', 'TOM', 'HARVEY', 'JESSY');
 */
 
-GRANT INSERT, UPDATE, DELETE, SELECT
-ON CUSTOMERS
-TO APP_OWNER;
 
 GRANT SELECT ON PAYMENTS TO JARVIS;
 
+GRANT ALL
+ON ADMIN.CAR
+TO APP_OWNER;
+
 GRANT APP_OWNER TO JARVIS;
+REVOKE APP_OWNER FROM JARVIS;
+
+GRANT CONNECT, RESOURCE TO JARVIS;
+REVOKE CREATE SESSION FROM JARVIS;
+
+GRANT SELECT ON CAR TO JARVIS;
+REVOKE SELECT ON CAR FROM JARVIS;
+
+set role APP_OWNER IDENTIFIED BY blender;
 
 SELECT * FROM session_roles;
 
 select ora_database_name from dual;
 
-select username,password from dba_users;
+SELECT * FROM user_role_privs;
+SELECT * FROM role_sys_privs;
+SELECT * FROM role_tab_privs;
 
-connect as SYSDBA;
+select * from ALL_TABLES where OWNER = 'ADMIN';
