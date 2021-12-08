@@ -487,7 +487,11 @@ delete from ride_transaction where trans_id = 66666;
 --vignesh
 
 
+begin
+    main_vignesh();
+end;
 
+select to_char(sysdate,'DD-MON-YYYY HH:MI:SS AM') from dual;
 
 
 
