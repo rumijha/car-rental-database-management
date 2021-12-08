@@ -29,8 +29,14 @@ GRANT INSERT, UPDATE, DELETE, SELECT
 ON CUSTOMERS
 TO APP_OWNER;
 
+GRANT SELECT ON PAYMENTS TO JARVIS;
+
 GRANT APP_OWNER TO JARVIS;
 
 SELECT * FROM session_roles;
 
+select ora_database_name from dual;
 
+select username,password from dba_users;
+
+connect as SYSDBA;

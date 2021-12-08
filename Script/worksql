@@ -478,3 +478,11 @@ select count(*) from customers where customer_id >11000;
 
 
 --rumi
+
+/*
+create table TEST (name varchar2(50), card_details varchar2(50) ENCRYPT);
+insert into TEST values('sanket','1234-1234-1234-12345');
+select * from TEST;
+drop table TEST;
+*/
+
