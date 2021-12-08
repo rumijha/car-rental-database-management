@@ -440,13 +440,47 @@ end;
 --sanket
 set serveroutput on;
 begin
-    main();
+   MAIN_SANKET();
+   --dbms_output.put_line(check_car_availability(1007,to_timestamp(sysdate+1/24),to_timestamp(sysdate+2/24)));
+   -- dbms_output.put_line(check_car_availability(1007,to_timestamp(sysdate+1/24), to_timestamp(sysdate+3/24)));  
+
 end;
 
+select to_char(sysdate,'DD-MON-YYYY HH:MI:SS AM') from dual;
+check_car_availability(1007,to_timestamp(sysdate+1/24),to_timestamp(sysdate+2/24));
 
 
+/*
+case 1 - 9.30-10.30 X X
+case 2 - 10 -11 X X
+case 3 - 10.30 - 10.45 X X
+case 4 - 10.30 - 11.30 X X
+case 5 - 9.30-9.45 EMPTY EMPTY
+case 6 - 11.15 -12 EMPTY EMPTY
+case 7 - 9 -12 X X
 
+select * from RIDE_TRANSACTION 
+where ((START_TIME >= '06-DEC-21 10.56.09.000000000 PM' or END_TIME >= '06-DEC-21 10.56.09.000000000 PM')   and 
+      (START_TIME <= '06-DEC-21 11.56.09.000000000 PM' or END_TIME <= '06-DEC-21 11.56.09.000000000 PM'))  and 
+      CAR_ID = 1007 and STATUS = 'IN PROCESS';
 
+where (10 >= '9' or 11 >= '9')   and 
+      (10 <= '12' or 11 <= '12')  and 
+      CAR_ID = 1007 and STATUS = 'IN PROCESS';
+
+case 1 - 9.30-10.30 X X                                                         |10       |11       
+case 2 - 10 -11 X X
+case 3 - 10.30 - 10.45 X X
+case 4 - 10.30 - 11.30 X X
+case 5 - 9.30-9.45 EMPTY EMPTY
+case 6 - 11.15 -12 EMPTY EMPTY
+case 7 - 9 -12 X X
+
+select to_char((sysdate),'DD-MON-YYYY HH:MI:SS AM'),to_char((sysdate +1/24),'DD-MON-YYYY HH:MI:SS AM'), to_timestamp(sysdate) from dual;
+
+delete from ride_transaction where trans_id = 66666;
+
+*/
 
 
 
@@ -462,7 +496,10 @@ end;
 
 
 --aish
-
+set serveroutput on;
+begin
+    MAIN_AISH();
+end;
 
 
 

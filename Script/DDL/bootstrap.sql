@@ -626,3 +626,10 @@ SET DEFINE OFF;
          ORDER;
 
 ---------------------------------------------------------
+-- SEQUENCE FOR FEEDBACK_ID_SEQ
+---------------------------------------------------------
+    CREATE SEQUENCE FEEDBACK_ID_SEQ
+         START WITH 1001
+         INCREMENT BY 1
+         ORDER;
+---------------------------------------------------------
