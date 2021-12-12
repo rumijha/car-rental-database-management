@@ -536,3 +536,7 @@ pckg.customer.update_customer();
 NULL;
 end;
 
+CREATE SEQUENCE CAR_ID_SEQ
+START WITH 1001
+INCREMENT BY 1
+ORDER;
