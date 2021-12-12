@@ -520,13 +520,13 @@ SET DEFINE OFF;
 
 
 ---------------------------------------------------------
--- SEQUENCE FOR CUSTOMER_ID
+-- SEQUENCE FOR ACTIVITY_ID
 ---------------------------------------------------------
 
-    CREATE SEQUENCE CUST_ID_SEQ
-        START WITH 1001
-        INCREMENT BY 1
-        ORDER;
+    CREATE SEQUENCE ACTIVITY_ID_SEQ
+         START WITH 1
+         INCREMENT BY 1
+         ORDER;
 
 ---------------------------------------------------------
 -- SEQUENCE FOR ADDRESS_ID
@@ -538,23 +538,12 @@ SET DEFINE OFF;
          ORDER;
 
 ---------------------------------------------------------
--- SEQUENCE FOR ACTIVITY_ID
+-- SEQUENCE FOR CAR_ID_SEQ
 ---------------------------------------------------------
-
-    CREATE SEQUENCE ACTIVITY_ID_SEQ
-         START WITH 1
-         INCREMENT BY 1
-         ORDER;
-
----------------------------------------------------------
--- SEQUENCE FOR RECORD_ID_SEQ
----------------------------------------------------------
-
-    CREATE SEQUENCE RECORD_ID_SEQ
-         START WITH 101
-         INCREMENT BY 1
-         ORDER;
-
+    CREATE SEQUENCE CAR_ID_SEQ
+        START WITH 1001
+        INCREMENT BY 1
+        ORDER;
 ---------------------------------------------------------
 -- SEQUENCE FOR CARS_AT_PICKUP_ID_SEQ
 ---------------------------------------------------------
@@ -563,13 +552,47 @@ SET DEFINE OFF;
          START WITH 9000
          INCREMENT BY 1
          ORDER;
+         
+---------------------------------------------------------
+-- SEQUENCE FOR CUSTOMER_ID
+---------------------------------------------------------
+
+    CREATE SEQUENCE CUST_ID_SEQ
+        START WITH 1001
+        INCREMENT BY 1
+        ORDER;
+        
+---------------------------------------------------------
+-- SEQUENCE FOR DISCOUNT_ID_SEQ
+---------------------------------------------------------
+    CREATE SEQUENCE DISCOUNT_ID_SEQ
+         START WITH 100
+         INCREMENT BY 1
+         ORDER;
 
 ---------------------------------------------------------
--- SEQUENCE FOR INSURANCE_CAR_ID_SEQ
+-- SEQUENCE FOR FEEDBACK_ID_SEQ
+---------------------------------------------------------
+    CREATE SEQUENCE FEEDBACK_ID_SEQ
+         START WITH 1001
+         INCREMENT BY 1
+         ORDER;
+       
+---------------------------------------------------------
+-- SEQUENCE FOR INSURANCE_ID_SEQ
 ---------------------------------------------------------
 
-    CREATE SEQUENCE INSURANCE_CAR_ID_SEQ
+    CREATE SEQUENCE INSURANCE_ID_SEQ
          START WITH 50001
+         INCREMENT BY 1
+         ORDER;
+         
+---------------------------------------------------------
+-- SEQUENCE FOR RECORD_ID_SEQ
+---------------------------------------------------------
+
+    CREATE SEQUENCE RECORD_ID_SEQ
+         START WITH 101
          INCREMENT BY 1
          ORDER;
 
@@ -624,12 +647,12 @@ SET DEFINE OFF;
          START WITH 1
          INCREMENT BY 1
          ORDER;
-
+             
 ---------------------------------------------------------
--- SEQUENCE FOR FEEDBACK_ID_SEQ
+-- SEQUENCE FOR PICKUP_POINT_ID_SEQ
 ---------------------------------------------------------
-    CREATE SEQUENCE FEEDBACK_ID_SEQ
-         START WITH 1001
+    CREATE SEQUENCE PICKUP_POINT_ID_SEQ
+         START WITH 7000
          INCREMENT BY 1
          ORDER;
 ---------------------------------------------------------
