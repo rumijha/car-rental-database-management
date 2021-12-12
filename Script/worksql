@@ -527,3 +527,12 @@ select * from TEST;
 drop table TEST;
 */
 
+begin
+
+pckg_customer.insert_customer();
+pckg.car.insert_car();
+
+pckg.customer.update_customer();
+NULL;
+end;
+
