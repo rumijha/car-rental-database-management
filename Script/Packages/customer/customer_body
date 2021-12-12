@@ -1,0 +1,419 @@
+--------------------------------------------------------
+--  File created - Sunday-December-12-2021   
+--------------------------------------------------------
+--------------------------------------------------------
+--  DDL for Package Body PCKG_CUSTOMER
+--------------------------------------------------------
+
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "ADMIN"."PCKG_CUSTOMER" AS
+
+    FUNCTION PROCESS_ACTIVITY(
+        vACTIVITY_ID IN ACTIVITY.ACTIVITY_ID%type,
+        vLOGIN_TIME  IN ACTIVITY.LOGIN_TIME%type,
+        vLOGOUT_TIME IN ACTIVITY.LOGOUT_TIME%type,
+        vCUSTOMER_ID IN ACTIVITY.CUSTOMER_ID%type) 
+    RETURN VARCHAR2 AS
+    
+        ex_ACTIVITY_ID EXCEPTION;
+        ex_LOGIN_TIME EXCEPTION;
+        ex_LOGOUT_TIME EXCEPTION;
+        ex_CUSTOMER_ID EXCEPTION;
+    
+    BEGIN
+    
+        if vCUSTOMER_ID is not null then
+            if CHECK_CUSTOMER_ID_EXISTS(vCUSTOMER_ID) = 0 then
+                raise no_data_found;
+            end if;
+        end if;
+    
+        if vACTIVITY_ID is null then
+            raise ex_ACTIVITY_ID;
+        end if;
+    
+        if vLOGIN_TIME is null or vLOGIN_TIME < sysdate then
+            raise ex_LOGIN_TIME;
+        end if;
+    
+        if vLOGOUT_TIME < vLOGIN_TIME then
+            raise ex_LOGOUT_TIME;
+        end if;
+    
+        if vCUSTOMER_ID is null then
+            raise ex_CUSTOMER_ID;
+        end if;
+    
+        RETURN 'YES';
+    
+    EXCEPTION
+        when no_data_found then
+        dbms_output.put_line('Customer Id not present in the parent table !!!');
+        RETURN 'NO';
+        when ex_ACTIVITY_ID then
+        dbms_output.put_line('Activity Id cannot be Null !!!');
+        RETURN 'NO';
+        when ex_LOGIN_TIME then
+        dbms_output.put_line('LOGIN_TIME cannot be less than Sysdate or can be left blank !!!');
+        RETURN 'NO';
+        when ex_LOGOUT_TIME then
+        dbms_output.put_line('LOGOUT_TIME should be greater than LOGIN Time !!!');
+        RETURN 'NO';
+        when ex_CUSTOMER_ID then
+        dbms_output.put_line('Customer Id cannot be null !!!');
+        RETURN 'NO';
+        when others then
+        dbms_output.put_line(SQLCODE|| ': ' || SQLERRM);
+        RETURN 'NO';        
+    
+    END PROCESS_ACTIVITY;
+
+    FUNCTION PROCESS_CUSTOMER(
+        vFIRST_NAME IN CUSTOMERS.FIRST_NAME%type, 
+        vLAST_NAME IN CUSTOMERS.LAST_NAME%type, 
+        vEMAIL_ID IN CUSTOMERS.EMAIL_ID%type,
+        vCONTACT IN CUSTOMERS.CONTACT%type, 
+        vLICENSE_NUMBER IN CUSTOMERS.LICENSE_NUMBER%type,
+        vPASSPORT_NUMBER IN CUSTOMERS.PASSPORT_NUMBER%type, 
+        vCUSTOMER_TYPE IN CUSTOMERS.CUSTOMER_TYPE%type, 
+        vDATE_OF_BIRTH IN CUSTOMERS.DATE_OF_BIRTH%type) 
+    RETURN VARCHAR2 AS
+    
+        DB_EMAIL_ID CUSTOMERS.EMAIL_ID%type;
+        DB_CONTACT CUSTOMERS.CONTACT%type;
+        DB_LICENSE_NUMBER CUSTOMERS.LICENSE_NUMBER%type;
+        DB_PASSPORT_NUMBER CUSTOMERS.PASSPORT_NUMBER%type;
+        
+        INVALID_NAME EXCEPTION;
+        INVALID_EMAIL EXCEPTION;
+        INVALID_CONTACT EXCEPTION;
+        INVALID_LICENSE_NUMBER EXCEPTION;
+        INVALID_PASSPORT_NUMBER EXCEPTION;
+        INVALID_CUSTOMER_TYPE EXCEPTION;
+        INVALID_DATE_OF_BIRTH EXCEPTION;
+    
+    BEGIN
+            
+        -- check data is null, empty and appropriate
+        if vFIRST_NAME is NULL or REGEXP_LIKE(TRIM(vFIRST_NAME) , '^[0-9]*$') or LENGTH(TRIM(vFIRST_NAME)) is NULL or
+        vLAST_NAME is NULL or REGEXP_LIKE(TRIM(vLAST_NAME) , '^[0-9]*$') or LENGTH(TRIM(vLAST_NAME)) is NULL then
+            raise INVALID_NAME;
+        end if;
+        
+        if vEMAIL_ID is NULL or LENGTH(TRIM(vEMAIL_ID)) is NULL or NOT (TRIM(vEMAIL_ID)) LIKE '%@_%._%' then
+            raise INVALID_EMAIL;
+        end if;
+        
+        if vCONTACT is NULL or  LENGTH(vCONTACT) != 10  then
+            raise INVALID_CONTACT;
+        end if;
+        
+        if vLICENSE_NUMBER is NULL or LENGTH(TRIM(vLICENSE_NUMBER)) is NULL then
+            raise INVALID_LICENSE_NUMBER;
+        end if;
+        
+        if vPASSPORT_NUMBER is NULL or LENGTH(TRIM(vPASSPORT_NUMBER)) is NULL then
+            raise INVALID_PASSPORT_NUMBER;
+        end if;
+           
+        if vCUSTOMER_TYPE is NULL or LENGTH(TRIM(vCUSTOMER_TYPE)) is NULL or vCUSTOMER_TYPE not in ('STUDENT','EMPLOYEE','OTHERS') then
+            raise INVALID_CUSTOMER_TYPE;
+        end if;
+        
+        if vDATE_OF_BIRTH is NULL or ((sysdate - vDATE_OF_BIRTH)/365) < 18  then
+            raise INVALID_DATE_OF_BIRTH;
+        end if;
+        
+            -- check if customer data already exists
+            begin
+                select EMAIL_ID into DB_EMAIL_ID from CUSTOMERS where EMAIL_ID = vEMAIL_ID;
+                if DB_EMAIL_ID IS NOT NULL then
+                    raise INVALID_EMAIL;
+                end if;
+            exception
+                when NO_DATA_FOUND then
+                     NULL;
+                when INVALID_EMAIL then
+                    dbms_output.put_line('Duplicate Email Address!!!');
+                    RETURN 'NO';
+            end;
+        
+            begin
+                select CONTACT into DB_CONTACT from CUSTOMERS where CONTACT = vCONTACT;
+                if DB_CONTACT IS NOT NULL then
+                    raise INVALID_CONTACT;
+                end if;
+            exception
+                when NO_DATA_FOUND then
+                     NULL;
+                when INVALID_CONTACT then
+                    dbms_output.put_line('Duplicate Contact!!!');
+                    RETURN 'NO';
+            end;
+        
+            begin
+                select LICENSE_NUMBER into DB_LICENSE_NUMBER from CUSTOMERS where LICENSE_NUMBER = vLICENSE_NUMBER;
+                if DB_LICENSE_NUMBER IS NOT NULL then
+                    raise INVALID_LICENSE_NUMBER;
+                end if;
+            exception
+                when NO_DATA_FOUND then
+                     NULL;
+                when INVALID_LICENSE_NUMBER then
+                    dbms_output.put_line('Duplicate License Number!!!');
+                    RETURN 'NO';
+            end;
+        
+        if CHECK_PASSSPORT_EXISTS(vPASSPORT_NUMBER) != '0'  then
+            raise INVALID_PASSPORT_NUMBER;
+        end if;
+        
+        RETURN 'YES';
+    
+    EXCEPTION
+        when INVALID_NAME then
+            dbms_output.put_line('Invalid Name !!!');
+            RETURN 'NO';
+        when INVALID_EMAIL then
+            dbms_output.put_line('Invalid Email !!!');
+            RETURN 'NO';
+        when INVALID_CONTACT then
+            dbms_output.put_line('Invalid Contact !!!');
+            RETURN 'NO';
+        when INVALID_LICENSE_NUMBER then
+            dbms_output.put_line('Invalid License Number !!!');
+            RETURN 'NO';
+        when INVALID_PASSPORT_NUMBER then
+            dbms_output.put_line('Invalid Passport Number !!!');
+            RETURN 'NO';
+        when INVALID_CUSTOMER_TYPE then
+            dbms_output.put_line('Invalid Customer Type !!!');
+            RETURN 'NO';
+        when INVALID_DATE_OF_BIRTH then
+            dbms_output.put_line('Invalid Date of Birth OR Age Less Than 18 !!!');
+            RETURN 'NO';
+        when others then
+            RETURN 'NO';
+        
+    END PROCESS_CUSTOMER;
+
+    FUNCTION PROCESS_CUSTOMER_ADDRESS(
+        vADDRESS_LINE1 IN CUSTOMER_ADDRESS.ADDRESS_LINE1%TYPE,
+        vADDRESS_LINE2 IN CUSTOMER_ADDRESS.ADDRESS_LINE2%TYPE,
+        vCITY_STATE IN CUSTOMER_ADDRESS.CITY_STATE%TYPE,
+        vCITY IN CUSTOMER_ADDRESS.CITY%TYPE, 
+        vZIP_CODE IN CUSTOMER_ADDRESS.ZIP_CODE%TYPE, 
+        vADDRESS_TYPE IN CUSTOMER_ADDRESS.ADDRESS_TYPE%TYPE) 
+    RETURN VARCHAR2 AS
+    
+        ex_INVALID_ADDRESS EXCEPTION;
+        ex_INVALID_CITY EXCEPTION;
+        ex_INVALID_CITY_STATE EXCEPTION;
+        ex_INVALID_ZIP_CODE EXCEPTION;
+        ex_INVALID_ADDRESS_TYPE EXCEPTION;
+    
+    BEGIN
+    
+      --check if data is null, empty and not appropriate---
+        if vADDRESS_LINE1 is NULL or LENGTH(trim(vADDRESS_LINE1)) is NULL or LENGTH(trim(vADDRESS_LINE1)) > 50 then
+            raise ex_INVALID_ADDRESS;
+        end if;
+        
+        if LENGTH(trim(vADDRESS_LINE1)) > 50 then
+            raise ex_INVALID_ADDRESS;
+        end if; 
+    
+        if vCITY is NULL or LENGTH(trim(vCITY)) is NULL then
+            raise ex_INVALID_CITY;
+        end if;
+    
+        if vCITY_STATE is NULL or LENGTH(trim(vCITY_STATE)) is NULL then
+            raise ex_INVALID_CITY_STATE;
+        end if;
+        
+        if vZIP_CODE is NULL or LENGTH(trim(vZIP_CODE)) is NULL then
+            raise ex_INVALID_ZIP_CODE;
+        end if;
+    
+        if vADDRESS_TYPE is NULL or LENGTH(trim(vADDRESS_TYPE)) is NULL or vADDRESS_TYPE NOT IN ('HOME','OFFICE','OTHER') then
+            raise ex_INVALID_ADDRESS_TYPE;
+        end if;
+    
+        RETURN 'YES';
+    
+    EXCEPTION
+        when ex_INVALID_ADDRESS then
+        dbms_output.put_line('Invalid Address !!!');
+        RETURN 'NO';
+        
+        when ex_INVALID_CITY then
+        dbms_output.put_line('Invalid City !!!');
+        RETURN 'NO';
+        
+        when ex_INVALID_CITY_STATE then
+        dbms_output.put_line('Invalid State !!!');
+        RETURN 'NO';
+      
+        when ex_INVALID_ZIP_CODE then
+        dbms_output.put_line('Invalid Zip Code !!!');
+        RETURN 'NO';
+        
+        when ex_INVALID_ADDRESS_TYPE then
+        dbms_output.put_line('Invalid Address Type !!!');
+        RETURN 'NO';
+        
+        RETURN 'NO';
+    
+    END PROCESS_CUSTOMER_ADDRESS;
+
+    PROCEDURE INSERT_CUSTOMER(
+        vCUSTOMER_ID IN CUSTOMERS.CUSTOMER_ID%type,
+        vFIRST_NAME IN CUSTOMERS.FIRST_NAME%type,
+        vLAST_NAME IN CUSTOMERS.LAST_NAME%type, 
+        vEMAIL_ID IN CUSTOMERS.EMAIL_ID%type,
+        vCONTACT IN CUSTOMERS.CONTACT%type, 
+        vLICENSE_NUMBER IN CUSTOMERS.LICENSE_NUMBER%type,
+        vPASSPORT_NUMBER IN CUSTOMERS.PASSPORT_NUMBER%type, 
+        vCUSTOMER_TYPE IN CUSTOMERS.CUSTOMER_TYPE%type, 
+        vDATE_OF_BIRTH IN CUSTOMERS.DATE_OF_BIRTH%type) AS
+    BEGIN
+    -- TODO: Implementation required for PROCEDURE PCKG_CUSTOMER.INSERT_CUSTOMER
+    NULL;
+    END INSERT_CUSTOMER;
+
+    PROCEDURE UPDATE_CUSTOMERS(
+        vCUSTOMER_ID IN CUSTOMERS.CUSTOMER_ID%type,
+        vFIRST_NAME IN CUSTOMERS.FIRST_NAME%type,
+        vLAST_NAME IN CUSTOMERS.LAST_NAME%type, 
+        vEMAIL_ID IN CUSTOMERS.EMAIL_ID%type,
+        vCONTACT IN CUSTOMERS.CONTACT%type, 
+        vLICENSE_NUMBER IN CUSTOMERS.LICENSE_NUMBER%type,
+        vPASSPORT_NUMBER IN CUSTOMERS.PASSPORT_NUMBER%type, 
+        vCUSTOMER_TYPE IN CUSTOMERS.CUSTOMER_TYPE%type, 
+        vDATE_OF_BIRTH IN CUSTOMERS.DATE_OF_BIRTH%type) 
+        AS
+        ex_INVALID EXCEPTION;
+        ex_DUPLICATE_CUSTOMER_ID EXCEPTION;
+        ex_INVALID_CUSTOMER_TYPE EXCEPTION;
+
+    BEGIN
+
+        if PROCESS_CUSTOMER(trim(vFIRST_NAME),trim(vLAST_NAME),trim(vEMAIL_ID),vCONTACT,trim(vLICENSE_NUMBER),
+        trim(vPASSPORT_NUMBER),trim(vCUSTOMER_TYPE),vDATE_OF_BIRTH) = 'NO' then
+            raise ex_INVALID;
+        end if;
+       
+        if CHECK_CUSTOMER_ID_EXISTS(vCUSTOMER_ID) != 0 then
+            raise  ex_DUPLICATE_CUSTOMER_ID;
+        end if;
+        
+         if vCUSTOMER_TYPE NOT IN ('STUDENT', 'EMPLOYEE' ,'OTHER')  then
+            raise ex_INVALID_CUSTOMER_TYPE;
+        END IF;
+        
+        UPDATE CUSTOMERS SET FIRST_NAME = vFIRST_NAME, LAST_NAME = vLAST_NAME, EMAIL_ID = vEMAIL_ID,CONTACT = vCONTACT ,CUSTOMER_TYPE = vCUSTOMER_TYPE WHERE CUSTOMER_ID = vCUSTOMER_ID;
+        
+        IF SQL%ROWCOUNT !=1 THEN
+            dbms_output.put_line('Record not been updated. Please try again !!!');
+            rollback;
+        ELSE
+            dbms_output.put_line('Record has updated successfully !!!');
+            commit;
+        END IF;
+
+    EXCEPTION
+
+        when ex_INVALID then
+            dbms_output.put_line('Invalid Customer !!!');  
+            
+        when ex_DUPLICATE_CUSTOMER_ID then
+            dbms_output.put_line('Duplicate Customer Id Found !!! Cannot update Customer');
+        rollback;  
+        
+        WHEN ex_INVALID_CUSTOMER_TYPE THEN
+            dbms_output.put_line('Invalid Customer type!!!');
+        
+    END UPDATE_CUSTOMERS;
+
+    PROCEDURE INSERT_CUSTOMER_ADDRESS(
+        vADDRESS_ID IN CUSTOMER_ADDRESS.ADDRESS_ID%TYPE,
+        vADDRESS_LINE1 IN CUSTOMER_ADDRESS.ADDRESS_LINE1%TYPE,
+        vADDRESS_LINE2 IN CUSTOMER_ADDRESS.ADDRESS_LINE2%TYPE,
+        vCITY_STATE IN CUSTOMER_ADDRESS.CITY_STATE%TYPE,
+        vCITY IN CUSTOMER_ADDRESS.CITY%TYPE,
+        vCUSTOMER_ID IN CUSTOMER_ADDRESS.CUSTOMER_ID%TYPE,
+        vZIP_CODE IN CUSTOMER_ADDRESS.ZIP_CODE%TYPE,
+        vADDRESS_TYPE IN CUSTOMER_ADDRESS.ADDRESS_TYPE%TYPE) AS
+    BEGIN
+    -- TODO: Implementation required for PROCEDURE PCKG_CUSTOMER.INSERT_CUSTOMER_ADDRESS
+    NULL;
+    END INSERT_CUSTOMER_ADDRESS;
+
+    PROCEDURE UPDATE_CUSTOMER_ADDRESS(
+        vADDRESS_ID IN CUSTOMER_ADDRESS.ADDRESS_ID%TYPE,
+        vADDRESS_LINE1 IN CUSTOMER_ADDRESS.ADDRESS_LINE1%TYPE,
+        vADDRESS_LINE2 IN CUSTOMER_ADDRESS.ADDRESS_LINE2%TYPE,
+        vCITY_STATE IN CUSTOMER_ADDRESS.CITY_STATE%TYPE,
+        vCITY IN CUSTOMER_ADDRESS.CITY%TYPE,
+        vCUSTOMER_ID IN CUSTOMER_ADDRESS.CUSTOMER_ID%TYPE,
+        vZIP_CODE IN CUSTOMER_ADDRESS.ZIP_CODE%TYPE,
+        vADDRESS_TYPE IN CUSTOMER_ADDRESS.ADDRESS_TYPE%TYPE) 
+        AS
+        ex_INVALID EXCEPTION;
+
+    BEGIN
+
+        IF PROCESS_CUSTOMER_ADDRESS(trim(vADDRESS_LINE1),trim(vADDRESS_LINE2),trim(vCITY_STATE),trim(vCITY),
+        trim(vZIP_CODE), trim(vADDRESS_TYPE)) = 'NO' then
+            raise ex_INVALID;
+        END IF;
+        
+        UPDATE CUSTOMER_ADDRESS SET ADDRESS_ID=vADDRESS_ID, ADDRESS_LINE1 = vADDRESS_LINE1, ADDRESS_LINE2 = vADDRESS_LINE2, CITY_STATE = vCITY_STATE,CITY=vCITY ,ZIP_CODE=vZIP_CODE ,ADDRESS_TYPE=vADDRESS_TYPE WHERE CUSTOMER_ID = vCUSTOMER_ID;
+        
+        IF SQL%ROWCOUNT !=1 THEN
+            dbms_output.put_line('Record not been updated. Please try again !!!');
+            rollback;
+        ELSE
+            dbms_output.put_line('Record has updated successfully !!!');
+            commit;
+        END IF;
+
+    EXCEPTION
+        WHEN ex_INVALID THEN
+            dbms_output.put_line('Customer address Update has failed. Please try again with valid constraints !!!');
+            
+    END UPDATE_CUSTOMER_ADDRESS;
+
+    PROCEDURE INSERT_ACTIVITY(
+        vACTIVITY_ID IN ACTIVITY.ACTIVITY_ID%type,
+        vLOGIN_TIME  IN ACTIVITY.LOGIN_TIME%type,
+        vLOGOUT_TIME IN ACTIVITY.LOGOUT_TIME%type,
+        vCUSTOMER_ID IN ACTIVITY.CUSTOMER_ID%type) 
+        AS
+            ex_INVALID EXCEPTION;
+    
+    BEGIN
+    
+        IF PROCESS_ACTIVITY(vACTIVITY_ID, vLOGIN_TIME, vLOGOUT_TIME, vCUSTOMER_ID) = 'NO' then
+            raise ex_INVALID;
+        END IF;
+        
+        INSERT INTO ACTIVITY(ACTIVITY_ID, LOGIN_TIME, LOGOUT_TIME, CUSTOMER_ID)
+        VALUES(vACTIVITY_ID, vLOGIN_TIME, vLOGOUT_TIME, vCUSTOMER_ID);
+        
+        IF SQL%ROWCOUNT != 1 then
+            dbms_output.put_line('Sorry, Cannot record customers activity !!!');
+            rollback;
+        ELSE
+            COMMIT;
+            dbms_output.put_line('Customers activity recorded Added Successfully !!!'); 
+        END IF;
+    
+    EXCEPTION
+        when ex_INVALID then
+            dbms_output.put_line('Inserted Data is not as expected !!!');   
+    
+    END INSERT_ACTIVITY;
+
+END PCKG_CUSTOMER;
+
+/
