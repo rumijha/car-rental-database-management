@@ -234,9 +234,10 @@ CREATE SEQUENCE TEMP_CARS_AT_PICKUP_ID
      CYCLE
      ORDER;
 
+--INSERT INTO RIDE_TRANSACTION
 
--- INSERT INTO RIDE_TRANSACTION
 /*
+
 select count(*)
 from  
 (SELECT VIOLATION_ID
@@ -251,6 +252,11 @@ FROM   (
     FROM   ACTIVITY
     ORDER BY DBMS_RANDOM.RANDOM)
 WHERE  rownum < 107) p where ROWNUM < 500;
+
+    CREATE SEQUENCE VIOLATION_ID_SEQ
+         START WITH 1
+         INCREMENT BY 1
+         ORDER;
 */
 
 select count(*) from MOCKDATA;
@@ -404,7 +410,6 @@ CREATE SEQUENCE TRANS_ID_SEQ
  ORDER;
  */
  
-
 -- delete from RIDE_TRANSACTION;
 
 select count(*) from RIDE_TRANSACTION;
@@ -415,3 +420,119 @@ select car.car_type, sum(p.count_trans)/(select count(*) from RIDE_TRANSACTION) 
 from car, (select car_id, count(trans_id) as count_trans from RIDE_TRANSACTION group by car_id) p
 where car.car_id = p.car_id
 group by car.car_type;
+
+
+set serveroutput on;
+
+begin
+    main();
+end;
+
+select decode(trunc((sysdate - DATE_OF_BIRTH)/365),35,'Yes','No') as Result, DATE_OF_BIRTH  from CUSTOMERS where CUSTOMER_ID = 11000;
+
+select * from customers where first_name = 'Vignesh';
+begin
+update customers set last_name = 'Kumar' where customer_id = 11004;
+commit;
+end;
+
+
+--sanket
+set serveroutput on;
+begin
+   MAIN_SANKET();
+   --dbms_output.put_line(check_car_availability(1007,to_timestamp(sysdate+1/24),to_timestamp(sysdate+2/24)));
+   -- dbms_output.put_line(check_car_availability(1007,to_timestamp(sysdate+1/24), to_timestamp(sysdate+3/24)));  
+
+end;
+
+select to_char(sysdate,'DD-MON-YYYY HH:MI:SS AM') from dual;
+check_car_availability(1007,to_timestamp(sysdate+1/24),to_timestamp(sysdate+2/24));
+
+
+/*
+case 1 - 9.30-10.30 X X
+case 2 - 10 -11 X X
+case 3 - 10.30 - 10.45 X X
+case 4 - 10.30 - 11.30 X X
+case 5 - 9.30-9.45 EMPTY EMPTY
+case 6 - 11.15 -12 EMPTY EMPTY
+case 7 - 9 -12 X X
+
+select * from RIDE_TRANSACTION 
+where ((START_TIME >= '06-DEC-21 10.56.09.000000000 PM' or END_TIME >= '06-DEC-21 10.56.09.000000000 PM')   and 
+      (START_TIME <= '06-DEC-21 11.56.09.000000000 PM' or END_TIME <= '06-DEC-21 11.56.09.000000000 PM'))  and 
+      CAR_ID = 1007 and STATUS = 'IN PROCESS';
+
+where (10 >= '9' or 11 >= '9')   and 
+      (10 <= '12' or 11 <= '12')  and 
+      CAR_ID = 1007 and STATUS = 'IN PROCESS';
+
+case 1 - 9.30-10.30 X X                                                         |10       |11       
+case 2 - 10 -11 X X
+case 3 - 10.30 - 10.45 X X
+case 4 - 10.30 - 11.30 X X
+case 5 - 9.30-9.45 EMPTY EMPTY
+case 6 - 11.15 -12 EMPTY EMPTY
+case 7 - 9 -12 X X
+
+select to_char((sysdate),'DD-MON-YYYY HH:MI:SS AM'),to_char((sysdate +1/24),'DD-MON-YYYY HH:MI:SS AM'), to_timestamp(sysdate) from dual;
+
+delete from ride_transaction where trans_id = 66666;
+
+*/
+
+
+
+--vignesh
+
+
+begin
+    main_vignesh();
+end;
+
+select to_char(sysdate,'DD-MON-YYYY HH:MI:SS AM') from dual;
+alter table payments modify(customer_card varchar2(50) ENCRYPT);
+
+
+
+
+
+
+--aish
+set serveroutput on;
+begin
+    MAIN_AISH();
+end;
+
+
+
+
+select count(*) from customers where customer_id >11000;
+select count(*) from customers where customer_id >11000;
+
+
+
+
+
+
+
+
+--rumi
+
+/*
+create table TEST (name varchar2(50), card_details varchar2(50) ENCRYPT);
+insert into TEST values('sanket','1234-1234-1234-12345');
+select * from TEST;
+drop table TEST;
+*/
+
+begin
+
+pckg_customer.insert_customer();
+pckg.car.insert_car();
+
+pckg.customer.update_customer();
+NULL;
+end;
+
