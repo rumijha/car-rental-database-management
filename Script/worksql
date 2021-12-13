@@ -585,13 +585,13 @@ from car,
     from car,
     (
         select 
-        case when distance between 0 and 10 then '0-10Miles'
-             when distance between 11 and 20 then '11-20Miles'
-             when distance between 21 and 30 then '21-30Miles'
-             when distance between 31 and 40 then '31-40Miles'
-             when distance between 41 and 50 then '41-50Miles'
-             when distance between 51 and 60 then '51-60Miles'
-             when distance is null then 'IGNORE'
+        case when distance between 0 and 10 then '0-10 Miles'
+             when distance between 11 and 20 then '11-20 Miles'
+             when distance between 21 and 30 then '21-30 Miles'
+             when distance between 31 and 40 then '31-40 Miles'
+             when distance between 41 and 50 then '41-50 Miles'
+             when distance between 51 and 60 then '51-60 Miles'
+             when distance is null then 'INVALID'
         END as distance, car_id,count(distance) as total 
         from ride_transaction group by distance, car_id
     ) t
@@ -602,10 +602,7 @@ where car.car_id = q.car_id
 group by car.car_type, q.distance
 order by car.car_type, distance;
 
-select car.car_type,sum(p.count_trans) as Average_Rides
-from car, (select car_id, count(trans_id) as count_trans from RIDE_TRANSACTION group by car_id) p
-where car.car_id = p.car_id
-group by car.car_type;
+
 
 
 select  count(*) from RIDE_TRANSACTION
