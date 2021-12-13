@@ -1,0 +1,36 @@
+--------------------------------------------------------
+--  File created - Sunday-December-12-2021   
+--------------------------------------------------------
+--------------------------------------------------------
+--  DDL for Package PCKG_VIOLATIONS
+--------------------------------------------------------
+
+  CREATE OR REPLACE EDITIONABLE PACKAGE "ADMIN"."PCKG_VIOLATIONS" AS 
+
+  /* TODO enter package declarations (types, exceptions, methods etc) here */
+  
+    FUNCTION PROCESS_VIOLATION(
+        vDESCRIPTION IN violations.DESCRIPTION%type 
+        )
+    RETURN VARCHAR2;
+  
+    PROCEDURE INSERT_VIOLATIONS(
+        vVIOLATION_ID IN VIOLATIONS.VIOLATION_ID%type, 
+        vDESCRIPTION IN VIOLATIONS.DESCRIPTION%type 
+    );
+    
+    PROCEDURE UPDATE_VIOLATIONS(
+        vVIOLATION_ID IN VIOLATIONS.VIOLATION_ID%type,
+        vDESCRIPTION IN VIOLATIONS.DESCRIPTION%type 
+    );
+  
+    PROCEDURE INSERT_VIOLATIONS_RECORD(
+        vRECORD_ID IN VIOLATIONS_RECORDS.RECORD_ID%type, 
+        vRECORD_DATE IN VIOLATIONS_RECORDS.RECORD_DATE%type, 
+        vCUSTOMER_ID IN CUSTOMERS.CUSTOMER_ID%type,
+        vVIOLATION_ID IN VIOLATIONS.VIOLATION_ID%type
+    );
+
+END PCKG_VIOLATIONS;
+
+/
