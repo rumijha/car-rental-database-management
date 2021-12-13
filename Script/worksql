@@ -540,3 +540,72 @@ CREATE SEQUENCE CAR_ID_SEQ
 START WITH 1001
 INCREMENT BY 1
 ORDER;
+
+
+ SELECT distinct CUSTOMER_ID FROM RIDE_TRANSACTION WHERE TRANS_ID IN 
+    (select distinct TRANS_ID from PAYMENTS WHERE to_date(PAY_DATE) = to_date(SYSDATE) AND STATUS = 'COMPLETED');
+    
+    select distinct TRANS_ID from PAYMENTS WHERE to_date(PAY_DATE) = to_date(SYSDATE) AND STATUS = 'COMPLETED' and TRANS_ID=7727;
+    
+    
+select car.car_type, p.distance,  round(sum(p.count_trans)/(select count(*) from RIDE_TRANSACTION) *100,2) || '%' as Average_Rides
+from car, 
+(
+select car_id, distance, count(car_id) as count_trans 
+from RIDE_TRANSACTION 
+group by car_id, Distance
+) p
+where car.car_id = p.car_id
+group by car.car_type,p.distance;
+
+
+select car.car_type, sum(p.count_trans)/(select count(*) from RIDE_TRANSACTION) *100 || '%' as Average_Rides
+from car, (select car_id, count(trans_id) as count_trans from RIDE_TRANSACTION group by car_id) p
+where car.car_id = p.car_id
+group by car.car_type;
+
+
+select distance, count(distance) as total   from ride_transaction group by distance order by distance;
+
+select car.car_type, q.distance,
+round( sum(q.total) /
+    (
+        select Average_Rides from
+        (
+            select  car.car_type as car_type, sum(p.count_trans) as Average_Rides
+            from car, (select car_id, count(trans_id) as count_trans from RIDE_TRANSACTION group by car_id) p
+            where car.car_id = p.car_id 
+            group by car.car_type
+        )
+        where car_type = car.car_type
+    ) *100 ,2)|| '%' as Average_Rides
+from car,
+(
+    select t.distance, car.car_id, sum(total) as total
+    from car,
+    (
+        select 
+        case when distance between 0 and 10 then '0-10Miles'
+             when distance between 11 and 20 then '11-20Miles'
+             when distance between 21 and 30 then '21-30Miles'
+             when distance between 31 and 40 then '31-40Miles'
+             when distance between 41 and 50 then '41-50Miles'
+             when distance between 51 and 60 then '51-60Miles'
+             when distance is null then 'IGNORE'
+        END as distance, car_id,count(distance) as total 
+        from ride_transaction group by distance, car_id
+    ) t
+    where car.car_id = t.car_id
+    group by t.distance, car.car_id
+) q
+where car.car_id = q.car_id
+group by car.car_type, q.distance
+order by car.car_type, distance;
+
+select car.car_type,sum(p.count_trans) as Average_Rides
+from car, (select car_id, count(trans_id) as count_trans from RIDE_TRANSACTION group by car_id) p
+where car.car_id = p.car_id
+group by car.car_type;
+
+
+select  count(*) from RIDE_TRANSACTION
