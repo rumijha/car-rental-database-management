@@ -506,6 +506,11 @@ from ride_transaction
 where extract(year from end_time) = 2021
 order by quarter;
 
+select * from analyst_view;
+select * from support_view;
+select * from audit_view;
+
+
 --aish
 set serveroutput on;
 begin
