@@ -443,7 +443,6 @@ begin
    MAIN_SANKET();
    --dbms_output.put_line(check_car_availability(1007,to_timestamp(sysdate+1/24),to_timestamp(sysdate+2/24)));
    -- dbms_output.put_line(check_car_availability(1007,to_timestamp(sysdate+1/24), to_timestamp(sysdate+3/24)));  
-
 end;
 
 select to_char(sysdate,'DD-MON-YYYY HH:MI:SS AM') from dual;
@@ -495,9 +494,17 @@ select to_char(sysdate,'DD-MON-YYYY HH:MI:SS AM') from dual;
 alter table payments modify(customer_card varchar2(50) ENCRYPT);
 
 
+select trunc(to_char(sysdate)) from dual;
 
-
-
+select trans_id,
+    case when end_time between to_date('01-01-2021 23:59:59','DD-MM-YYYY HH24:MI:SS') and to_date('01-04-2021 00:00:00','DD-MM-YYYY HH24:MI:SS') THEN 'Q1'
+        when end_time between to_date('01-04-2021 23:59:59','DD-MM-YYYY HH24:MI:SS') and to_date('01-07-2021 00:00:00','DD-MM-YYYY HH24:MI:SS') THEN 'Q2'
+        when end_time between to_date('01-07-2021 23:59:59','DD-MM-YYYY HH24:MI:SS') and to_date('01-09-2021 00:00:00','DD-MM-YYYY HH24:MI:SS') THEN 'Q3'
+        when end_time between to_date('01-09-2021 23:59:59','DD-MM-YYYY HH24:MI:SS') and to_date('01-12-2021 00:00:00','DD-MM-YYYY HH24:MI:SS') THEN 'Q4'
+    end as quarter
+from ride_transaction
+where extract(year from end_time) = 2021
+order by quarter;
 
 --aish
 set serveroutput on;
@@ -604,5 +611,257 @@ order by car.car_type, distance;
 
 
 
+select  count(*) from RIDE_TRANSACTION;
 
-select  count(*) from RIDE_TRANSACTION
+
+
+--------------------------------------------------------------
+
+--report 3
+---------------------------------------------------------------
+select STATE, count(*) from PICKUP_POINTS group by STATE;
+
+
+select STATES_BY_TRANS.STATE, qt.quarter, SUM(PAYMENT_BILL.BILL_AMOUNT) as BILL
+from RIDE_TRANSACTION, PAYMENT_BILL,
+(
+    select trans_id,
+        case
+            when TRUNC(TRANSACTION_DATE) >= to_date('01-JAN-2021','DD-MON-YYYY') and TRUNC(TRANSACTION_DATE) <= to_date('31-MAR-2021','DD-MON-YYYY') then 'Q1'
+            when TRUNC(TRANSACTION_DATE) >= to_date('01-APR-2021','DD-MON-YYYY') and TRUNC(TRANSACTION_DATE) <= to_date('30-JUN-2021','DD-MON-YYYY') then 'Q2'
+            when TRUNC(TRANSACTION_DATE) >= to_date('01-JUL-2021','DD-MON-YYYY') and TRUNC(TRANSACTION_DATE) <= to_date('30-SEP-2021','DD-MON-YYYY') then 'Q3'
+            when TRUNC(TRANSACTION_DATE) >= to_date('01-OCT-2021','DD-MON-YYYY') and TRUNC(TRANSACTION_DATE) <= to_date('31-DEC-2021','DD-MON-YYYY') then 'Q4'
+        END as quarter
+    from ride_transaction
+    where extract(year from TRANSACTION_DATE) = 2021
+) qt,
+(
+    select TRANS_ID, STATE
+    FROM RIDE_TRANSACTION,
+    (
+        select CARS_AT_PICKUP.CARS_AT_PICKUP_ID, CARS_AT_PICKUP.PICKUP_POINT_ID, STATE
+        from CARS_AT_PICKUP,
+        (
+            select PICKUP_POINT_ID, STATE FROM PICKUP_POINTS
+        ) q
+        where CARS_AT_PICKUP.PICKUP_POINT_ID = q.PICKUP_POINT_ID
+    ) p
+    where RIDE_TRANSACTION.CARS_AT_PICKUP_ID = p.CARS_AT_PICKUP_ID
+) STATES_BY_TRANS
+where 
+    RIDE_TRANSACTION.TRANS_ID = STATES_BY_TRANS.TRANS_ID and
+    RIDE_TRANSACTION.TRANS_ID = PAYMENT_BILL.TRANS_ID and
+    RIDE_TRANSACTION.TRANS_ID = qt.TRANS_ID and
+    extract(year from RIDE_TRANSACTION.END_TIME) = 2021
+group by STATE, quarter
+order by STATE, quarter
+;
+
+update RIDE_TRANSACTION
+set 
+transaction_date = to_date('12-NOV-2021 07:46:22 PM','DD-MON-YYYY HH:MI:SS AM'),
+START_TIME = to_timestamp('12-NOV-2021 08:46:22 PM','DD-MON-YYYY HH:MI:SS AM'),
+END_TIME = to_timestamp('12-NOV-2021 10:46:22 PM','DD-MON-YYYY HH:MI:SS AM')
+where to_char(transaction_date,'DD-MON-YYYY') = '09-AUG-2021';
+
+update PAYMENTS
+set 
+pay_DATE = to_timestamp('12-NOV-2021 11:46:22 PM','DD-MON-YYYY HH:MI:SS AM')
+where to_char(pay_date,'DD-MON-YYYY') = '09-AUG-2021'; 
+
+select count(*) from RIDE_TRANSACTION where to_char(transaction_date,'DD-MON-YYYY') = '09-AUG-2021';
+
+select trans_id,
+    case
+            when TRUNC(TRANSACTION_DATE) >= to_date('01-JAN-2021','DD-MON-YYYY') and TRUNC(TRANSACTION_DATE) <= to_date('31-MAR-2021','DD-MON-YYYY') then 'Q1'
+            when TRUNC(TRANSACTION_DATE) >= to_date('01-APR-2021','DD-MON-YYYY') and TRUNC(TRANSACTION_DATE) <= to_date('30-JUN-2021','DD-MON-YYYY') then 'Q2'
+            when TRUNC(TRANSACTION_DATE) >= to_date('01-JUL-2021','DD-MON-YYYY') and TRUNC(TRANSACTION_DATE) <= to_date('30-SEP-2021','DD-MON-YYYY') then 'Q3'
+            when TRUNC(TRANSACTION_DATE) >= to_date('01-OCT-2021','DD-MON-YYYY') and TRUNC(TRANSACTION_DATE) <= to_date('31-DEC-2021','DD-MON-YYYY') then 'Q4'
+    END as quarter
+from ride_transaction
+where extract(year from END_TIME) = 2021
+order by quarter;
+
+select * from ride_transaction
+where TRANSACTION_DATE = to_date('31-MAR-2021','DD-MON-YYYY');
+
+select trunc(END_TIME) from ride_transaction where trunc(END_TIME) < sysdate;
+
+select trans_id,
+   case
+        when TRUNC(END_TIME) between '01-JAN-2021' and  '01-APR-2021' then 'Q1'
+        when TRUNC(END_TIME) between '01-APR-2021' and  '01-JUL-2021' then 'Q2'
+        when TRUNC(END_TIME) between '01-JUL-2021' and  '01-OCT-2021' then 'Q3'
+        when TRUNC(END_TIME) between '01-OCT-2021' and  '31-DEC-2021' then 'Q4'
+    END as quarter
+from ride_transaction
+where extract(year from END_TIME) = 2021
+order by quarter;
+
+select * from ride_transaction where trans_id = 45517;
+
+
+select extract(year from sysdate) from dual;
+
+select TRANS_ID, STATE
+FROM RIDE_TRANSACTION,
+(
+    select CARS_AT_PICKUP.CARS_AT_PICKUP_ID, CARS_AT_PICKUP.PICKUP_POINT_ID, STATE
+    from CARS_AT_PICKUP,
+    (
+        select PICKUP_POINT_ID, STATE FROM PICKUP_POINTS
+    ) q
+    where CARS_AT_PICKUP.PICKUP_POINT_ID = q.PICKUP_POINT_ID
+) p
+where RIDE_TRANSACTION.CARS_AT_PICKUP_ID = p.CARS_AT_PICKUP_ID;
+
+
+
+---------------------------------------------------
+-- just to verify total of bill till date 
+----------------------------------------------------
+select sum(BILL)
+from
+(
+    select (DISTANCE * RATE_PER_HR) as BILL
+    from RIDE_TRANSACTION,
+    (
+        select CAR_ID, RATE_PER_HR FROM CAR
+    ) CAR_RATE
+where 
+RIDE_TRANSACTION.CAR_ID = CAR_RATE.CAR_ID
+)
+
+---------------------------------------------------
+--- Payment View with bill amount
+--------------------------------------------------
+
+create or replace view payment_bill as
+select pay_id, payments.trans_id, pay_date, discount_id, payments.status, START_TIME, END_TIME, extract(hour from END_TIME - START_TIME) as Ride_Duration, distance, RATE_PER_HR, (RATE_PER_HR * extract(hour from END_TIME - START_TIME)) as BILL_AMOUNT
+from payments, ride_transaction,
+(
+ select CAR_ID, RATE_PER_HR FROM CAR
+) p
+where ride_transaction.car_id = p.car_id and 
+    ride_transaction.trans_id = payments.trans_id
+
+
+select sum(bill_amount) from payment_bill;
+
+
+
+-------------------------------------------------------
+--  usage pattern
+--------------------------------------------------------
+
+select 
+    case
+        when Duration = '2-4 Hr' and distance > 20 then 'gt 20' 
+    end as expected, count(distance)
+from
+(
+    select
+        case
+            when ride_duration >= 0 and ride_duration < 2 then '0-2 Hr'
+            when ride_duration >= 2 and ride_duration < 4 then '2-4 Hr'
+            when ride_duration >= 4 and ride_duration < 6 then '4-6 Hr'
+            when ride_duration >= 6 and ride_duration < 8 then '6-8 Hr'
+            when ride_duration >= 8 and ride_duration <= 10 then '8-10 Hr'
+        end as Duration, distance, count(ride_duration)
+    from payment_bill
+    group by ride_duration, distance
+)
+group by distance, duration
+
+select
+    case
+        when ride_duration >= 0 and ride_duration < 2 then '0-2 Hr'
+        when ride_duration >= 2 and ride_duration < 4 then '2-4 Hr'
+    end as "2-4", count(ride_duration) as over
+from payment_bill
+where distance < 20 and distance > 0 
+group by ride_duration
+
+
+
+
+select
+    case
+        when ride_duration >= 0 and ride_duration < 1 then '0-1 Hr'
+        when ride_duration >= 1 and ride_duration < 3 then '1-3 Hr'
+        when ride_duration >= 3 and ride_duration < 5 then '3-5 Hr'
+        when ride_duration >= 5 and ride_duration < 8 then '5-8 Hr'
+        when ride_duration >= 8 and ride_duration <= 10 then '8-10 Hr'
+    end as Frame, over
+from
+(
+select 
+    *
+from 
+(
+    select ride_duration , count(ride_duration) as over
+    from payment_bill
+    where distance > 10 and distance > 0  and ride_duration >= 0 and ride_duration < 1 
+    group by ride_duration
+) 
+UNION
+(
+    select ride_duration , count(ride_duration) as over
+    from payment_bill
+    where distance > 20  and ride_duration >= 1 and  ride_duration < 3
+    group by ride_duration
+) 
+UNION
+(
+    select ride_duration, count(ride_duration) as over
+    from payment_bill
+    where distance > 30  and ride_duration >= 3 and  ride_duration < 5
+    group by ride_duration
+)
+UNION
+(
+    select ride_duration, count(ride_duration) as over
+    from payment_bill
+    where distance > 40  and ride_duration >= 5 and  ride_duration < 8
+    group by ride_duration
+)
+UNION
+(
+    select ride_duration, count(ride_duration) as over
+    from payment_bill
+    where distance > 50  and ride_duration >= 8 and  ride_duration <= 10
+    group by ride_duration
+)
+)
+
+
+-------------------------------------------------------------
+--- Feedback
+-------------------------------------------------------------
+
+select ratings, round(count(ratings)/ (select count(*) from feedback) * 100,2) || ' %' as Percentage 
+from feedback
+group by ratings
+order by ratings;
+
+-------------------------------------------------------------
+-- Inactive customers
+-------------------------------------------------------------
+
+select customers.customer_id, customers.first_name, customers.last_name, customers.email_id
+from customers
+where customers.customer_id NOT IN (select distinct customer_id from ride_transaction) or
+   customers.customer_id in (select distinct customer_id from ride_transaction where months_between(sysdate,transaction_date) > 6);
+
+--------------------------------------------------------------
+--- 
+--------------------------------------------------------------
+
+select distinct count(customer_id) from ride_transaction where  months_between(sysdate,transaction_date) > 12;
+
+begin
+   MAIN_VIGNESH();
+end;
+
+
+create table audit_data (USER_NAME varchar2(50) not null, action varchar2(25), time_stamp timestamp default systimestamp not null);
