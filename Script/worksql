@@ -602,7 +602,139 @@ where car.car_id = q.car_id
 group by car.car_type, q.distance
 order by car.car_type, distance;
 
+select  count(*) from RIDE_TRANSACTION;
 
 
 
-select  count(*) from RIDE_TRANSACTION
+--------------------------------------------------------------
+
+--report 3
+---------------------------------------------------------------
+select STATE, count(*) from PICKUP_POINTS group by STATE;
+
+
+select STATE, quarter, SUM(PAYMENT_BILL.BILL_AMOUNT) as BILL
+from RIDE_TRANSACTION, PAYMENT_BILL,
+(
+    select trans_id,
+        case
+            when TRUNC(TRANSACTION_DATE) >= to_date('01-JAN-2021','DD-MON-YYYY') and TRUNC(TRANSACTION_DATE) <= to_date('31-MAR-2021','DD-MON-YYYY') then 'Q1'
+            when TRUNC(TRANSACTION_DATE) >= to_date('01-APR-2021','DD-MON-YYYY') and TRUNC(TRANSACTION_DATE) <= to_date('30-JUN-2021','DD-MON-YYYY') then 'Q2'
+            when TRUNC(TRANSACTION_DATE) >= to_date('01-JUL-2021','DD-MON-YYYY') and TRUNC(TRANSACTION_DATE) <= to_date('30-SEP-2021','DD-MON-YYYY') then 'Q3'
+            when TRUNC(TRANSACTION_DATE) >= to_date('01-OCT-2021','DD-MON-YYYY') and TRUNC(TRANSACTION_DATE) <= to_date('31-DEC-2021','DD-MON-YYYY') then 'Q4'
+        END as quarter
+    from ride_transaction
+    where extract(year from TRANSACTION_DATE) = 2021
+) qt,
+(
+    select TRANS_ID, STATE
+    FROM RIDE_TRANSACTION,
+    (
+        select CARS_AT_PICKUP.CARS_AT_PICKUP_ID, CARS_AT_PICKUP.PICKUP_POINT_ID, STATE
+        from CARS_AT_PICKUP,
+        (
+            select PICKUP_POINT_ID, STATE FROM PICKUP_POINTS
+        ) q
+        where CARS_AT_PICKUP.PICKUP_POINT_ID = q.PICKUP_POINT_ID
+    ) p
+    where RIDE_TRANSACTION.CARS_AT_PICKUP_ID = p.CARS_AT_PICKUP_ID
+) STATES_BY_TRANS
+where 
+    RIDE_TRANSACTION.TRANS_ID = STATES_BY_TRANS.TRANS_ID and
+    RIDE_TRANSACTION.TRANS_ID = PAYMENT_BILL.TRANS_ID and
+    RIDE_TRANSACTION.TRANS_ID = qt.TRANS_ID and
+    extract(year from END_TIME) = 2021
+group by STATE, quarter
+order by STATE, quarter
+;
+
+update RIDE_TRANSACTION
+set 
+transaction_date = to_date('12-NOV-2021 07:46:22 PM','DD-MON-YYYY HH:MI:SS AM'),
+START_TIME = to_timestamp('12-NOV-2021 08:46:22 PM','DD-MON-YYYY HH:MI:SS AM'),
+END_TIME = to_timestamp('12-NOV-2021 10:46:22 PM','DD-MON-YYYY HH:MI:SS AM')
+where to_char(transaction_date,'DD-MON-YYYY') = '09-AUG-2021';
+
+update PAYMENTS
+set 
+pay_DATE = to_timestamp('12-NOV-2021 11:46:22 PM','DD-MON-YYYY HH:MI:SS AM')
+where to_char(pay_date,'DD-MON-YYYY') = '09-AUG-2021'; 
+
+select count(*) from RIDE_TRANSACTION where to_char(transaction_date,'DD-MON-YYYY') = '09-AUG-2021';
+
+select trans_id,
+    case
+            when TRUNC(TRANSACTION_DATE) >= to_date('01-JAN-2021','DD-MON-YYYY') and TRUNC(TRANSACTION_DATE) <= to_date('31-MAR-2021','DD-MON-YYYY') then 'Q1'
+            when TRUNC(TRANSACTION_DATE) >= to_date('01-APR-2021','DD-MON-YYYY') and TRUNC(TRANSACTION_DATE) <= to_date('30-JUN-2021','DD-MON-YYYY') then 'Q2'
+            when TRUNC(TRANSACTION_DATE) >= to_date('01-JUL-2021','DD-MON-YYYY') and TRUNC(TRANSACTION_DATE) <= to_date('30-SEP-2021','DD-MON-YYYY') then 'Q3'
+            when TRUNC(TRANSACTION_DATE) >= to_date('01-OCT-2021','DD-MON-YYYY') and TRUNC(TRANSACTION_DATE) <= to_date('31-DEC-2021','DD-MON-YYYY') then 'Q4'
+    END as quarter
+from ride_transaction
+where extract(year from END_TIME) = 2021
+order by quarter;
+
+select * from ride_transaction
+where TRANSACTION_DATE = to_date('31-MAR-2021','DD-MON-YYYY');
+
+select trunc(END_TIME) from ride_transaction where trunc(END_TIME) < sysdate;
+
+select trans_id,
+   case
+        when TRUNC(END_TIME) between '01-JAN-2021' and  '01-APR-2021' then 'Q1'
+        when TRUNC(END_TIME) between '01-APR-2021' and  '01-JUL-2021' then 'Q2'
+        when TRUNC(END_TIME) between '01-JUL-2021' and  '01-OCT-2021' then 'Q3'
+        when TRUNC(END_TIME) between '01-OCT-2021' and  '31-DEC-2021' then 'Q4'
+    END as quarter
+from ride_transaction
+where extract(year from END_TIME) = 2021
+order by quarter;
+
+select * from ride_transaction where trans_id = 45517;
+
+
+select extract(year from sysdate) from dual;
+
+select TRANS_ID, STATE
+FROM RIDE_TRANSACTION,
+(
+    select CARS_AT_PICKUP.CARS_AT_PICKUP_ID, CARS_AT_PICKUP.PICKUP_POINT_ID, STATE
+    from CARS_AT_PICKUP,
+    (
+        select PICKUP_POINT_ID, STATE FROM PICKUP_POINTS
+    ) q
+    where CARS_AT_PICKUP.PICKUP_POINT_ID = q.PICKUP_POINT_ID
+) p
+where RIDE_TRANSACTION.CARS_AT_PICKUP_ID = p.CARS_AT_PICKUP_ID;
+
+
+
+---------------------------------------------------
+-- just to verify total of bill till date 
+----------------------------------------------------
+select sum(BILL)
+from
+(
+    select (DISTANCE * RATE_PER_HR) as BILL
+    from RIDE_TRANSACTION,
+    (
+        select CAR_ID, RATE_PER_HR FROM CAR
+    ) CAR_RATE
+where 
+RIDE_TRANSACTION.CAR_ID = CAR_RATE.CAR_ID
+)
+
+---------------------------------------------------
+--- Payment View with bill amount
+--------------------------------------------------
+
+create or replace view payment_bill as
+select pay_id, payments.trans_id, pay_date, discount_id, payments.status, (RATE_PER_HR * extract(hour from END_TIME - START_TIME)) as BILL_AMOUNT
+from payments, ride_transaction,
+(
+ select CAR_ID, RATE_PER_HR FROM CAR
+) p
+where ride_transaction.car_id = p.car_id and 
+    ride_transaction.trans_id = payments.trans_id
+
+
+select sum(bill_amount) from payment_bill;
