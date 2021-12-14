@@ -495,9 +495,17 @@ select to_char(sysdate,'DD-MON-YYYY HH:MI:SS AM') from dual;
 alter table payments modify(customer_card varchar2(50) ENCRYPT);
 
 
+select trunc(to_char(sysdate)) from dual;
 
-
-
+select trans_id,
+    case when end_time between to_date('01-01-2021 23:59:59','DD-MM-YYYY HH24:MI:SS') and to_date('01-04-2021 00:00:00','DD-MM-YYYY HH24:MI:SS') THEN 'Q1'
+        when end_time between to_date('01-04-2021 23:59:59','DD-MM-YYYY HH24:MI:SS') and to_date('01-07-2021 00:00:00','DD-MM-YYYY HH24:MI:SS') THEN 'Q2'
+        when end_time between to_date('01-07-2021 23:59:59','DD-MM-YYYY HH24:MI:SS') and to_date('01-09-2021 00:00:00','DD-MM-YYYY HH24:MI:SS') THEN 'Q3'
+        when end_time between to_date('01-09-2021 23:59:59','DD-MM-YYYY HH24:MI:SS') and to_date('01-12-2021 00:00:00','DD-MM-YYYY HH24:MI:SS') THEN 'Q4'
+    end as quarter
+from ride_transaction
+where extract(year from end_time) = 2021
+order by quarter;
 
 --aish
 set serveroutput on;
