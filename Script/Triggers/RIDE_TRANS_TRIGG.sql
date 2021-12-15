@@ -1,0 +1,14 @@
+CREATE OR REPLACE TRIGGER RIDE_TRANS_TRIGG
+AFTER INSERT OR UPDATE OR DELETE
+ON RIDE_TRANSACTION
+FOR EACH ROW
+BEGIN
+CASE
+    WHEN INSERTING THEN
+    INSERT INTO audit_data values(AUDIT_ID_SEQ.nextval, user, sysdate, 'INSERT');
+    WHEN UPDATING THEN
+    INSERT INTO audit_data values(AUDIT_ID_SEQ.nextval, user, sysdate, 'UPDATE');
+    WHEN DELETING THEN
+    INSERT INTO audit_data values(AUDIT_ID_SEQ.nextval, user, sysdate, 'DELETE');
+END CASE;
+END;

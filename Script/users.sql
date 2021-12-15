@@ -1,5 +1,5 @@
 
-select USER from dual;
+SELECT USER FROM DUAL;
 
 --------------------------------------
 --          ROLES
@@ -38,8 +38,11 @@ select USER from dual;
     GRANT ALL ON PCKG_SERVICE TO APP_OWNER;
     GRANT ALL ON PCKG_TRANSACT TO APP_OWNER; 
     GRANT ALL ON PCKG_VIOLATIONS TO APP_OWNER;
+    GRANT ALL ON PCKG_UTILS TO APP_OWNER;
 
-VIEWS
+    GRANT ALL ON ANALYST_VIEW TO APP_OWNER;
+    GRANT ALL ON SUPPORT_VIEW TO APP_OWNER;
+    GRANT ALL ON AUDIT_VIEW TO APP_OWNER;
 
 ---------------------------------------
 ---         DEVELOPER
@@ -68,8 +71,11 @@ VIEWS
     GRANT ALL ON PCKG_SERVICE TO DEVELOPER;
     GRANT ALL ON PCKG_TRANSACT TO DEVELOPER; 
     GRANT ALL ON PCKG_VIOLATIONS TO DEVELOPER;
+    GRANT ALL ON PCKG_UTILS TO DEVELOPER;
 
-VIEWS
+    GRANT ALL ON ANALYST_VIEW TO DEVELOPER;
+    GRANT ALL ON SUPPORT_VIEW TO DEVELOPER;
+    GRANT ALL ON AUDIT_VIEW TO DEVELOPER;
 
 ---------------------------------------
 ---         TESTER
@@ -98,15 +104,17 @@ VIEWS
     GRANT EXECUTE ON PCKG_SERVICE TO TESTER;
     GRANT EXECUTE ON PCKG_TRANSACT TO TESTER; 
     GRANT EXECUTE ON PCKG_VIOLATIONS TO TESTER;
+    GRANT EXECUTE ON PCKG_UTILS TO TESTER;
 
-VIEWS
+    GRANT ALL ON ANALYST_VIEW TO TESTER;
+    GRANT ALL ON SUPPORT_VIEW TO TESTER;
+    GRANT ALL ON AUDIT_VIEW TO TESTER;
 
 ---------------------------------------
----  ANALYST do this later
+---  ANALYST 
 ---------------------------------------
-GRANT  CONNECT, CREATE SESSION to ANALYST;
-
-VIEWS
+    GRANT  CONNECT, CREATE SESSION to ANALYST;
+    GRANT SELECT ON ANALYST_VIEW TO ANALYST;
 
 ---------------------------------------
 ---         SERVICE
@@ -118,15 +126,18 @@ VIEWS
     GRANT EXECUTE ON PCKG_SERVICE TO SERVICE;
     GRANT EXECUTE ON PCKG_TRANSACT TO SERVICE; 
     GRANT EXECUTE ON PCKG_VIOLATIONS TO SERVICE;
+    GRANT ALL ON PCKG_UTILS TO SERVICE;
     
-    VIEW FOR PAYMENTS
-
+    GRANT SELECT ON ANALYST_VIEW TO SERVICE;
+    GRANT SELECT ON SUPPORT_VIEW TO SERVICE;
+    GRANT SELECT ON AUDIT_VIEW TO SERVICE;
+    
 ---------------------------------------
 ---  SECURITY
 ---------------------------------------
-VIEWS
-
-
+    GRANT CONNECT, CREATE SESSION to SECURITY;
+    GRANT SELECT ON AUDIT_VIEW TO SECURITY;
+    
 ---------------------------------------
 
  -- SELECT * FROM role_sys_privs where ROLE IN ('APP_OWNER','DEVELOPER','TESTER','ANALYST','SERVICE','SECURITY');
@@ -151,9 +162,9 @@ VIEWS
     --AUDIT
     CREATE USER JESSY IDENTIFIED BY Blender12345;
 
-/*
+
     select * from dba_users where username in ('HARRY', 'JARVIS', 'PETER', 'TOM', 'ROOT', 'JESSY');
-*/
+
 -----------------------------------------
 -- ######################################
 -----------------------------------------
@@ -171,13 +182,13 @@ VIEWS
 
 -----------------------------------------
 
--- SELECT * FROM session_roles;
-
--- SELECT * FROM user_role_privs;
--- SELECT * FROM role_sys_privs where ROLE IN ('APP_OWNER','DEVELOPER','TESTER','ANALYST','SERVICE','SECURITY');
--- SELECT * FROM role_tab_privs where ROLE IN ('APP_OWNER','DEVELOPER','TESTER','ANALYST','SERVICE','SECURITY');
-
--- select * from ALL_TABLES where OWNER = 'ADMIN';
--- select * from DBA_ROLE_PRIVS where grantee = 'ADMIN';
-
--- SELECT * FROM dba_role_privs where GRANTED_ROLE IN ('ADMIN', 'APP_OWNER', 'DEVELOPER', 'TESTER', 'ANALYST', 'SERVICE', 'SECURITY');
+    -- SELECT * FROM session_roles;
+    
+    -- SELECT * FROM user_role_privs;
+    -- SELECT * FROM role_sys_privs where ROLE IN ('APP_OWNER','DEVELOPER','TESTER','ANALYST','SERVICE','SECURITY');
+    -- SELECT * FROM role_tab_privs where ROLE IN ('APP_OWNER','DEVELOPER','TESTER','ANALYST','SERVICE','SECURITY');
+    
+    -- select * from ALL_TABLES where OWNER = 'ADMIN';
+    -- select * from DBA_ROLE_PRIVS where grantee = 'ADMIN';
+    
+    -- SELECT * FROM dba_role_privs where GRANTED_ROLE IN ('ADMIN', 'APP_OWNER', 'DEVELOPER', 'TESTER', 'ANALYST', 'SERVICE', 'SECURITY');

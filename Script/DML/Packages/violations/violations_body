@@ -1,0 +1,159 @@
+--------------------------------------------------------
+--  File created - Tuesday-December-14-2021   
+--------------------------------------------------------
+--------------------------------------------------------
+--  DDL for Package Body PCKG_VIOLATIONS
+--------------------------------------------------------
+
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "ADMIN"."PCKG_VIOLATIONS" AS
+
+FUNCTION PROCESS_VIOLATION 
+(
+  vDESCRIPTION IN violations.DESCRIPTION%type 
+) RETURN VARCHAR2 AS 
+
+    ex_INVALID_DESCRIPTION EXCEPTION;
+BEGIN
+    if (length(trim(vDESCRIPTION)) IS NULL) then
+        raise ex_INVALID_DESCRIPTION;
+    end if;
+    RETURN 'YES';
+EXCEPTION
+    when ex_INVALID_DESCRIPTION then
+        RETURN 'NO';
+    when others then
+        RETURN 'NO';
+END PROCESS_VIOLATION;
+
+PROCEDURE INSERT_VIOLATIONS 
+(
+  vVIOLATION_ID IN VIOLATIONS.VIOLATION_ID%type 
+, vDESCRIPTION IN VIOLATIONS.DESCRIPTION%type 
+) AS 
+    
+    ex_INVALID_DESCRIPTION EXCEPTION;
+    ex_FAILURE EXCEPTION;
+BEGIN
+    if  PROCESS_VIOLATION(trim(vDESCRIPTION)) = 'NO' then
+        raise ex_INVALID_DESCRIPTION;
+    end if;
+    
+    insert into VIOLATIONS values (
+        vVIOLATION_ID,
+        vDESCRIPTION
+    );
+    
+    if SQL%ROWCOUNT != 1 then
+        rollback;
+        raise ex_FAILURE;
+    else 
+        dbms_output.put_line('Violation Record Inserted Successfully !!!');
+    end if;
+    
+    commit;
+EXCEPTION
+    when ex_INVALID_DESCRIPTION then
+        dbms_output.put_line('Invalid Description!!! Description cannot be Empty or Null');
+    when ex_FAILURE then
+        dbms_output.put_line('Violations Record Could Not Be Inserted !!!');
+END INSERT_VIOLATIONS;
+
+PROCEDURE UPDATE_VIOLATIONS 
+(
+   vVIOLATION_ID IN VIOLATIONS.VIOLATION_ID%type,
+   vDESCRIPTION IN VIOLATIONS.DESCRIPTION%type 
+) AS 
+        ex_INVALID_DESCRIPTION EXCEPTION;
+BEGIN
+      if  PROCESS_VIOLATION(trim(vDESCRIPTION)) = 'NO' then
+        raise ex_INVALID_DESCRIPTION;
+    end if;
+    
+    UPDATE VIOLATIONS SET DESCRIPTION = vDESCRIPTION WHERE VIOLATION_ID = vVIOLATION_ID;
+    
+    IF SQL%ROWCOUNT !=1 THEN
+        dbms_output.put_line('Record not been updated. Please try again !!!');
+        rollback;
+    ELSE
+        dbms_output.put_line('Record has Updated successfully !!!');
+        commit;
+    END IF;
+
+EXCEPTION
+
+    WHEN ex_INVALID_DESCRIPTION THEN
+        dbms_output.put_line('Violations Update failed. Please try again with valid constraints !!!');
+    when others then
+        dbms_output.put_line('Invalid Operation !!!' || SQLERRM);
+    
+END UPDATE_VIOLATIONS;
+
+PROCEDURE INSERT_VIOLATIONS_RECORD 
+(
+  vRECORD_ID IN VIOLATIONS_RECORDS.RECORD_ID%type,
+  vCUSTOMER_ID IN CUSTOMERS.CUSTOMER_ID%type,
+  vVIOLATION_ID IN VIOLATIONS.VIOLATION_ID%type
+) AS
+
+    ex_NO_CUSTOMER_FOUND EXCEPTION;
+    ex_NO_VIOLATION_FOUND EXCEPTION;
+    ex_FAILURE EXCEPTION;
+    db_CUSTOMER_ID CUSTOMERS.CUSTOMER_ID%type;
+    db_VIOLATION_ID VIOLATIONS.VIOLATION_ID%type;
+BEGIN
+    
+    begin
+        select CUSTOMER_ID into db_CUSTOMER_ID from CUSTOMERS where CUSTOMER_ID = vCUSTOMER_ID;
+        if db_CUSTOMER_ID is NULL then
+             raise NO_DATA_FOUND;
+        end if;
+    exception
+        when NO_DATA_FOUND then
+            raise ex_NO_CUSTOMER_FOUND;
+    end;
+    
+    begin
+        select VIOLATION_ID into db_VIOLATION_ID from VIOLATIONS where VIOLATION_ID = vVIOLATION_ID;
+        if db_VIOLATION_ID is NULL then
+             raise NO_DATA_FOUND;
+        end if;
+    exception
+        when NO_DATA_FOUND then
+            raise ex_NO_VIOLATION_FOUND;
+    end;
+    
+    insert into VIOLATIONS_RECORDS values(
+        vRECORD_ID,
+        sysdate,
+        vCUSTOMER_ID,
+        vVIOLATION_ID
+    );
+    
+    if SQL%ROWCOUNT != 1 then
+        rollback;
+        raise ex_FAILURE;
+    else 
+        dbms_output.put_line('Violations Data Inserted Successfully !!!');
+    end if;
+    
+EXCEPTION
+
+    when ex_NO_CUSTOMER_FOUND then
+        dbms_output.put_line('No Customer Id Found To Insert Violation Record!!!');
+    when ex_NO_VIOLATION_FOUND then
+        dbms_output.put_line('No Violation Id Found To Insert Violation Record!!!');
+    when ex_FAILURE then
+        dbms_output.put_line('Violations Data Inserted Successfully !!!');
+
+END INSERT_VIOLATIONS_RECORD;
+
+END PCKG_VIOLATIONS;
+
+/
+
+  GRANT EXECUTE ON "ADMIN"."PCKG_VIOLATIONS" TO "APP_OWNER";
+  GRANT DEBUG ON "ADMIN"."PCKG_VIOLATIONS" TO "APP_OWNER";
+  GRANT EXECUTE ON "ADMIN"."PCKG_VIOLATIONS" TO "DEVELOPER";
+  GRANT DEBUG ON "ADMIN"."PCKG_VIOLATIONS" TO "DEVELOPER";
+  GRANT EXECUTE ON "ADMIN"."PCKG_VIOLATIONS" TO "TESTER";
+  GRANT EXECUTE ON "ADMIN"."PCKG_VIOLATIONS" TO "SERVICE";

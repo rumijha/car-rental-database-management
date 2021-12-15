@@ -1,0 +1,27 @@
+--------------------------------------------------------
+--  File created - Tuesday-December-14-2021   
+--------------------------------------------------------
+--------------------------------------------------------
+--  DDL for View PAYMENT_BILL
+--------------------------------------------------------
+
+  CREATE OR REPLACE FORCE EDITIONABLE VIEW "ADMIN"."PAYMENT_BILL" ("PAY_ID", "TRANS_ID", "PAY_DATE", "DISCOUNT_ID", "STATUS", "START_TIME", "END_TIME", "RIDE_DURATION", "DISTANCE", "RATE_PER_HR", "BILL_AMOUNT") DEFAULT COLLATION "USING_NLS_COMP"  AS 
+  select pay_id, payments.trans_id, pay_date, discount_id, payments.status, START_TIME, END_TIME, 
+    case
+        when ceil((extract(hour from END_TIME - START_TIME)*60 + round(abs(extract(minute from  END_TIME - START_TIME)),2))/60) < 1 then 1
+        else
+            ceil(round(extract(hour from END_TIME - START_TIME)*60 + round(abs(extract(minute from  END_TIME - START_TIME)),2),2)/60)
+    END as Ride_Duration, distance, RATE_PER_HR, 
+    round(RATE_PER_HR * 
+        case
+            when ceil((extract(hour from END_TIME - START_TIME)*60 + round(abs(extract(minute from  END_TIME - START_TIME)),2))/60) < 1 then 1
+        else
+           ceil((extract(hour from END_TIME - START_TIME)*60 + round(abs(extract(minute from  END_TIME - START_TIME)),2))/60)
+        END,2) as BILL_AMOUNT
+from payments, ride_transaction,
+(
+ select CAR_ID, RATE_PER_HR FROM CAR
+) p
+where ride_transaction.car_id = p.car_id and 
+    ride_transaction.trans_id = payments.trans_id
+;

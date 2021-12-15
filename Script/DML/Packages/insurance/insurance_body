@@ -1,0 +1,258 @@
+--------------------------------------------------------
+--  File created - Tuesday-December-14-2021   
+--------------------------------------------------------
+--------------------------------------------------------
+--  DDL for Package Body PCKG_INSURANCE
+--------------------------------------------------------
+
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "ADMIN"."PCKG_INSURANCE" AS
+
+FUNCTION PROCESS_INSURANCE 
+(
+    vSUMMARY IN INSURANCE.SUMMARY%TYPE,
+    vINSURANCE_TYPE IN INSURANCE.INSURANCE_TYPE%TYPE,
+    vINSURANCE_COST IN INSURANCE.INSURANCE_COST%TYPE 
+) RETURN VARCHAR2 AS 
+
+    ex_INVALID_INSURANCE_COST EXCEPTION;
+    ex_INVALID_SUMMARY EXCEPTION;
+    ex_INVALID_INSURANCE_TYPE EXCEPTION;
+BEGIN
+
+    if vINSURANCE_COST is NULL then
+        raise ex_INVALID_INSURANCE_COST;
+    end if;  
+    
+    if LENGTH(trim(vINSURANCE_TYPE)) > 50 then
+        raise ex_INVALID_INSURANCE_TYPE;
+    end if; 
+    
+    if LENGTH(trim(vSUMMARY)) > 50 then
+        raise ex_INVALID_SUMMARY;
+    end if; 
+    
+    RETURN 'YES';
+
+EXCEPTION
+
+    when ex_INVALID_INSURANCE_COST then
+        dbms_output.put_line('Please enter the cost of Insurance !!!');
+        RETURN 'NO';
+    
+    when ex_INVALID_INSURANCE_TYPE then
+        dbms_output.put_line('Please enter the Insurance Type value within 50 characters !!!');
+        RETURN 'NO';
+        
+    when ex_INVALID_SUMMARY then
+        dbms_output.put_line('Please enter the Summary within 50 characters !!!');
+        RETURN 'NO';
+        
+    RETURN 'NO';    
+END PROCESS_INSURANCE;
+
+PROCEDURE INSERT_INSURANCE 
+(
+    vINSURANCE_ID IN INSURANCE.INSURANCE_ID%TYPE, 
+    vSUMMARY IN INSURANCE.SUMMARY%TYPE, 
+    vINSURANCE_TYPE IN INSURANCE.INSURANCE_TYPE%TYPE, 
+    vINSURANCE_COST IN INSURANCE.INSURANCE_COST%TYPE 
+) AS 
+    ex_INVALID EXCEPTION;
+    
+BEGIN
+
+    if PROCESS_INSURANCE(vSUMMARY,vINSURANCE_TYPE,vINSURANCE_COST) = 'NO' then
+        raise ex_INVALID;
+    end if;
+    
+    INSERT INTO INSURANCE VALUES(
+        vINSURANCE_ID,
+        trim(vSUMMARY),
+        trim(vINSURANCE_TYPE),
+        vINSURANCE_COST);
+        
+    IF SQL%ROWCOUNT != 1 then
+        dbms_output.put_line('Sorry, Insurance could not be inserted. Please retry again with valid constraints !!!');
+        rollback;
+    ELSE
+        COMMIT;
+        dbms_output.put_line('Insurance Inserted Successfully !!!'); 
+    END IF;
+
+EXCEPTION
+    when ex_INVALID then
+        dbms_output.put_line('Insurance has not inserted. Please retry again with valid constraints  !!!'); 
+    rollback;
+        
+END INSERT_INSURANCE;
+
+PROCEDURE UPDATE_INSURANCE 
+(
+    vINSURANCE_ID IN INSURANCE.INSURANCE_ID%TYPE, 
+    vSUMMARY IN INSURANCE.SUMMARY%TYPE, 
+    vINSURANCE_TYPE IN INSURANCE.INSURANCE_TYPE%TYPE, 
+    vINSURANCE_COST IN INSURANCE.INSURANCE_COST%TYPE 
+) AS 
+    
+    ex_INVALID EXCEPTION;
+
+BEGIN
+
+    IF PROCESS_INSURANCE(vSUMMARY,vINSURANCE_TYPE, vINSURANCE_COST) = 'NO' THEN
+        raise ex_INVALID;
+    END IF;
+    
+    UPDATE INSURANCE SET SUMMARY = vSUMMARY, INSURANCE_TYPE = vINSURANCE_TYPE, INSURANCE_COST = vINSURANCE_COST WHERE INSURANCE_ID = vINSURANCE_ID;
+    
+    IF SQL%ROWCOUNT !=1 THEN
+        dbms_output.put_line('Record not been updated. Please try again !!!');
+        rollback;
+    ELSE
+        dbms_output.put_line('Record has updated successfully !!!');
+        commit;
+    END IF;
+
+EXCEPTION
+
+    WHEN ex_INVALID THEN
+        dbms_output.put_line('Insurance Update has been failed. Please try again with valid constraints !!!');
+    
+END UPDATE_INSURANCE;
+
+PROCEDURE INSERT_PURCHASE_INSURANCE 
+(
+    vPURCHASE_INSURANCE_ID IN PURCHASE_INSURANCE.PURCHASE_INSURANCE_ID%TYPE, 
+    vCAR_ID IN PURCHASE_INSURANCE.CAR_ID%TYPE, 
+    vINSURANCE_ID IN PURCHASE_INSURANCE.INSURANCE_ID%TYPE, 
+    vPURCHASE_DATE IN PURCHASE_INSURANCE.PURCHASE_DATE%TYPE, 
+    vEXPIRY_DATE IN PURCHASE_INSURANCE.EXPIRY_DATE%TYPE 
+) AS 
+
+    ex_INVALID EXCEPTION;
+    
+BEGIN
+
+    IF PROCESS_PURCHASE_INSURANCE(vCAR_ID,vINSURANCE_ID,vPURCHASE_DATE,vEXPIRY_DATE) = 'NO' then
+        raise ex_INVALID;
+    END IF;
+    
+    INSERT INTO PURCHASE_INSURANCE(PURCHASE_INSURANCE_ID, CAR_ID, INSURANCE_ID, PURCHASE_DATE, EXPIRY_DATE)
+    VALUES(
+        vPURCHASE_INSURANCE_ID,
+        vCAR_ID,
+        vINSURANCE_ID,
+        vPURCHASE_DATE,
+        vEXPIRY_DATE);
+        
+    IF SQL%ROWCOUNT != 1 then
+        dbms_output.put_line('Sorry, Purchase Insurance could not be inserted !!!');
+        rollback;
+    ELSE
+        COMMIT;
+        dbms_output.put_line('Purchase Insurance Inserted Successfully !!!'); 
+    END IF;
+    
+EXCEPTION
+    when ex_INVALID then
+        dbms_output.put_line('Please retry inserting the valid Purchase Insurance !!!'); 
+  
+END INSERT_PURCHASE_INSURANCE;
+
+FUNCTION PROCESS_PURCHASE_INSURANCE(
+    vCAR_ID IN PURCHASE_INSURANCE.CAR_ID%TYPE, 
+    vINSURANCE_ID IN PURCHASE_INSURANCE.INSURANCE_ID%TYPE, 
+    vPURCHASE_DATE IN PURCHASE_INSURANCE.PURCHASE_DATE%TYPE, 
+    vEXPIRY_DATE IN PURCHASE_INSURANCE.EXPIRY_DATE%TYPE 
+) RETURN VARCHAR2 AS 
+
+    DB_vCAR_ID PURCHASE_INSURANCE.CAR_ID%TYPE;
+    DB_vINSURANCE_ID PURCHASE_INSURANCE.INSURANCE_ID%TYPE;
+    
+    ex_INVALID_CAR_ID EXCEPTION;
+    ex_INVALID_INSURANCE_ID EXCEPTION;
+    ex_INVALID_PURCHASE_DATE EXCEPTION;
+    ex_INVALID_EXPIRY_DATE EXCEPTION;
+
+BEGIN
+    
+    --check if data is null, empty and not appropriate---
+    
+    if vCAR_ID is NULL or LENGTH(vCAR_ID) is NULL then
+        raise ex_INVALID_CAR_ID;
+    end if;
+    
+    if vINSURANCE_ID is NULL or LENGTH(vINSURANCE_ID) is NULL then
+        raise ex_INVALID_INSURANCE_ID;
+    end if;
+    
+    if vPURCHASE_DATE is NULL or to_char(LENGTH(vPURCHASE_DATE)) is NULL then
+        raise ex_INVALID_PURCHASE_DATE;
+    end if;
+    
+    if vEXPIRY_DATE is NULL or to_char(LENGTH(vEXPIRY_DATE)) is NULL then
+        raise ex_INVALID_EXPIRY_DATE;
+    end if;
+    
+    -- check if Car ID, Customer ID exists in CAR table
+    begin
+    select CAR_ID into DB_vCAR_ID from CAR where CAR_ID = vCAR_ID;
+        if DB_vCAR_ID IS NULL OR LENGTH(DB_vCAR_ID) IS NULL THEN
+            raise ex_INVALID_CAR_ID;
+        end if;
+    exception
+        when NO_DATA_FOUND then
+            dbms_output.put_line('Car ID does not exists in Car table !!!');
+            RETURN 'NO';
+        when ex_INVALID_CAR_ID then
+            dbms_output.put_line('Car ID does not exists in Car table !!!');
+            RETURN 'NO';
+    end;
+    
+    begin
+        select INSURANCE_ID into DB_vINSURANCE_ID from INSURANCE where INSURANCE_ID = vINSURANCE_ID;
+        if DB_vINSURANCE_ID IS NULL OR LENGTH(DB_vINSURANCE_ID) IS NULL THEN
+            raise ex_INVALID_INSURANCE_ID;
+        end if;
+    exception
+        when NO_DATA_FOUND then
+            dbms_output.put_line('Insurance ID does not exists in Insurance table !!!');
+            RETURN 'NO';
+        when ex_INVALID_INSURANCE_ID then
+            dbms_output.put_line('Insurance ID does not exists in Insurance table !!!');
+            RETURN 'NO';
+    end;
+    
+    RETURN 'YES';
+    
+EXCEPTION
+
+    when ex_INVALID_CAR_ID then
+        dbms_output.put_line('Please enter the valid Car ID !!!');
+        RETURN 'NO';
+        
+    when ex_INVALID_INSURANCE_ID then
+        dbms_output.put_line('Please enter the valid Insurance ID !!!');
+        RETURN 'NO';
+        
+    when ex_INVALID_PURCHASE_DATE then
+        dbms_output.put_line('Please enter the Purchase Date !!!');
+        RETURN 'NO';
+        
+    when ex_INVALID_EXPIRY_DATE then
+        dbms_output.put_line('Please enter the Expiry Date !!!');
+        RETURN 'NO';
+    
+    RETURN 'NO';
+        
+END PROCESS_PURCHASE_INSURANCE;
+
+END PCKG_INSURANCE;
+
+/
+
+  GRANT EXECUTE ON "ADMIN"."PCKG_INSURANCE" TO "APP_OWNER";
+  GRANT DEBUG ON "ADMIN"."PCKG_INSURANCE" TO "APP_OWNER";
+  GRANT EXECUTE ON "ADMIN"."PCKG_INSURANCE" TO "DEVELOPER";
+  GRANT DEBUG ON "ADMIN"."PCKG_INSURANCE" TO "DEVELOPER";
+  GRANT EXECUTE ON "ADMIN"."PCKG_INSURANCE" TO "TESTER";
+  GRANT EXECUTE ON "ADMIN"."PCKG_INSURANCE" TO "SERVICE";
