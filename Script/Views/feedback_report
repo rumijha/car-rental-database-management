@@ -1,0 +1,13 @@
+--------------------------------------------------------
+--  File created - Tuesday-December-14-2021   
+--------------------------------------------------------
+--------------------------------------------------------
+--  DDL for View FEEDBACK_REPORT
+--------------------------------------------------------
+
+  CREATE OR REPLACE FORCE EDITIONABLE VIEW "ADMIN"."FEEDBACK_REPORT" ("RATINGS", "PERCENTAGE") DEFAULT COLLATION "USING_NLS_COMP"  AS 
+  select ratings, round(count(ratings)/ (select count(*) from feedback) * 100,2) || ' %' as Percentage 
+from feedback 
+group by ratings
+order by ratings
+;

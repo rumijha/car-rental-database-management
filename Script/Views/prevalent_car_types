@@ -1,0 +1,13 @@
+--------------------------------------------------------
+--  File created - Tuesday-December-14-2021   
+--------------------------------------------------------
+--------------------------------------------------------
+--  DDL for View PREVALENT_CAR_TYPES
+--------------------------------------------------------
+
+  CREATE OR REPLACE FORCE EDITIONABLE VIEW "ADMIN"."PREVALENT_CAR_TYPES" ("CAR_TYPE", "AVERAGE_RIDES") DEFAULT COLLATION "USING_NLS_COMP"  AS 
+  select car.car_type, round(sum(p.count_trans)/(select count(*) from RIDE_TRANSACTION) *100,2) || '%' as Average_Rides
+from car, (select car_id, count(trans_id) as count_trans from RIDE_TRANSACTION group by car_id) p
+where car.car_id = p.car_id
+group by car.car_type
+;
