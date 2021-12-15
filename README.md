@@ -34,23 +34,23 @@ However, only for demo purpose we have to use few static values in package/proce
 
 ### **Follow the Below Steps If Wanted To Re-Run Scripts Multiple Times**
 
-**If Executing For *First Time*:**
+**If Executing For First Time:**
 
     Step1: Run the DDL script 'DDL\Bootstrap' which will create All Objects
 
     Step2: Compile both the package 'utils' and its body 'utils_body' from 'DML\Packages\utils' respectively
 
-    Step3: Compile all other package script from 'DML\Packages' provided which includes
+    Step3: Compile all other package script from 'DML\Packages\' provided which includes
            Package Specifications, Body holding Functions and Procedures for DML
            
-    Step4: Run all the view scripts from 'SQL\Views'
+    Step4: Run all the view scripts from 'SQL\Views\'
     
-    Step5: Run the Users script at 'SQL\Users' which creates the Users and Grant them access accordingly
+    Step5: Run the Users script at 'SQL\Users\' which creates the Users and Grant them access accordingly
     
-    Step6: Run the Trigger script at 'SQL\Triggers' used for Audit Purpose.
+    Step6: Run the Trigger script at 'SQL\Triggers\' used for Audit Purpose.
 
 
-**If Executing For *Second Time*:**
+**If Executing For Second Time:**
 
     Step1: Run the DDL script at 'DDL\DropObjects' which will Drop Old Objects
     
@@ -58,14 +58,14 @@ However, only for demo purpose we have to use few static values in package/proce
 
     Step3: Compile both the package 'utils' and its body 'utils_body' from 'DML\Packages\utils' respectively
 
-    Step4: Compile all other package script from 'DML\Packages' provided which includes
+    Step4: Compile all other package script from 'DML\Packages\' provided which includes
            Package Specifications, Body holding Functions and Procedures for DML
            
-    Step5: Run all the view scripts from 'SQL\Views'
+    Step5: Run all the view scripts from 'SQL\Views\'
     
-    Step6: Run the Users script at 'SQL\Users' which creates the Users and Grant them access accordingly
+    Step6: Run the Users script at 'SQL\Users\' which creates the Users and Grant them access accordingly
     
-    Step7: Run the Trigger script at 'SQL\Triggers' used for Audit Purpose.
+    Step7: Run the Trigger script at 'SQL\Triggers\' used for Audit Purpose.
 
 
 This provide you the reports available to Analyst, Support and Audit Team for analysis and reports which focuses on the problem statement given.
