@@ -182,40 +182,15 @@ UNION
 --------------------------------------
 
 create or replace view support_view as
-select STATE, quarter, SUM(PAYMENT_BILL.BILL_AMOUNT) as BILL
-from RIDE_TRANSACTION, PAYMENT_BILL,
-(
-    select trans_id,
-        case
-            when TRUNC(TRANSACTION_DATE) >= to_date('01-JAN-2021','DD-MON-YYYY') and TRUNC(TRANSACTION_DATE) <= to_date('31-MAR-2021','DD-MON-YYYY') then 'Q1'
-            when TRUNC(TRANSACTION_DATE) >= to_date('01-APR-2021','DD-MON-YYYY') and TRUNC(TRANSACTION_DATE) <= to_date('30-JUN-2021','DD-MON-YYYY') then 'Q2'
-            when TRUNC(TRANSACTION_DATE) >= to_date('01-JUL-2021','DD-MON-YYYY') and TRUNC(TRANSACTION_DATE) <= to_date('30-SEP-2021','DD-MON-YYYY') then 'Q3'
-            when TRUNC(TRANSACTION_DATE) >= to_date('01-OCT-2021','DD-MON-YYYY') and TRUNC(TRANSACTION_DATE) <= to_date('31-DEC-2021','DD-MON-YYYY') then 'Q4'
-        END as quarter
-    from ride_transaction
-    where extract(year from TRANSACTION_DATE) = 2021
-) qt,
-(
-    select TRANS_ID, STATE
-    FROM RIDE_TRANSACTION,
-    (
-        select CARS_AT_PICKUP.CARS_AT_PICKUP_ID, CARS_AT_PICKUP.PICKUP_POINT_ID, STATE
-        from CARS_AT_PICKUP,
-        (
-            select PICKUP_POINT_ID, STATE FROM PICKUP_POINTS
-        ) q
-        where CARS_AT_PICKUP.PICKUP_POINT_ID = q.PICKUP_POINT_ID
-    ) p
-    where RIDE_TRANSACTION.CARS_AT_PICKUP_ID = p.CARS_AT_PICKUP_ID
-) STATES_BY_TRANS
-where 
-    RIDE_TRANSACTION.TRANS_ID = STATES_BY_TRANS.TRANS_ID and
-    RIDE_TRANSACTION.TRANS_ID = PAYMENT_BILL.TRANS_ID and
-    RIDE_TRANSACTION.TRANS_ID = qt.TRANS_ID and
-    extract(year from RIDE_TRANSACTION.END_TIME) = 2021
-group by STATE, quarter
-order by STATE, quarter;
-
+select support_id, support.trans_id, support.customer_id, first_name, last_name, email_id, contact, 
+customer_type, car_id, rate_per_hr, ride_duration, transaction_date, pay_id, pay_date, bill_amount, support.status as "Support Status"
+from support, ride_transaction, payment_bill, customers
+where
+    support.trans_id = ride_transaction.trans_id and
+    support.trans_id = payment_bill.trans_id and
+    support.customer_id = customers.customer_id and
+    support.customer_id = ride_transaction.customer_id;
+    
 --------------------------------------
 -- END
 --------------------------------------

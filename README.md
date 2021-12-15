@@ -34,8 +34,8 @@ However, only for _demo_ purpose used static values in package/procedure calls
 
  **To _Re-Run_ Scripts Multiple Times**
  
-  - If executing for One Time only then follow **First Time** steps
-  - If already executed and wanted to execute multiple times then follow **Second Time** steps
+  - If executing for One Time **only** then follow _First Time_ steps
+  - If **already** executed and wanted to execute again *multiple* times then follow _Second Time_ steps
   
 > **If Executing For `First` Time:**
 
@@ -52,7 +52,7 @@ However, only for _demo_ purpose used static values in package/procedure calls
     
     Step6: Run the Trigger script from 'SQL\Triggers\' used for Audit Purpose.
     
-    Step7: Run the DML script 'DML\sample_DML' to to sample DML operations
+    Step7: Uncomment individual package calls and excecute one by one from the DML script 'DML\sample_DML' to perform sample DML operations
 
 > **If Executing For `Second` Time:**
 
@@ -71,7 +71,7 @@ However, only for _demo_ purpose used static values in package/procedure calls
     
     Step7: Run the Trigger script from 'SQL\Triggers\' used for Audit Purpose.
 
-    Step7: Run the DML script 'DML\sample_DML' to to sample DML operations
+    Step8: Uncomment individual package call and excecute one by one from the DML script 'DML\sample_DML' to perform sample DML operations
     
 
 This provide you the reports available to Analyst, Support and Audit Team for analysis and reports which focuses on the problem statement given.
