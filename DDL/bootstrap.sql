@@ -20,6 +20,7 @@
         dbms_output.put_line('Table Activity already exists');
     end if;
   end;
+  /
 --------------------------------------------------------
 --  DDL for Table CAR
 --------------------------------------------------------
@@ -48,6 +49,7 @@
         dbms_output.put_line('Table CAR already exists');
     end if;
   end;
+  /
 --------------------------------------------------------
 --  DDL for Table CARS_AT_PICKUP
 --------------------------------------------------------
@@ -71,7 +73,7 @@
         dbms_output.put_line('Table CARS_AT_PICKUP already exists');
     end if;
   end;
-  
+  /
 --------------------------------------------------------
 --  DDL for Table CUSTOMERS
 --------------------------------------------------------
@@ -101,6 +103,7 @@
         dbms_output.put_line('Table CUSTOMERS already exists');
     end if;
   end;
+  /
 --------------------------------------------------------
 --  DDL for Table CUSTOMER_ADDRESS
 --------------------------------------------------------
@@ -129,6 +132,7 @@
         dbms_output.put_line('Table CUSTOMER_ADDRESS already exists');
     end if;
   end;
+  /
 --------------------------------------------------------
 --  DDL for Table DISCOUNTS
 --------------------------------------------------------
@@ -152,6 +156,7 @@
         dbms_output.put_line('Table DISCOUNTS already exists');
     end if;
   end;
+  /
 --------------------------------------------------------
 --  DDL for Table FEEDBACK
 --------------------------------------------------------
@@ -177,6 +182,7 @@
         dbms_output.put_line('Table FEEDBACK already exists');
     end if;
   end;
+  /
 --------------------------------------------------------
 --  DDL for Table INSURANCE
 --------------------------------------------------------
@@ -201,6 +207,7 @@
         dbms_output.put_line('Table INSURANCE already exists');
     end if;
   end;
+  /
 --------------------------------------------------------
 --  DDL for Table MAINTENANCE
 --------------------------------------------------------
@@ -227,6 +234,7 @@
         dbms_output.put_line('Table MAINTENANCE already exists');
     end if;
   end;
+  /
 --------------------------------------------------------
 --  DDL for Table PAYMENTS
 --------------------------------------------------------
@@ -253,6 +261,7 @@
         dbms_output.put_line('Table PAYMENTS already exists');
     end if;
   end;
+  /
 --------------------------------------------------------
 --  DDL for Table PICKUP_POINTS
 --------------------------------------------------------
@@ -279,6 +288,7 @@
         dbms_output.put_line('Table PICKUP_POINTS already exists');
     end if;
   end;
+  /
 --------------------------------------------------------
 --  DDL for Table PURCHASE_INSURANCE
 --------------------------------------------------------
@@ -304,6 +314,7 @@
         dbms_output.put_line('Table PURCHASE_INSURANCE already exists');
     end if;
   end;
+  /
 --------------------------------------------------------
 --  DDL for Table RIDE_TRANSACTION
 --------------------------------------------------------
@@ -333,6 +344,7 @@
         dbms_output.put_line('Table RIDE_TRANSACTION already exists');
     end if;
   end;
+  /
 --------------------------------------------------------
 --  DDL for Table SUPPORT
 --------------------------------------------------------
@@ -357,6 +369,7 @@
         dbms_output.put_line('Table SUPPORT already exists');
     end if;
   end;
+  /
 --------------------------------------------------------
 --  DDL for Table VIOLATIONS
 --------------------------------------------------------
@@ -379,6 +392,7 @@
         dbms_output.put_line('Table VIOLATIONS already exists');
     end if;
   end;
+  /
 --------------------------------------------------------
 --  DDL for Table VIOLATIONS_RECORDS
 --------------------------------------------------------
@@ -403,6 +417,7 @@
         dbms_output.put_line('Table VIOLATIONS_RECORDS already exists');
     end if;
   end;
+  /
 --------------------------------------------------------
 --  DDL for Table AUDIT_DATA
 --------------------------------------------------------
@@ -423,7 +438,7 @@
         dbms_output.put_line('Table AUDIT_DATA already exists');
     end if;
   end;
-  
+  /
 REM INSERTING into ADMIN.ACTIVITY
 SET DEFINE OFF;
 REM INSERTING into ADMIN.CAR
@@ -456,259 +471,1313 @@ REM INSERTING into ADMIN.VIOLATIONS
 SET DEFINE OFF;
 REM INSERTING into ADMIN.VIOLATIONS_RECORDS
 SET DEFINE OFF;
-
+/
 --------------------------------------------------------
 --  Constraints for Table MAINTENANCE
 --------------------------------------------------------
 
-  ALTER TABLE "ADMIN"."MAINTENANCE" MODIFY ("PURCHASE_INSURANCE_ID" CONSTRAINT "PURCHASE_INSURANCE_ID_NOT_NULL" NOT NULL ENABLE);
-  ALTER TABLE "ADMIN"."MAINTENANCE" ADD CONSTRAINT "MAINTENANCE_PK" PRIMARY KEY ("MAINTENANCE_ID")
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='PURCHASE_INSURANCE_ID_NOT_NULL';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."MAINTENANCE" MODIFY ("PURCHASE_INSURANCE_ID" CONSTRAINT "PURCHASE_INSURANCE_ID_NOT_NULL" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint PURCHASE_INSURANCE_ID_NOT_NULL already exists');
+    end if;
+  end;
+  /
+  
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='MAINTENANCE_PK';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."MAINTENANCE" ADD CONSTRAINT "MAINTENANCE_PK" PRIMARY KEY ("MAINTENANCE_ID")
   USING INDEX PCTFREE 10 INITRANS 20 MAXTRANS 255 
-  TABLESPACE "DATA"  ENABLE;
-  ALTER TABLE "ADMIN"."MAINTENANCE" MODIFY ("MAINTENANCE_DATE" CONSTRAINT "MAINTENANCE_DATE_NOT_NULL" NOT NULL ENABLE);
-  ALTER TABLE "ADMIN"."MAINTENANCE" MODIFY ("MAINTENANCE_COST" CONSTRAINT "MAINTENANCE_COST_NOT_NULL" NOT NULL ENABLE);
-  ALTER TABLE "ADMIN"."MAINTENANCE" MODIFY ("CAR_ID" CONSTRAINT "CAR_ID_NOT_NULL1" NOT NULL ENABLE);
+  TABLESPACE "DATA"  ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint MAINTENANCE_PK already exists');
+    end if;
+  end;
+  /
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='MAINTENANCE_DATE_NOT_NULL';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."MAINTENANCE" MODIFY ("MAINTENANCE_DATE" CONSTRAINT "MAINTENANCE_DATE_NOT_NULL" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint MAINTENANCE_DATE_NOT_NULL already exists');
+    end if;
+  end;
+  /
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='MAINTENANCE_COST_NOT_NULL';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."MAINTENANCE" MODIFY ("MAINTENANCE_COST" CONSTRAINT "MAINTENANCE_COST_NOT_NULL" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint MAINTENANCE_COST_NOT_NULL already exists');
+    end if;
+  end;
+  /
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='CAR_ID_NOT_NULL1';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."MAINTENANCE" MODIFY ("CAR_ID" CONSTRAINT "CAR_ID_NOT_NULL1" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint CAR_ID_NOT_NULL1 already exists');
+    end if;
+  end;
+  /
 --------------------------------------------------------
 --  Constraints for Table SUPPORT
 --------------------------------------------------------
 
-  ALTER TABLE "ADMIN"."SUPPORT" MODIFY ("TRANS_ID" CONSTRAINT "TRANS_ID_NOT_NULL" NOT NULL ENABLE);
-  ALTER TABLE "ADMIN"."SUPPORT" ADD CONSTRAINT "SUPPORT_PK" PRIMARY KEY ("SUPPORT_ID")
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='TRANS_ID_NOT_NULL';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."SUPPORT" MODIFY ("TRANS_ID" CONSTRAINT "TRANS_ID_NOT_NULL" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint TRANS_ID_NOT_NULL already exists');
+    end if;
+  end;
+  /
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='SUPPORT_PK';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."SUPPORT" ADD CONSTRAINT "SUPPORT_PK" PRIMARY KEY ("SUPPORT_ID")
   USING INDEX PCTFREE 10 INITRANS 20 MAXTRANS 255 
-  TABLESPACE "DATA"  ENABLE;
-  ALTER TABLE "ADMIN"."SUPPORT" ADD CONSTRAINT "STATUS_CHECK" CHECK (status in ('IN PROGRESS', 'COMPLETED', 'PENDING')) ENABLE;
-  ALTER TABLE "ADMIN"."SUPPORT" MODIFY ("CUSTOMER_ID" CONSTRAINT "CUSTOMER_ID_NOT_NULL1" NOT NULL ENABLE);
+  TABLESPACE "DATA"  ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint SUPPORT_PK already exists');
+    end if;
+  end;
+  /
+  
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='STATUS_CHECK';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."SUPPORT" ADD CONSTRAINT "STATUS_CHECK" CHECK (status in ("IN PROGRESS", "COMPLETED", "PENDING")) ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint STATUS_CHECK already exists');
+    end if;
+  end;
+  /
+  
+   set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='CUSTOMER_ID_NOT_NULL1';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."SUPPORT" MODIFY ("CUSTOMER_ID" CONSTRAINT "CUSTOMER_ID_NOT_NULL1" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint CUSTOMER_ID_NOT_NULL1 already exists');
+    end if;
+  end;
+  /
 --------------------------------------------------------
 --  Constraints for Table FEEDBACK
 --------------------------------------------------------
 
-  ALTER TABLE "ADMIN"."FEEDBACK" MODIFY ("TRANS_ID" CONSTRAINT "TRANS_ID_NOT_NULL3" NOT NULL ENABLE);
-  ALTER TABLE "ADMIN"."FEEDBACK" ADD CONSTRAINT "FEEDBACK_PK" PRIMARY KEY ("FEEDBACK_ID")
+   set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='TRANS_ID_NOT_NULL3';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."FEEDBACK" MODIFY ("TRANS_ID" CONSTRAINT "TRANS_ID_NOT_NULL3" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint TRANS_ID_NOT_NULL3 already exists');
+    end if;
+  end;
+  /
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='FEEDBACK_PK';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."FEEDBACK" ADD CONSTRAINT "FEEDBACK_PK" PRIMARY KEY ("FEEDBACK_ID")
   USING INDEX PCTFREE 10 INITRANS 20 MAXTRANS 255 
-  TABLESPACE "DATA"  ENABLE;
+  TABLESPACE "DATA"  ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint FEEDBACK_PK already exists');
+    end if;
+  end;
+  /
 --------------------------------------------------------
 --  Constraints for Table INSURANCE
 --------------------------------------------------------
 
-  ALTER TABLE "ADMIN"."INSURANCE" ADD CONSTRAINT "INSURANCE_PK" PRIMARY KEY ("INSURANCE_ID")
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='INSURANCE_PK';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."INSURANCE" ADD CONSTRAINT "INSURANCE_PK" PRIMARY KEY ("INSURANCE_ID")
   USING INDEX PCTFREE 10 INITRANS 20 MAXTRANS 255 
-  TABLESPACE "DATA"  ENABLE;
-  ALTER TABLE "ADMIN"."INSURANCE" MODIFY ("INSURANCE_COST" CONSTRAINT "INSURANCE_COST_NOT_NULL" NOT NULL ENABLE);
+  TABLESPACE "DATA"  ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint INSURANCE_PK already exists');
+    end if;
+  end;
+  /
+  
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='INSURANCE_COST_NOT_NULL';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."INSURANCE" MODIFY ("INSURANCE_COST" CONSTRAINT "INSURANCE_COST_NOT_NULL" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint INSURANCE_COST_NOT_NULL already exists');
+    end if;
+  end;
+  /
 --------------------------------------------------------
 --  Constraints for Table PICKUP_POINTS
 --------------------------------------------------------
 
-  ALTER TABLE "ADMIN"."PICKUP_POINTS" ADD CONSTRAINT "PICKUP_POINTS_PK" PRIMARY KEY ("PICKUP_POINT_ID")
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='PICKUP_POINTS_PK';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."PICKUP_POINTS" ADD CONSTRAINT "PICKUP_POINTS_PK" PRIMARY KEY ("PICKUP_POINT_ID")
   USING INDEX PCTFREE 10 INITRANS 20 MAXTRANS 255 
-  TABLESPACE "DATA"  ENABLE;
-  ALTER TABLE "ADMIN"."PICKUP_POINTS" MODIFY ("STATE" CONSTRAINT "STATE_NOT_NULL" NOT NULL ENABLE);
-  ALTER TABLE "ADMIN"."PICKUP_POINTS" MODIFY ("CITY" CONSTRAINT "CITY_NOT_NULL1" NOT NULL ENABLE);
-  ALTER TABLE "ADMIN"."PICKUP_POINTS" MODIFY ("ZIP" CONSTRAINT "ZIP_NOT_NULL" NOT NULL ENABLE);
-  ALTER TABLE "ADMIN"."PICKUP_POINTS" MODIFY ("NAME" CONSTRAINT "NAME_NOT_NULL" NOT NULL ENABLE);
+  TABLESPACE "DATA"  ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint PICKUP_POINTS_PK already exists');
+    end if;
+  end;
+  /
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='STATE_NOT_NULL';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."PICKUP_POINTS" MODIFY ("STATE" CONSTRAINT "STATE_NOT_NULL" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint STATE_NOT_NULL already exists');
+    end if;
+  end;
+  /
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='CITY_NOT_NULL1';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."PICKUP_POINTS" MODIFY ("CITY" CONSTRAINT "CITY_NOT_NULL1" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint CITY_NOT_NULL1 already exists');
+    end if;
+  end;
+  /
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='ZIP_NOT_NULL';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."PICKUP_POINTS" MODIFY ("ZIP" CONSTRAINT "ZIP_NOT_NULL" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint ZIP_NOT_NULL already exists');
+    end if;
+  end;
+  /
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='NAME_NOT_NULL';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."PICKUP_POINTS" MODIFY ("NAME" CONSTRAINT "NAME_NOT_NULL" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint NAME_NOT_NULL already exists');
+    end if;
+  end;
+  /
 --------------------------------------------------------
 --  Constraints for Table CUSTOMER_ADDRESS
 --------------------------------------------------------
 
-  ALTER TABLE "ADMIN"."CUSTOMER_ADDRESS" MODIFY ("CUSTOMER_ID" CONSTRAINT "CUSTOMER_ID_NOT_NULL2" NOT NULL ENABLE);
-  ALTER TABLE "ADMIN"."CUSTOMER_ADDRESS" ADD CONSTRAINT "CUSTOMER_ADDRESS_PK" PRIMARY KEY ("ADDRESS_ID")
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='CUSTOMER_ID_NOT_NULL2';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."CUSTOMER_ADDRESS" MODIFY ("CUSTOMER_ID" CONSTRAINT "CUSTOMER_ID_NOT_NULL2" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint CUSTOMER_ID_NOT_NULL2 already exists');
+    end if;
+  end;
+  /
+  
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='CUSTOMER_ADDRESS_PK';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."CUSTOMER_ADDRESS" ADD CONSTRAINT "CUSTOMER_ADDRESS_PK" PRIMARY KEY ("ADDRESS_ID")
   USING INDEX PCTFREE 10 INITRANS 20 MAXTRANS 255 
-  TABLESPACE "DATA"  ENABLE;
-  ALTER TABLE "ADMIN"."CUSTOMER_ADDRESS" MODIFY ("ADDRESS_LINE1" CONSTRAINT "ADDRESS_LINE1_NOT_NULL" NOT NULL ENABLE);
-  ALTER TABLE "ADMIN"."CUSTOMER_ADDRESS" MODIFY ("CITY_STATE" CONSTRAINT "CITY_STATE_NOT_NULL" NOT NULL ENABLE);
-  ALTER TABLE "ADMIN"."CUSTOMER_ADDRESS" MODIFY ("CITY" CONSTRAINT "CITY_NOT_NULL" NOT NULL ENABLE);
-  ALTER TABLE "ADMIN"."CUSTOMER_ADDRESS" MODIFY ("ZIP_CODE" CONSTRAINT "ZIP_CODE_NOT_NULL" NOT NULL ENABLE);
-  ALTER TABLE "ADMIN"."CUSTOMER_ADDRESS" ADD CONSTRAINT "ADDRESS_TYPE_CHECK" CHECK (ADDRESS_TYPE in ('HOME', 'OFFICE', 'OTHER')) ENABLE;
+  TABLESPACE "DATA"  ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint CUSTOMER_ADDRESS_PK already exists');
+    end if;
+  end;
+  /
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='ADDRESS_LINE1_NOT_NULL';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."CUSTOMER_ADDRESS" MODIFY ("ADDRESS_LINE1" CONSTRAINT "ADDRESS_LINE1_NOT_NULL" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint ADDRESS_LINE1_NOT_NULL already exists');
+    end if;
+  end;
+  /
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='CITY_STATE_NOT_NULL';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."CUSTOMER_ADDRESS" MODIFY ("CITY_STATE" CONSTRAINT "CITY_STATE_NOT_NULL" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint CITY_STATE_NOT_NULL already exists');
+    end if;
+  end;
+  /
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='CITY_NOT_NULL';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."CUSTOMER_ADDRESS" MODIFY ("CITY" CONSTRAINT "CITY_NOT_NULL" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint CITY_NOT_NULL already exists');
+    end if;
+  end;
+  /
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='ZIP_CODE_NOT_NULL';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."CUSTOMER_ADDRESS" MODIFY ("ZIP_CODE" CONSTRAINT "ZIP_CODE_NOT_NULL" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint ZIP_CODE_NOT_NULL already exists');
+    end if;
+  end;
+  /
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='ADDRESS_TYPE_CHECK';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."CUSTOMER_ADDRESS" ADD CONSTRAINT "ADDRESS_TYPE_CHECK" CHECK (ADDRESS_TYPE in ("HOME", "OFFICE", "OTHER")) ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint ADDRESS_TYPE_CHECK already exists');
+    end if;
+  end;
+  /
 --------------------------------------------------------
 --  Constraints for Table PAYMENTS
 --------------------------------------------------------
 
-  ALTER TABLE "ADMIN"."PAYMENTS" ADD CONSTRAINT "PAYMENTS_PK" PRIMARY KEY ("PAY_ID")
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='PAYMENTS_PK';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."PAYMENTS" ADD CONSTRAINT "PAYMENTS_PK" PRIMARY KEY ("PAY_ID")
   USING INDEX PCTFREE 10 INITRANS 20 MAXTRANS 255 
-  TABLESPACE "DATA"  ENABLE;
-  ALTER TABLE "ADMIN"."PAYMENTS" MODIFY ("CUSTOMER_CARD" CONSTRAINT "CUSTOMER_CARD_NOT_NULL" NOT NULL ENABLE);
-  ALTER TABLE "ADMIN"."PAYMENTS" ADD CONSTRAINT "STATUS_CHECK1" CHECK (status in ('IN PROGRESS', 'COMPLETED', 'PENDING')) ENABLE;
-  ALTER TABLE "ADMIN"."PAYMENTS" MODIFY ("TRANS_ID" CONSTRAINT "TRANS_ID_NOT_NULL2" NOT NULL ENABLE);
+  TABLESPACE "DATA"  ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint PAYMENTS_PK already exists');
+    end if;
+  end;
+  /
+  
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='CUSTOMER_CARD_NOT_NULL';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."PAYMENTS" MODIFY ("CUSTOMER_CARD" CONSTRAINT "CUSTOMER_CARD_NOT_NULL" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint CUSTOMER_CARD_NOT_NULL already exists');
+    end if;
+  end;
+  /
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='STATUS_CHECK1';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."PAYMENTS" ADD CONSTRAINT "STATUS_CHECK1" CHECK (status in ("IN PROGRESS", "COMPLETED", "PENDING")) ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint STATUS_CHECK1 already exists');
+    end if;
+  end;
+  /
+  
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='TRANS_ID_NOT_NULL2';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."PAYMENTS" MODIFY ("TRANS_ID" CONSTRAINT "TRANS_ID_NOT_NULL2" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint TRANS_ID_NOT_NULL2 already exists');
+    end if;
+  end;
+  /
 --------------------------------------------------------
 --  Constraints for Table DISCOUNTS
 --------------------------------------------------------
 
-  ALTER TABLE "ADMIN"."DISCOUNTS" ADD CONSTRAINT "DISCOUNTS_PK" PRIMARY KEY ("DISCOUNT_ID")
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='DISCOUNTS_PK';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."DISCOUNTS" ADD CONSTRAINT "DISCOUNTS_PK" PRIMARY KEY ("DISCOUNT_ID")
   USING INDEX PCTFREE 10 INITRANS 20 MAXTRANS 255 
-  TABLESPACE "DATA"  ENABLE;
+  TABLESPACE "DATA"  ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint DISCOUNTS_PK already exists');
+    end if;
+  end;
+  /
 --------------------------------------------------------
 --  Constraints for Table CAR
 --------------------------------------------------------
 
-  ALTER TABLE "ADMIN"."CAR" ADD CONSTRAINT "CAR_PK" PRIMARY KEY ("CAR_ID")
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='CAR_PK';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."CAR" ADD CONSTRAINT "CAR_PK" PRIMARY KEY ("CAR_ID")
   USING INDEX PCTFREE 10 INITRANS 20 MAXTRANS 255 
-  TABLESPACE "DATA"  ENABLE;
-  ALTER TABLE "ADMIN"."CAR" ADD CONSTRAINT "CAR_NUMBER_UN" UNIQUE ("CAR_NUMBER")
+  TABLESPACE "DATA"  ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint CAR_PK already exists');
+    end if;
+  end;
+  /
+  
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='CAR_NUMBER_UN';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."CAR" ADD CONSTRAINT "CAR_NUMBER_UN" UNIQUE ("CAR_NUMBER")
   USING INDEX PCTFREE 10 INITRANS 20 MAXTRANS 255 
-  TABLESPACE "DATA"  ENABLE;
-  ALTER TABLE "ADMIN"."CAR" MODIFY ("CAR_TYPE" CONSTRAINT "CAR_TYPE_NOT_NULL" NOT NULL ENABLE);
-  ALTER TABLE "ADMIN"."CAR" MODIFY ("MODEL" CONSTRAINT "MODEL_NOT_NULL" NOT NULL ENABLE);
-  ALTER TABLE "ADMIN"."CAR" MODIFY ("CAR_MAKE" CONSTRAINT "CAR_MAKE_NOT_NULL" NOT NULL ENABLE);
-  ALTER TABLE "ADMIN"."CAR" MODIFY ("CAR_NUMBER" CONSTRAINT "CAR_NUMBER_NOT_NULL" NOT NULL ENABLE);
+  TABLESPACE "DATA"  ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint CAR_NUMBER_UN already exists');
+    end if;
+  end;
+  /
+  
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='CAR_TYPE_NOT_NULL';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."CAR" MODIFY ("CAR_TYPE" CONSTRAINT "CAR_TYPE_NOT_NULL" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint CAR_TYPE_NOT_NULL already exists');
+    end if;
+  end;
+  /
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='MODEL_NOT_NULL';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."CAR" MODIFY ("MODEL" CONSTRAINT "MODEL_NOT_NULL" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint MODEL_NOT_NULL already exists');
+    end if;
+  end;
+  /
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='CAR_MAKE_NOT_NULL';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."CAR" MODIFY ("CAR_MAKE" CONSTRAINT "CAR_MAKE_NOT_NULL" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint CAR_MAKE_NOT_NULL already exists');
+    end if;
+  end;
+  /
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='CAR_NUMBER_NOT_NULL';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."CAR" MODIFY ("CAR_NUMBER" CONSTRAINT "CAR_NUMBER_NOT_NULL" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint CAR_NUMBER_NOT_NULL already exists');
+    end if;
+  end;
+  /
 --------------------------------------------------------
 --  Constraints for Table ACTIVITY
 --------------------------------------------------------
 
-  ALTER TABLE "ADMIN"."ACTIVITY" ADD CONSTRAINT "ACTIVITY_PK" PRIMARY KEY ("ACTIVITY_ID")
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='ACTIVITY_PK';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."ACTIVITY" ADD CONSTRAINT "ACTIVITY_PK" PRIMARY KEY ("ACTIVITY_ID")
   USING INDEX PCTFREE 10 INITRANS 20 MAXTRANS 255 
-  TABLESPACE "DATA"  ENABLE;
+  TABLESPACE "DATA"  ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint ACTIVITY_PK already exists');
+    end if;
+  end;
+  /
 --------------------------------------------------------
 --  Constraints for Table CUSTOMERS
 --------------------------------------------------------
 
-  ALTER TABLE "ADMIN"."CUSTOMERS" MODIFY ("FIRST_NAME" CONSTRAINT "FIRST_NAME_NOT_NULL" NOT NULL ENABLE);
-  ALTER TABLE "ADMIN"."CUSTOMERS" ADD CONSTRAINT "CUSTOMERS_PK" PRIMARY KEY ("CUSTOMER_ID")
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='FIRST_NAME_NOT_NULL';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."CUSTOMERS" MODIFY ("FIRST_NAME" CONSTRAINT "FIRST_NAME_NOT_NULL" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint FIRST_NAME_NOT_NULL already exists');
+    end if;
+  end;
+  
+  /
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='CUSTOMERS_PK';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."CUSTOMERS" ADD CONSTRAINT "CUSTOMERS_PK" PRIMARY KEY ("CUSTOMER_ID")
   USING INDEX PCTFREE 10 INITRANS 20 MAXTRANS 255 
-  TABLESPACE "DATA"  ENABLE;
-  ALTER TABLE "ADMIN"."CUSTOMERS" MODIFY ("EMAIL_ID" CONSTRAINT "EMAIL_ID_NOT_NULL" NOT NULL ENABLE);
-  ALTER TABLE "ADMIN"."CUSTOMERS" MODIFY ("CONTACT" CONSTRAINT "CONTACT_NOT_NULL" NOT NULL ENABLE);
-  ALTER TABLE "ADMIN"."CUSTOMERS" MODIFY ("LICENSE_NUMBER" CONSTRAINT "LICENSE_NUMBER_NOT_NULL" NOT NULL ENABLE);
-  ALTER TABLE "ADMIN"."CUSTOMERS" MODIFY ("PASSPORT_NUMBER" CONSTRAINT "PASSPORT_NUMBER_NOT_NULL" NOT NULL ENABLE);
-  ALTER TABLE "ADMIN"."CUSTOMERS" ADD CONSTRAINT "CUSTOMER_TYPE_CHECK" CHECK ( customer_type in ('student','employee','others')) ENABLE;
-  ALTER TABLE "ADMIN"."CUSTOMERS" ADD CONSTRAINT "CUSTOMERS_EMAIL_ID_UN" UNIQUE ("EMAIL_ID")
+  TABLESPACE "DATA"  ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint CUSTOMERS_PK already exists');
+    end if;
+  end;
+  /
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='EMAIL_ID_NOT_NULL';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."CUSTOMERS" MODIFY ("EMAIL_ID" CONSTRAINT "EMAIL_ID_NOT_NULL" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint EMAIL_ID_NOT_NULL already exists');
+    end if;
+  end;
+  /
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='CONTACT_NOT_NULL';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."CUSTOMERS" MODIFY ("CONTACT" CONSTRAINT "CONTACT_NOT_NULL" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint CONTACT_NOT_NULL already exists');
+    end if;
+  end;
+  /
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='LICENSE_NUMBER_NOT_NULL';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."CUSTOMERS" MODIFY ("LICENSE_NUMBER" CONSTRAINT "LICENSE_NUMBER_NOT_NULL" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint LICENSE_NUMBER_NOT_NULL already exists');
+    end if;
+  end;
+  /
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='PASSPORT_NUMBER_NOT_NULL';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."CUSTOMERS" MODIFY ("PASSPORT_NUMBER" CONSTRAINT "PASSPORT_NUMBER_NOT_NULL" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint PASSPORT_NUMBER_NOT_NULL already exists');
+    end if;
+  end;
+  /
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='CUSTOMER_TYPE_CHECK';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."CUSTOMERS" ADD CONSTRAINT "CUSTOMER_TYPE_CHECK" CHECK ( customer_type in ("student","employee","others")) ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint CUSTOMER_TYPE_CHECK already exists');
+    end if;
+  end;
+  /
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='CUSTOMERS_EMAIL_ID_UN';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."CUSTOMERS" ADD CONSTRAINT "CUSTOMERS_EMAIL_ID_UN" UNIQUE ("EMAIL_ID")
   USING INDEX PCTFREE 10 INITRANS 20 MAXTRANS 255 
-  TABLESPACE "DATA"  ENABLE;
-  ALTER TABLE "ADMIN"."CUSTOMERS" ADD CONSTRAINT "CUSTOMERS_CONTACT_UN" UNIQUE ("CONTACT")
+  TABLESPACE "DATA"  ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint CUSTOMERS_EMAIL_ID_UN already exists');
+    end if;
+  end;
+  /
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='CUSTOMERS_CONTACT_UN';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."CUSTOMERS" ADD CONSTRAINT "CUSTOMERS_CONTACT_UN" UNIQUE ("CONTACT")
   USING INDEX PCTFREE 10 INITRANS 20 MAXTRANS 255 
-  TABLESPACE "DATA"  ENABLE;
-  ALTER TABLE "ADMIN"."CUSTOMERS" ADD CONSTRAINT "CUSTOMERS_LICENSE_NUMBER_UN" UNIQUE ("LICENSE_NUMBER")
+  TABLESPACE "DATA"  ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint CUSTOMERS_CONTACT_UN already exists');
+    end if;
+  end;
+  /
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='CUSTOMERS_LICENSE_NUMBER_UN';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."CUSTOMERS" ADD CONSTRAINT "CUSTOMERS_LICENSE_NUMBER_UN" UNIQUE ("LICENSE_NUMBER")
   USING INDEX PCTFREE 10 INITRANS 20 MAXTRANS 255 
-  TABLESPACE "DATA"  ENABLE;
-  ALTER TABLE "ADMIN"."CUSTOMERS" ADD CONSTRAINT "CUSTOMERS_PASSPORT_NUMBER_UN" UNIQUE ("PASSPORT_NUMBER")
+  TABLESPACE "DATA"  ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint CUSTOMERS_LICENSE_NUMBER_UN already exists');
+    end if;
+  end;
+  /
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='CUSTOMERS_PASSPORT_NUMBER_UN';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."CUSTOMERS" ADD CONSTRAINT "CUSTOMERS_PASSPORT_NUMBER_UN" UNIQUE ("PASSPORT_NUMBER")
   USING INDEX PCTFREE 10 INITRANS 20 MAXTRANS 255 
-  TABLESPACE "DATA"  ENABLE;
+  TABLESPACE "DATA"  ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint CUSTOMERS_PASSPORT_NUMBER_UN already exists');
+    end if;
+  end;
+  /
 --------------------------------------------------------
 --  Constraints for Table VIOLATIONS
 --------------------------------------------------------
 
-  ALTER TABLE "ADMIN"."VIOLATIONS" MODIFY ("DESCRIPTION" CONSTRAINT "DESCRIPTION_NOT_NULL" NOT NULL ENABLE);
-  ALTER TABLE "ADMIN"."VIOLATIONS" ADD CONSTRAINT "VIOLATIONS_PK" PRIMARY KEY ("VIOLATION_ID")
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='DESCRIPTION_NOT_NULL';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."VIOLATIONS" MODIFY ("DESCRIPTION" CONSTRAINT "DESCRIPTION_NOT_NULL" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint DESCRIPTION_NOT_NULL already exists');
+    end if;
+  end;
+  
+  /
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='VIOLATIONS_PK';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."VIOLATIONS" ADD CONSTRAINT "VIOLATIONS_PK" PRIMARY KEY ("VIOLATION_ID")
   USING INDEX PCTFREE 10 INITRANS 20 MAXTRANS 255 
-  TABLESPACE "DATA"  ENABLE;
+  TABLESPACE "DATA"  ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint VIOLATIONS_PK already exists');
+    end if;
+  end;
+  /
 --------------------------------------------------------
 --  Constraints for Table CARS_AT_PICKUP
 --------------------------------------------------------
 
-  ALTER TABLE "ADMIN"."CARS_AT_PICKUP" ADD CONSTRAINT "CARS_AT_PICKUP_PK" PRIMARY KEY ("CARS_AT_PICKUP_ID")
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='CARS_AT_PICKUP_PK';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."CARS_AT_PICKUP" ADD CONSTRAINT "CARS_AT_PICKUP_PK" PRIMARY KEY ("CARS_AT_PICKUP_ID")
   USING INDEX PCTFREE 10 INITRANS 20 MAXTRANS 255 
-  TABLESPACE "DATA"  ENABLE;
-  ALTER TABLE "ADMIN"."CARS_AT_PICKUP" MODIFY ("PICKUP_POINT_ID" CONSTRAINT "PICKUP_POINT_ID_NOT_NULL" NOT NULL ENABLE);
-  ALTER TABLE "ADMIN"."CARS_AT_PICKUP" MODIFY ("CAR_ID" CONSTRAINT "CAR_ID_NOT_NULL3" NOT NULL ENABLE);
+  TABLESPACE "DATA"  ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint CARS_AT_PICKUP_PK already exists');
+    end if;
+  end;
+  /
+  
+   set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='PICKUP_POINT_ID_NOT_NULL';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."CARS_AT_PICKUP" MODIFY ("PICKUP_POINT_ID" CONSTRAINT "PICKUP_POINT_ID_NOT_NULL" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint PICKUP_POINT_ID_NOT_NULL already exists');
+    end if;
+  end;
+  /
+   set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='CAR_ID_NOT_NULL3';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."CARS_AT_PICKUP" MODIFY ("CAR_ID" CONSTRAINT "CAR_ID_NOT_NULL3" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint CAR_ID_NOT_NULL3 already exists');
+    end if;
+  end;
 --------------------------------------------------------
 --  Constraints for Table VIOLATIONS_RECORDS
 --------------------------------------------------------
-
-  ALTER TABLE "ADMIN"."VIOLATIONS_RECORDS" ADD CONSTRAINT "VIOLATIONS_RECORDS_PK" PRIMARY KEY ("RECORD_ID")
+/
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='VIOLATIONS_RECORDS_PK';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."VIOLATIONS_RECORDS" ADD CONSTRAINT "VIOLATIONS_RECORDS_PK" PRIMARY KEY ("RECORD_ID")
   USING INDEX PCTFREE 10 INITRANS 20 MAXTRANS 255 
-  TABLESPACE "DATA"  ENABLE;
-  ALTER TABLE "ADMIN"."VIOLATIONS_RECORDS" MODIFY ("VIOLATION_ID" CONSTRAINT "VIOLATION_ID_NOT_NULL" NOT NULL ENABLE);
-  ALTER TABLE "ADMIN"."VIOLATIONS_RECORDS" MODIFY ("RECORD_DATE" CONSTRAINT "RECORD_DATE_NOT_NULL" NOT NULL ENABLE);
-  ALTER TABLE "ADMIN"."VIOLATIONS_RECORDS" MODIFY ("CUSTOMER_ID" CONSTRAINT "CUSTOMER_ID_NOT_NULL" NOT NULL ENABLE);
+  TABLESPACE "DATA"  ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint VIOLATIONS_RECORDS_PK already exists');
+    end if;
+  end;
+  /
+  
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='VIOLATION_ID_NOT_NULL';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."VIOLATIONS_RECORDS" MODIFY ("VIOLATION_ID" CONSTRAINT "VIOLATION_ID_NOT_NULL" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint VIOLATION_ID_NOT_NULL already exists');
+    end if;
+  end;
+ /
+ set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='RECORD_DATE_NOT_NULL';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."VIOLATIONS_RECORDS" MODIFY ("RECORD_DATE" CONSTRAINT "RECORD_DATE_NOT_NULL" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint RECORD_DATE_NOT_NULL already exists');
+    end if;
+  end;
+/
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='CUSTOMER_ID_NOT_NULL';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."VIOLATIONS_RECORDS" MODIFY ("CUSTOMER_ID" CONSTRAINT "CUSTOMER_ID_NOT_NULL" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint CUSTOMER_ID_NOT_NULL already exists');
+    end if;
+  end;
 --------------------------------------------------------
 --  Constraints for Table RIDE_TRANSACTION
 --------------------------------------------------------
-
-  ALTER TABLE "ADMIN"."RIDE_TRANSACTION" MODIFY ("CARS_AT_PICKUP_ID" CONSTRAINT "CARS_AT_PICKUP_ID_NOT_NULL" NOT NULL ENABLE);
-  ALTER TABLE "ADMIN"."RIDE_TRANSACTION" MODIFY ("CAR_ID" CONSTRAINT "CAR_ID_NOT_NULL" NOT NULL ENABLE);
-  ALTER TABLE "ADMIN"."RIDE_TRANSACTION" MODIFY ("END_TIME" CONSTRAINT "END_TIME_NOT_NULL" NOT NULL ENABLE);
-  ALTER TABLE "ADMIN"."RIDE_TRANSACTION" MODIFY ("CUSTOMER_ID" CONSTRAINT "CUSTOMER_ID_NOT_NULL3" NOT NULL ENABLE);
-  ALTER TABLE "ADMIN"."RIDE_TRANSACTION" ADD CONSTRAINT "RIDE_TRANSACTION_PK" PRIMARY KEY ("TRANS_ID")
+/
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='CARS_AT_PICKUP_ID_NOT_NULL';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."RIDE_TRANSACTION" MODIFY ("CARS_AT_PICKUP_ID" CONSTRAINT "CARS_AT_PICKUP_ID_NOT_NULL" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint CARS_AT_PICKUP_ID_NOT_NULL already exists');
+    end if;
+  end;
+ /
+ set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='CAR_ID_NOT_NULL';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."RIDE_TRANSACTION" MODIFY ("CAR_ID" CONSTRAINT "CAR_ID_NOT_NULL" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint CAR_ID_NOT_NULL already exists');
+    end if;
+  end;
+/
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='END_TIME_NOT_NULL';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."RIDE_TRANSACTION" MODIFY ("END_TIME" CONSTRAINT "END_TIME_NOT_NULL" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint END_TIME_NOT_NULL already exists');
+    end if;
+  end;
+/
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='CUSTOMER_ID_NOT_NULL3';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."RIDE_TRANSACTION" MODIFY ("CUSTOMER_ID" CONSTRAINT "CUSTOMER_ID_NOT_NULL3" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint CUSTOMER_ID_NOT_NULL3 already exists');
+    end if;
+  end;
+/  
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='RIDE_TRANSACTION_PK';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."RIDE_TRANSACTION" ADD CONSTRAINT "RIDE_TRANSACTION_PK" PRIMARY KEY ("TRANS_ID")
   USING INDEX PCTFREE 10 INITRANS 20 MAXTRANS 255 
-  TABLESPACE "DATA"  ENABLE;
-  ALTER TABLE "ADMIN"."RIDE_TRANSACTION" MODIFY ("STATUS" CONSTRAINT "STATUS_NOT_NULL" NOT NULL ENABLE);
-  ALTER TABLE "ADMIN"."RIDE_TRANSACTION" MODIFY ("START_TIME" CONSTRAINT "START_TIME_NOT_NULL" NOT NULL ENABLE);
-  ALTER TABLE "ADMIN"."RIDE_TRANSACTION" ADD CONSTRAINT "STATUS_CHECK2" CHECK (STATUS in ('IN PROCESS', 'COMPLETED', 'CANCELLED', 'UPDATED')) ENABLE;
+  TABLESPACE "DATA"  ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint RIDE_TRANSACTION_PK already exists');
+    end if;
+  end;
+  /
+  
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='STATUS_NOT_NULL';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."RIDE_TRANSACTION" MODIFY ("STATUS" CONSTRAINT "STATUS_NOT_NULL" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint STATUS_NOT_NULL already exists');
+    end if;
+  end;
+ /
+ set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='START_TIME_NOT_NULL';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."RIDE_TRANSACTION" MODIFY ("START_TIME" CONSTRAINT "START_TIME_NOT_NULL" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint START_TIME_NOT_NULL already exists');
+    end if;
+  end;
+/  
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='STATUS_CHECK2';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."RIDE_TRANSACTION" ADD CONSTRAINT "STATUS_CHECK2" CHECK (STATUS in ("IN PROCESS", "COMPLETED", "CANCELLED", "UPDATED")) ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint STATUS_CHECK2 already exists');
+    end if;
+  end;
+  /
 --------------------------------------------------------
 --  Constraints for Table PURCHASE_INSURANCE
 --------------------------------------------------------
 
-  ALTER TABLE "ADMIN"."PURCHASE_INSURANCE" ADD CONSTRAINT "PURCHASE_INSURANCE_PK" PRIMARY KEY ("PURCHASE_INSURANCE_ID")
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='PURCHASE_INSURANCE_PK';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."PURCHASE_INSURANCE" ADD CONSTRAINT "PURCHASE_INSURANCE_PK" PRIMARY KEY ("PURCHASE_INSURANCE_ID")
   USING INDEX PCTFREE 10 INITRANS 20 MAXTRANS 255 
-  TABLESPACE "DATA"  ENABLE;
-  ALTER TABLE "ADMIN"."PURCHASE_INSURANCE" MODIFY ("EXPIRY_DATE" CONSTRAINT "EXPIRY_DATE_NOT_NULL" NOT NULL ENABLE);
-  ALTER TABLE "ADMIN"."PURCHASE_INSURANCE" MODIFY ("CAR_ID" CONSTRAINT "CAR_ID_NOT_NULL2" NOT NULL ENABLE);
-  ALTER TABLE "ADMIN"."PURCHASE_INSURANCE" MODIFY ("INSURANCE_ID" CONSTRAINT "INSURANCE_ID_NOT_NULL" NOT NULL ENABLE);
+  TABLESPACE "DATA"  ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint PURCHASE_INSURANCE_PK already exists');
+    end if;
+  end;
+  /
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='EXPIRY_DATE_NOT_NULL';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."PURCHASE_INSURANCE" MODIFY ("EXPIRY_DATE" CONSTRAINT "EXPIRY_DATE_NOT_NULL" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint EXPIRY_DATE_NOT_NULL already exists');
+    end if;
+  end;
+  /
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='CAR_ID_NOT_NULL2';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."PURCHASE_INSURANCE" MODIFY ("CAR_ID" CONSTRAINT "CAR_ID_NOT_NULL2" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint CAR_ID_NOT_NULL2 already exists');
+    end if;
+  end;
+  /
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='INSURANCE_ID_NOT_NULL';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."PURCHASE_INSURANCE" MODIFY ("INSURANCE_ID" CONSTRAINT "INSURANCE_ID_NOT_NULL" NOT NULL ENABLE)';
+  	  else 
+        dbms_output.put_line('Constraint INSURANCE_ID_NOT_NULL already exists');
+    end if;
+  end;
 --------------------------------------------------------
 --  Ref Constraints for Table ACTIVITY
 --------------------------------------------------------
-
-  ALTER TABLE "ADMIN"."ACTIVITY" ADD CONSTRAINT "CUSTOMER_ID_FK1" FOREIGN KEY ("CUSTOMER_ID")
-	  REFERENCES "ADMIN"."CUSTOMERS" ("CUSTOMER_ID") ENABLE;
+/
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='CUSTOMER_ID_FK1';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."ACTIVITY" ADD CONSTRAINT "CUSTOMER_ID_FK1" FOREIGN KEY ("CUSTOMER_ID")
+	  REFERENCES "ADMIN"."CUSTOMERS" ("CUSTOMER_ID") ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint CUSTOMER_ID_FK1 already exists');
+    end if;
+  end;
+  /
 --------------------------------------------------------
 --  Ref Constraints for Table CARS_AT_PICKUP
 --------------------------------------------------------
 
-  ALTER TABLE "ADMIN"."CARS_AT_PICKUP" ADD CONSTRAINT "CAR_ID_FK4" FOREIGN KEY ("CAR_ID")
-	  REFERENCES "ADMIN"."CAR" ("CAR_ID") ENABLE;
-  ALTER TABLE "ADMIN"."CARS_AT_PICKUP" ADD CONSTRAINT "PICKUP_POINT_ID_FK1" FOREIGN KEY ("PICKUP_POINT_ID")
-	  REFERENCES "ADMIN"."PICKUP_POINTS" ("PICKUP_POINT_ID") ENABLE;
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='CAR_ID_FK4';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."CARS_AT_PICKUP" ADD CONSTRAINT "CAR_ID_FK4" FOREIGN KEY ("CAR_ID")
+	  REFERENCES "ADMIN"."CAR" ("CAR_ID") ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint CAR_ID_FK4 already exists');
+    end if;
+  end;
+  /
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='PICKUP_POINT_ID_FK1';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."CARS_AT_PICKUP" ADD CONSTRAINT "PICKUP_POINT_ID_FK1" FOREIGN KEY ("PICKUP_POINT_ID")
+	  REFERENCES "ADMIN"."PICKUP_POINTS" ("PICKUP_POINT_ID") ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint PICKUP_POINT_ID_FK1 already exists');
+    end if;
+  end;
+  /
 --------------------------------------------------------
 --  Ref Constraints for Table CUSTOMER_ADDRESS
 --------------------------------------------------------
 
-  ALTER TABLE "ADMIN"."CUSTOMER_ADDRESS" ADD CONSTRAINT "CUSTOMER_ID_FK4" FOREIGN KEY ("CUSTOMER_ID")
-	  REFERENCES "ADMIN"."CUSTOMERS" ("CUSTOMER_ID") ENABLE;
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='CUSTOMER_ID_FK4';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."CUSTOMER_ADDRESS" ADD CONSTRAINT "CUSTOMER_ID_FK4" FOREIGN KEY ("CUSTOMER_ID")
+	  REFERENCES "ADMIN"."CUSTOMERS" ("CUSTOMER_ID") ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint CUSTOMER_ID_FK4 already exists');
+    end if;
+  end;
+  /
 --------------------------------------------------------
 --  Ref Constraints for Table FEEDBACK
 --------------------------------------------------------
 
-  ALTER TABLE "ADMIN"."FEEDBACK" ADD CONSTRAINT "TRANS_ID_FK3" FOREIGN KEY ("TRANS_ID")
-	  REFERENCES "ADMIN"."RIDE_TRANSACTION" ("TRANS_ID") ENABLE;
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='TRANS_ID_FK3';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."FEEDBACK" ADD CONSTRAINT "TRANS_ID_FK3" FOREIGN KEY ("TRANS_ID")
+	  REFERENCES "ADMIN"."RIDE_TRANSACTION" ("TRANS_ID") ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint TRANS_ID_FK3 already exists');
+    end if;
+  end;
+  /
 --------------------------------------------------------
 --  Ref Constraints for Table MAINTENANCE
 --------------------------------------------------------
 
-  ALTER TABLE "ADMIN"."MAINTENANCE" ADD CONSTRAINT "CAR_ID_FK2" FOREIGN KEY ("CAR_ID")
-	  REFERENCES "ADMIN"."CAR" ("CAR_ID") ENABLE;
-  ALTER TABLE "ADMIN"."MAINTENANCE" ADD CONSTRAINT "PURCHASE_INSUARANCE_ID_FK1" FOREIGN KEY ("PURCHASE_INSURANCE_ID")
-	  REFERENCES "ADMIN"."PURCHASE_INSURANCE" ("PURCHASE_INSURANCE_ID") ENABLE;
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='CAR_ID_FK2';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."MAINTENANCE" ADD CONSTRAINT "CAR_ID_FK2" FOREIGN KEY ("CAR_ID")
+	  REFERENCES "ADMIN"."CAR" ("CAR_ID") ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint CAR_ID_FK2 already exists');
+    end if;
+  end;
+  /
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='PURCHASE_INSUARANCE_ID_FK1';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."MAINTENANCE" ADD CONSTRAINT "PURCHASE_INSUARANCE_ID_FK1" FOREIGN KEY ("PURCHASE_INSURANCE_ID")
+	  REFERENCES "ADMIN"."PURCHASE_INSURANCE" ("PURCHASE_INSURANCE_ID") ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint PURCHASE_INSUARANCE_ID_FK1 already exists');
+    end if;
+  end;
+  /
 --------------------------------------------------------
 --  Ref Constraints for Table PAYMENTS
 --------------------------------------------------------
 
-  ALTER TABLE "ADMIN"."PAYMENTS" ADD CONSTRAINT "TRANS_ID_FK2" FOREIGN KEY ("TRANS_ID")
-	  REFERENCES "ADMIN"."RIDE_TRANSACTION" ("TRANS_ID") ENABLE;
-  ALTER TABLE "ADMIN"."PAYMENTS" ADD CONSTRAINT "DISCOUNT_ID_FK1" FOREIGN KEY ("DISCOUNT_ID")
-	  REFERENCES "ADMIN"."DISCOUNTS" ("DISCOUNT_ID") ENABLE;
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='TRANS_ID_FK2';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."PAYMENTS" ADD CONSTRAINT "TRANS_ID_FK2" FOREIGN KEY ("TRANS_ID")
+	  REFERENCES "ADMIN"."RIDE_TRANSACTION" ("TRANS_ID") ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint TRANS_ID_FK2 already exists');
+    end if;
+  end;
+  /
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='DISCOUNT_ID_FK1';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."PAYMENTS" ADD CONSTRAINT "DISCOUNT_ID_FK1" FOREIGN KEY ("DISCOUNT_ID")
+	  REFERENCES "ADMIN"."DISCOUNTS" ("DISCOUNT_ID") ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint DISCOUNT_ID_FK1 already exists');
+    end if;
+  end;
+  /
 --------------------------------------------------------
 --  Ref Constraints for Table PURCHASE_INSURANCE
 --------------------------------------------------------
 
-  ALTER TABLE "ADMIN"."PURCHASE_INSURANCE" ADD CONSTRAINT "CAR_ID_FK3" FOREIGN KEY ("CAR_ID")
-	  REFERENCES "ADMIN"."CAR" ("CAR_ID") ENABLE;
-  ALTER TABLE "ADMIN"."PURCHASE_INSURANCE" ADD CONSTRAINT "INSURANCE_ID_FK1" FOREIGN KEY ("INSURANCE_ID")
-	  REFERENCES "ADMIN"."INSURANCE" ("INSURANCE_ID") ENABLE;
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='CAR_ID_FK3';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."PURCHASE_INSURANCE" ADD CONSTRAINT "CAR_ID_FK3" FOREIGN KEY ("CAR_ID")
+	  REFERENCES "ADMIN"."CAR" ("CAR_ID") ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint CAR_ID_FK3 already exists');
+    end if;
+  end;
+  /
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='INSURANCE_ID_FK1';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."PURCHASE_INSURANCE" ADD CONSTRAINT "INSURANCE_ID_FK1" FOREIGN KEY ("INSURANCE_ID")
+	  REFERENCES "ADMIN"."INSURANCE" ("INSURANCE_ID") ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint INSURANCE_ID_FK1 already exists');
+    end if;
+  end;
+  /
 --------------------------------------------------------
 --  Ref Constraints for Table RIDE_TRANSACTION
 --------------------------------------------------------
 
-  ALTER TABLE "ADMIN"."RIDE_TRANSACTION" ADD CONSTRAINT "CARS_AT_PICKUP_ID_FK1" FOREIGN KEY ("CARS_AT_PICKUP_ID")
-	  REFERENCES "ADMIN"."CARS_AT_PICKUP" ("CARS_AT_PICKUP_ID") ENABLE;
-  ALTER TABLE "ADMIN"."RIDE_TRANSACTION" ADD CONSTRAINT "CUSTOMER_ID_FK5" FOREIGN KEY ("CUSTOMER_ID")
-	  REFERENCES "ADMIN"."CUSTOMERS" ("CUSTOMER_ID") ENABLE;
-  ALTER TABLE "ADMIN"."RIDE_TRANSACTION" ADD CONSTRAINT "CAR_ID_FK1" FOREIGN KEY ("CAR_ID")
-	  REFERENCES "ADMIN"."CAR" ("CAR_ID") ENABLE;
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='CARS_AT_PICKUP_ID_FK1';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."RIDE_TRANSACTION" ADD CONSTRAINT "CARS_AT_PICKUP_ID_FK1" FOREIGN KEY ("CARS_AT_PICKUP_ID")
+	  REFERENCES "ADMIN"."CARS_AT_PICKUP" ("CARS_AT_PICKUP_ID") ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint CARS_AT_PICKUP_ID_FK1 already exists');
+    end if;
+  end;
+  /
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='CUSTOMER_ID_FK5';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."RIDE_TRANSACTION" ADD CONSTRAINT "CUSTOMER_ID_FK5" FOREIGN KEY ("CUSTOMER_ID")
+	  REFERENCES "ADMIN"."CUSTOMERS" ("CUSTOMER_ID") ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint CUSTOMER_ID_FK5 already exists');
+    end if;
+  end;
+  /
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='CAR_ID_FK1';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."RIDE_TRANSACTION" ADD CONSTRAINT "CAR_ID_FK1" FOREIGN KEY ("CAR_ID")
+	  REFERENCES "ADMIN"."CAR" ("CAR_ID") ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint CAR_ID_FK1 already exists');
+    end if;
+  end;
+  /
 --------------------------------------------------------
 --  Ref Constraints for Table SUPPORT
 --------------------------------------------------------
 
-  ALTER TABLE "ADMIN"."SUPPORT" ADD CONSTRAINT "TRANS_ID_FK1" FOREIGN KEY ("TRANS_ID")
-	  REFERENCES "ADMIN"."RIDE_TRANSACTION" ("TRANS_ID") ENABLE;
-  ALTER TABLE "ADMIN"."SUPPORT" ADD CONSTRAINT "CUSTOMER_ID_FK3" FOREIGN KEY ("CUSTOMER_ID")
-	  REFERENCES "ADMIN"."CUSTOMERS" ("CUSTOMER_ID") ENABLE;
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='TRANS_ID_FK1';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."SUPPORT" ADD CONSTRAINT "TRANS_ID_FK1" FOREIGN KEY ("TRANS_ID")
+	  REFERENCES "ADMIN"."RIDE_TRANSACTION" ("TRANS_ID") ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint TRANS_ID_FK1 already exists');
+    end if;
+  end;
+  /
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='CUSTOMER_ID_FK3';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."SUPPORT" ADD CONSTRAINT "CUSTOMER_ID_FK3" FOREIGN KEY ("CUSTOMER_ID")
+	  REFERENCES "ADMIN"."CUSTOMERS" ("CUSTOMER_ID") ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint CUSTOMER_ID_FK3 already exists');
+    end if;
+  end;
+  /
 --------------------------------------------------------
 --  Ref Constraints for Table VIOLATIONS_RECORDS
 --------------------------------------------------------
 
-  ALTER TABLE "ADMIN"."VIOLATIONS_RECORDS" ADD CONSTRAINT "CUSTOMER_ID_FK2" FOREIGN KEY ("CUSTOMER_ID")
-	  REFERENCES "ADMIN"."CUSTOMERS" ("CUSTOMER_ID") ENABLE;
-  ALTER TABLE "ADMIN"."VIOLATIONS_RECORDS" ADD CONSTRAINT "VIOLATION_ID_FK" FOREIGN KEY ("VIOLATION_ID")
-	  REFERENCES "ADMIN"."VIOLATIONS" ("VIOLATION_ID") ENABLE;
-
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='CUSTOMER_ID_FK2';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."VIOLATIONS_RECORDS" ADD CONSTRAINT "CUSTOMER_ID_FK2" FOREIGN KEY ("CUSTOMER_ID")
+	  REFERENCES "ADMIN"."CUSTOMERS" ("CUSTOMER_ID") ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint CUSTOMER_ID_FK2 already exists');
+    end if;
+  end;
+  /
+    set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_constraints where constraint_name='VIOLATION_ID_FK';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'ALTER TABLE "ADMIN"."VIOLATIONS_RECORDS" ADD CONSTRAINT "VIOLATION_ID_FK" FOREIGN KEY ("VIOLATION_ID")
+	  REFERENCES "ADMIN"."VIOLATIONS" ("VIOLATION_ID") ENABLE';
+  	  else 
+        dbms_output.put_line('Constraint VIOLATION_ID_FK already exists');
+    end if;
+  end;
+/
 
 ---------------------------------------------------------
 -- SEQUENCE FOR ACTIVITY_ID
@@ -729,6 +1798,7 @@ SET DEFINE OFF;
         dbms_output.put_line('Sequence ACTIVITY_ID_SEQ already exists');
     end if;
   end;
+  /
 ---------------------------------------------------------
 -- SEQUENCE FOR ADDRESS_ID
 ---------------------------------------------------------
@@ -748,6 +1818,7 @@ SET DEFINE OFF;
         dbms_output.put_line('Sequence ADDRESS_ID_SEQ already exists');
     end if;
   end;
+  /
 ---------------------------------------------------------
 -- SEQUENCE FOR CAR_ID_SEQ
 ---------------------------------------------------------
@@ -766,6 +1837,7 @@ SET DEFINE OFF;
         dbms_output.put_line('Sequence CAR_ID_SEQ already exists');
     end if;
   end;
+  /
 ---------------------------------------------------------
 -- SEQUENCE FOR CARS_AT_PICKUP_ID_SEQ
 ---------------------------------------------------------
@@ -785,7 +1857,7 @@ SET DEFINE OFF;
         dbms_output.put_line('Sequence CARS_AT_PICKUP_ID_SEQ already exists');
     end if;
   end;
-         
+   /      
 ---------------------------------------------------------
 -- SEQUENCE FOR CUSTOMER_ID
 ---------------------------------------------------------
@@ -805,7 +1877,7 @@ SET DEFINE OFF;
         dbms_output.put_line('Sequence CUST_ID_SEQ already exists');
     end if;
   end;
-        
+    /    
 ---------------------------------------------------------
 -- SEQUENCE FOR DISCOUNT_ID_SEQ
 ---------------------------------------------------------
@@ -824,7 +1896,7 @@ SET DEFINE OFF;
         dbms_output.put_line('Sequence DISCOUNT_ID_SEQ already exists');
     end if;
   end;
-
+/
 ---------------------------------------------------------
 -- SEQUENCE FOR FEEDBACK_ID_SEQ
 ---------------------------------------------------------
@@ -843,7 +1915,7 @@ SET DEFINE OFF;
         dbms_output.put_line('Sequence FEEDBACK_ID_SEQ already exists');
     end if;
   end;
-       
+ /      
 ---------------------------------------------------------
 -- SEQUENCE FOR INSURANCE_ID_SEQ
 ---------------------------------------------------------
@@ -863,7 +1935,7 @@ SET DEFINE OFF;
         dbms_output.put_line('Sequence INSURANCE_ID_SEQ already exists');
     end if;
   end;
-         
+  /       
 ---------------------------------------------------------
 -- SEQUENCE FOR RECORD_ID_SEQ
 ---------------------------------------------------------
@@ -883,7 +1955,7 @@ SET DEFINE OFF;
         dbms_output.put_line('Sequence RECORD_ID_SEQ already exists');
     end if;
   end;
-
+/
 ---------------------------------------------------------
 -- SEQUENCE FOR MAINTENANCE_ID_SEQ
 ---------------------------------------------------------
@@ -903,7 +1975,7 @@ SET DEFINE OFF;
         dbms_output.put_line('Sequence MAINTENANCE_ID_SEQ already exists');
     end if;
   end;
-
+/
 ---------------------------------------------------------
 -- SEQUENCE FOR PURCHASE_INSURANCE_ID_SEQ
 ---------------------------------------------------------
@@ -923,7 +1995,7 @@ SET DEFINE OFF;
         dbms_output.put_line('Sequence PURCHASE_INSURANCE_ID_SEQ already exists');
     end if;
   end;
-         
+ /        
 ---------------------------------------------------------
 -- SEQUENCE FOR TRANS_ID_SEQ
 ---------------------------------------------------------
@@ -943,7 +2015,7 @@ SET DEFINE OFF;
         dbms_output.put_line('Sequence TRANS_ID_SEQ already exists');
     end if;
   end;
-
+/
 ---------------------------------------------------------
 -- SEQUENCE FOR VIOLATION_ID_SEQ
 ---------------------------------------------------------
@@ -963,7 +2035,7 @@ SET DEFINE OFF;
         dbms_output.put_line('Sequence VIOLATION_ID_SEQ already exists');
     end if;
   end;
-
+/
 ---------------------------------------------------------
 -- SEQUENCE FOR PAYMENT_ID_SEQ
 ---------------------------------------------------------
@@ -982,7 +2054,7 @@ SET DEFINE OFF;
         dbms_output.put_line('Sequence PAY_ID_SEQ already exists');
     end if;
   end;
-
+/
 ---------------------------------------------------------
 -- SEQUENCE FOR SUPPORT_ID_SEQ
 ---------------------------------------------------------
@@ -1001,7 +2073,7 @@ SET DEFINE OFF;
         dbms_output.put_line('Sequence SUPPORT_ID_SEQ already exists');
     end if;
   end;
-             
+ /            
 ---------------------------------------------------------
 -- SEQUENCE FOR PICKUP_POINT_ID_SEQ
 ---------------------------------------------------------
@@ -1020,6 +2092,7 @@ SET DEFINE OFF;
         dbms_output.put_line('Sequence PICKUP_POINT_ID_SEQ already exists');
     end if;
   end;
+  /
 ---------------------------------------------------------
 -- SEQUENCE FOR AUDIT_ID_SEQ
 ---------------------------------------------------------
@@ -1036,3 +2109,4 @@ SET DEFINE OFF;
         dbms_output.put_line('Sequence AUDIT_ID_SEQ already exists');
     end if;
   end;
+  /
