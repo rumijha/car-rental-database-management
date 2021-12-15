@@ -31,6 +31,11 @@ begin
         --pckg_car.update_pickup_point(100000,'ARIZONA','TEMPE','98732',87000,'SQUARE');
     
     --INSERT CARS AT PICK UP
+        --pckg_car.insert_cars_at_pickup(6,7000,5);
+        
+     --UPDATE CARS AT PICK UP
+        --pckg_car.update_cars_at_pickup(6,7000,2);
+        
     --pckg_utils.show_all_available_cars(to_timestamp((sysdate)), to_timestamp((sysdate+2/24)));
     --pckg_utils.get_car(1009);
 end;
