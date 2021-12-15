@@ -491,7 +491,7 @@
                 commit;
             end if;
             
-            PROC_INSERT_PAYMENTS(PAY_ID_SEQ.NEXTVAL, sysdate, vCUSTOMER_CARD, PAYMENT_IN_PROCESS, vTRANS_ID, vDISCOUNT_ID);
+            INSERT_PAYMENT(PAY_ID_SEQ.NEXTVAL, sysdate, vCUSTOMER_CARD, PAYMENT_IN_PROCESS, vTRANS_ID, vDISCOUNT_ID);
         
         end if;
     
