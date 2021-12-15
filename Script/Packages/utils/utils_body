@@ -1,0 +1,280 @@
+--------------------------------------------------------
+--  File created - Tuesday-December-14-2021   
+--------------------------------------------------------
+--------------------------------------------------------
+--  DDL for Package Body PCKG_UTILS
+--------------------------------------------------------
+
+  CREATE OR REPLACE EDITIONABLE PACKAGE BODY "ADMIN"."PCKG_UTILS" AS
+
+    FUNCTION CHECK_CAR_AT_PICKUP_EXISTS 
+    (
+      vCARS_ID IN NUMBER 
+    ) RETURN NUMBER AS 
+        DB_CAR_ID CARS_AT_PICKUP.CAR_ID%type;
+    BEGIN
+    
+        select CAR_ID into DB_CAR_ID from CARS_AT_PICKUP where CAR_ID = vCARS_ID;
+        if DB_CAR_ID IS NOT NULL then
+            return DB_CAR_ID;
+        end if;
+    EXCEPTION
+        when NO_DATA_FOUND then
+             return 0;
+        when others then
+            RETURN 0;
+    END CHECK_CAR_AT_PICKUP_EXISTS;
+
+    FUNCTION CHECK_CAR_AT_PICKUP_ID_EXISTS 
+    (
+      vCARS_AT_PICKUP_ID IN NUMBER 
+    ) RETURN NUMBER AS 
+        DB_CARS_AT_PICKUP_ID CARS_AT_PICKUP.CARS_AT_PICKUP_ID%type;
+    BEGIN
+    
+        select CARS_AT_PICKUP_ID into DB_CARS_AT_PICKUP_ID from CARS_AT_PICKUP where CARS_AT_PICKUP_ID = vCARS_AT_PICKUP_ID;
+        if DB_CARS_AT_PICKUP_ID IS NOT NULL then
+            return DB_CARS_AT_PICKUP_ID;
+        end if;
+    EXCEPTION
+        when NO_DATA_FOUND then
+             return 0;
+        RETURN 0;
+    END CHECK_CAR_AT_PICKUP_ID_EXISTS;
+    
+    
+    FUNCTION CHECK_CAR_AVAILABILITY 
+    (
+        vCAR_ID IN CAR.CAR_ID%type,
+        vSTART_TIME IN RIDE_TRANSACTION.START_TIME%type,
+        vEND_TIME IN RIDE_TRANSACTION.END_TIME%type 
+    ) RETURN NUMBER AS
+        
+        DB_CAR_ID CAR.CAR_ID%type;
+        ex_INVALID_CAR EXCEPTION;
+        DB_TRANS_ID RIDE_TRANSACTION.TRANS_ID%type;
+    BEGIN
+        
+        if check_car_id_exists(vCAR_ID) = 0 then 
+            raise ex_INVALID_CAR;
+        end if;
+        
+        begin
+            select TRANS_ID into DB_TRANS_ID 
+            from RIDE_TRANSACTION 
+            where ((START_TIME >= vSTART_TIME or END_TIME >= vSTART_TIME)   and 
+            (START_TIME <= vEND_TIME or END_TIME <= vEND_TIME))  and 
+            CAR_ID = vCAR_ID and STATUS in ('IN PROCESS', 'UPDATED');
+            
+            if DB_TRANS_ID IS NOT NULL then
+                return DB_TRANS_ID;
+            end if;
+            
+        exception
+            when NO_DATA_FOUND then
+                return 0;
+            when TOO_MANY_ROWS then
+                return 1;
+            when others then
+                dbms_output.put_line('Something went wrong while checking car availability!!!');
+                return 1;
+        end;
+        
+        return 0;
+    EXCEPTION
+    
+        when ex_INVALID_CAR then
+            dbms_output.put_line('Invalid Car!!! Car Do Not Exists');
+            return 1;
+        when others then
+            dbms_output.put_line('Something went wrong while checking Car Availability!!!');
+            RETURN 1;
+    END CHECK_CAR_AVAILABILITY;
+    
+    
+    FUNCTION CHECK_CAR_ID_EXISTS 
+    (
+      vCAR_ID IN NUMBER 
+    ) RETURN NUMBER AS 
+        DB_CAR_ID CAR.CAR_ID%type;
+    BEGIN
+    
+        select CAR_ID into DB_CAR_ID from CAR where CAR_ID = vCAR_ID;
+        if DB_CAR_ID IS NOT NULL then
+            return DB_CAR_ID;
+        end if;
+    EXCEPTION
+        when NO_DATA_FOUND then
+             return 0;
+        RETURN 0;
+    END CHECK_CAR_ID_EXISTS;
+    
+
+    FUNCTION CHECK_CUSTOMER_ID_EXISTS 
+    (
+      vCUST_ID IN CUSTOMERS.CUSTOMER_ID%type 
+    ) RETURN NUMBER AS
+    
+        DB_CUSTOMER_ID CUSTOMERS.CUSTOMER_ID%type;
+    BEGIN
+    
+        select CUSTOMER_ID into DB_CUSTOMER_ID from CUSTOMERS where CUSTOMER_ID = vCUST_ID;
+        if DB_CUSTOMER_ID IS NOT NULL then
+            return DB_CUSTOMER_ID;
+        end if;
+    EXCEPTION
+        when NO_DATA_FOUND then
+             return 0;
+        RETURN 0;
+    END CHECK_CUSTOMER_ID_EXISTS;
+    
+    
+    FUNCTION CHECK_PASSSPORT_EXISTS 
+    (
+      vPASSPORT_NO IN CUSTOMERS.PASSPORT_NUMBER%type
+    ) RETURN VARCHAR2 AS 
+    
+        DB_PASSPORT_NO CUSTOMERS.PASSPORT_NUMBER%type;
+    BEGIN
+    
+        select PASSPORT_NUMBER into DB_PASSPORT_NO from CUSTOMERS where PASSPORT_NUMBER = vPASSPORT_NO;
+        if DB_PASSPORT_NO IS NOT NULL then
+            return DB_PASSPORT_NO;
+        end if;
+    EXCEPTION
+        when NO_DATA_FOUND then
+            return '0';
+        when others then
+            RETURN '0';
+    END CHECK_PASSSPORT_EXISTS;
+    
+    
+    FUNCTION CHECK_PICKUP_POINT_EXISTS 
+    (
+      vPICKUP_POINT_ID IN NUMBER 
+    ) RETURN NUMBER AS 
+        DB_PICKUP_POINT_ID PICKUP_POINTS.PICKUP_POINT_ID%type;
+    BEGIN
+    
+        select PICKUP_POINT_ID into DB_PICKUP_POINT_ID from PICKUP_POINTS where PICKUP_POINT_ID = vPICKUP_POINT_ID;
+        if DB_PICKUP_POINT_ID IS NOT NULL then
+            return DB_PICKUP_POINT_ID;
+        end if;
+    EXCEPTION
+        when NO_DATA_FOUND then
+             return 0;
+        RETURN 0;
+    END CHECK_PICKUP_POINT_EXISTS;
+    
+    
+    FUNCTION CHECK_TRANS_ID_EXISTS 
+    (
+      vTRANS_ID IN NUMBER 
+    ) RETURN NUMBER AS 
+        DB_TRANS_ID RIDE_TRANSACTION.TRANS_ID%type;
+    BEGIN
+    
+        select TRANS_ID into DB_TRANS_ID from RIDE_TRANSACTION where TRANS_ID = vTRANS_ID;
+        if DB_TRANS_ID IS NOT NULL then
+            return DB_TRANS_ID;
+        end if;
+        
+    EXCEPTION
+        when NO_DATA_FOUND then
+             return 0;
+        when others then
+            RETURN 0;
+            
+        RETURN 0;
+        
+    END CHECK_TRANS_ID_EXISTS;
+    
+  PROCEDURE SHOW_ALL_AVAILABLE_CARS(
+        vSTART_TIME IN RIDE_TRANSACTION.START_TIME%type,
+        vEND_TIME IN RIDE_TRANSACTION.END_TIME%type
+    ) AS
+    
+    CURSOR CAR_LIST IS SELECT CAR_ID FROM CAR;
+    TYPE CARS IS VARRAY(20500) OF CUSTOMERS.CUSTOMER_ID%TYPE;
+    AVAILABLE_CARS_ARR CARS := CARS();
+    CAR_INDEX NUMBER := 1;
+    
+    DB_CARID CAR.CAR_ID%type;
+    DB_MAKE CAR.CAR_MAKE%type;
+    DB_MODEL CAR.MODEL%type;
+    DB_TYPE CAR.CAR_TYPE%type;
+    DB_RATE CAR.RATE_PER_HR%type;
+    DB_CAR_NUM CAR.CAR_NUMBER%type;
+    DB_SEATS CAR.MAX_PERSON%type;
+    
+    ex_No_CARS_AVAILABLE EXCEPTION;
+  BEGIN
+    -- TODO: Implementation required for PROCEDURE PCKG_UTILS.SHOW_ALL_AVAILABLE_CARS
+    FOR i IN CAR_LIST LOOP
+        AVAILABLE_CARS_ARR.EXTEND;
+        if pckg_utils.check_car_availability(i.CAR_ID,vSTART_TIME,vEND_TIME) = 0 then
+            AVAILABLE_CARS_ARR(CAR_INDEX) := i.CAR_ID;
+            CAR_INDEX := CAR_INDEX +1;
+        end if;
+    END LOOP;
+    
+    dbms_output.put_line('Car Id     Make           Model           Type        Rate Per Hr     Reg. Number      Seats Capacity');
+    FOR i in AVAILABLE_CARS_ARR.FIRST .. AVAILABLE_CARS_ARR.LAST LOOP
+        select CAR_ID, CAR_MAKE, MODEL, CAR_TYPE, 
+        RATE_PER_HR, CAR_NUMBER, MAX_PERSON INTO
+        DB_CARID, DB_MAKE, DB_MODEL, DB_TYPE, DB_RATE, DB_CAR_NUM, DB_SEATS
+        from CAR WHERE CAR_ID = AVAILABLE_CARS_ARR(i);
+        
+        dbms_output.put_line(DB_CARID||'      '||DB_MAKE||'         '||DB_MODEL||'             '||DB_TYPE||'           '||DB_RATE||'        '||DB_CAR_NUM||'            '||DB_SEATS);
+        
+    END LOOP;
+   
+   EXCEPTION
+    when NO_DATA_FOUND then
+        dbms_output.put_line('No Car Available...');
+    when others then
+        dbms_output.put_line('Invalid Operation '|| SQLERRM);
+        
+  END SHOW_ALL_AVAILABLE_CARS;
+
+
+  PROCEDURE GET_CAR(
+        vCAR_ID IN CAR.CAR_ID%type
+    ) AS
+    
+    DB_CARS_AT_PICKUP_ID CARS_AT_PICKUP.CARS_AT_PICKUP_ID%type;
+    DB_PICKUP_POINT_ID PICKUP_POINTS.PICKUP_POINT_ID%type;
+    DB_NAME PICKUP_POINTS.name%type;
+    DB_CITY PICKUP_POINTS.city%type;
+    DB_ZIP PICKUP_POINTS.zip%type;
+    DB_STATE PICKUP_POINTS.STATE%type;
+
+  BEGIN
+    -- TODO: Implementation required for PROCEDURE PCKG_UTILS.GET_CAR
+        dbms_output.put_line('Cars At Pickup Id       Pickup Point Id     Name          City           Zip          State');
+        
+        select cars_at_pickup_id, p.PICKUP_POINT_ID, NAME, CITY, ZIP, STATE INTO
+        DB_CARS_AT_PICKUP_ID, DB_PICKUP_POINT_ID, DB_NAME, DB_CITY, DB_ZIP, DB_STATE
+        from pickup_points,
+        (
+            select cars_at_pickup_id, pickup_point_id, car_id  from cars_at_pickup
+        ) p
+        where p.car_id = vCAR_ID and
+        pickup_points.pickup_point_id=p.pickup_point_id;
+        
+        dbms_output.put_line(DB_CARS_AT_PICKUP_ID||'                       '||DB_PICKUP_POINT_ID||'             '||
+        DB_NAME||'       '||DB_CITY||'       '||DB_ZIP||'       '||DB_STATE);
+  END GET_CAR;
+
+
+END PCKG_UTILS;
+
+/
+
+  GRANT EXECUTE ON "ADMIN"."PCKG_UTILS" TO "APP_OWNER";
+  GRANT DEBUG ON "ADMIN"."PCKG_UTILS" TO "APP_OWNER";
+  GRANT EXECUTE ON "ADMIN"."PCKG_UTILS" TO "DEVELOPER";
+  GRANT DEBUG ON "ADMIN"."PCKG_UTILS" TO "DEVELOPER";
+  GRANT EXECUTE ON "ADMIN"."PCKG_UTILS" TO "TESTER";
+  GRANT EXECUTE ON "ADMIN"."PCKG_UTILS" TO "SERVICE";
+  GRANT DEBUG ON "ADMIN"."PCKG_UTILS" TO "SERVICE";
