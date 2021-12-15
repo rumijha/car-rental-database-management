@@ -1,0 +1,10 @@
+create or replace view audit_view as
+SELECT 
+cust.CUSTOMER_ID, 
+cust.first_name, 
+cust.last_name, 
+cust.email_id, 
+to_char(act.login_time, 'DD-MON-YYYY HH24:MI:SS') login_time, 
+to_char(act.logout_time, 'DD-MON-YYYY HH24:MI:SS') logout_time
+FROM customers cust, activity act
+WHERE cust.CUSTOMER_ID = act.CUSTOMER_ID;

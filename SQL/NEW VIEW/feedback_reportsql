@@ -1,0 +1,5 @@
+create or replace view feedback_report as
+select ratings, round(count(ratings)/ (select count(*) from feedback) * 100,2) || ' %' as Percentage 
+from feedback 
+group by ratings
+order by ratings;

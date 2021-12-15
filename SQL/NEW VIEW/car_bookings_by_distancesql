@@ -1,0 +1,36 @@
+create or replace view car_bookings_by_distance as
+select car.car_type, q.distance,
+round( sum(q.total) /
+    (
+        select Average_Rides from
+        (
+            select  car.car_type as car_type, sum(p.count_trans) as Average_Rides
+            from car, (select car_id, count(trans_id) as count_trans from RIDE_TRANSACTION group by car_id) p
+            where car.car_id = p.car_id 
+            group by car.car_type
+        )
+        where car_type = car.car_type
+    ) *100 ,2)|| '%' as Average_Rides
+from car,
+(
+    select t.distance, car.car_id, sum(total) as total
+    from car,
+    (
+        select 
+        case 
+             when distance between 0  and 10 then '0-10 Miles'
+             when distance between 11 and 20 then '11-20 Miles'
+             when distance between 21 and 30 then '21-30 Miles'
+             when distance between 31 and 40 then '31-40 Miles'
+             when distance between 41 and 50 then '41-50 Miles'
+             when distance between 51 and 60 then '51-60 Miles'
+             when distance is null then 'IGNORE'
+        END as distance, car_id,count(distance) as total 
+        from ride_transaction group by distance, car_id
+    ) t
+    where car.car_id = t.car_id
+    group by t.distance, car.car_id
+) q
+where car.car_id = q.car_id
+group by car.car_type, q.distance
+order by car.car_type, distance;

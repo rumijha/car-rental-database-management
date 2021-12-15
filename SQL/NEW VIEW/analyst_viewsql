@@ -1,0 +1,28 @@
+create or replace view analyst_view as
+SELECT 
+cust.FIRST_NAME, 
+cust.LAST_NAME, 
+cust.EMAIL_ID, 
+cust.CUSTOMER_TYPE, 
+car.car_make, 
+car.model, 
+car.car_type, 
+car.rate_per_hr, 
+rt.TRANSACTION_DATE, 
+rt.START_TIME, 
+rt.END_TIME, 
+bill.ride_duration, 
+rt.DISTANCE, 
+rt.status as trans_status, 
+pay.PAY_DATE, 
+bill.status as payment_status, 
+bill.bill_amount
+FROM customers cust, 
+ride_transaction rt, 
+payments pay, 
+car, 
+payment_bill bill
+WHERE cust.CUSTOMER_ID = rt.CUSTOMER_ID 
+and rt.TRANS_ID = pay.TRANS_ID 
+and rt.CAR_ID = car.CAR_ID 
+and rt.TRANS_ID = bill.TRANS_ID;
