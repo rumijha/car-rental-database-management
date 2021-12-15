@@ -44,7 +44,18 @@ begin
         --pckg_transact.insert_ride_transaction(12,4000,9010,to_timestamp((sysdate)), to_timestamp((sysdate+1/24)),1016,0,'IN PROCESS');
     
     --UPDATE  Ride Transaction- Trans id, car at pickup id, start, end, car id, distance, status, customer card, discount id
-        pckg_transact.update_ride_transaction();
+        --pckg_transact.update_ride_transaction(10,9010,to_timestamp((sysdate+1/24)), to_timestamp((sysdate+2/24)),1018,10,'COMPLETED','1234-1234-1234-1234',NULL);
+        
+    
+    --INSERT violations violation id description
+        --pckg_violations.insert_violations(22,NULL);
+        --pckg_violations.update_violations(21,'Park');
+    
+    --INSERT VIOLATIONS records record id,  cust id, violation id
+      -- pckg_violations.insert_violations_record(2000,2007,12);
+        
+    --INSERt
+    
     --pckg_utils.show_all_available_cars(to_timestamp((sysdate)), to_timestamp((sysdate+2/24)));
     --pckg_utils.get_car(1009);
 end;
