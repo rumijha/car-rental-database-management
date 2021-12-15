@@ -24,3 +24,49 @@ Using RDBMS, provide knowledge and create reports for the business management te
 
 *Vignesh Kumar Baskar (NUID: 002196442)*
 
+## Note
+
+As per business logic we are using sequences to create a primary key id value for each table
+However,only for demo purpose we have to use few static values in package/procedure calls
+
+## Steps
+
+*If Executing For *First Time* then follow below steps:
+
+Step1: Please run the DDL script(Car-Rental-Management\DDL\Bootstrap) which includes, Tables defination and Sequences
+
+Step2: Please compile the package 'utils' (Car-Rental-Management\DML\Packages\utils) which holds all the functions
+
+Step3: Please run all the other package script(Car-Rental-Management\DML\Packages) provided which includes, Package Specifications, Package Body holding all the functions and procedures used to Insert/Update record into the respective tables.
+
+Step4: Run the trigger script(Car-Rental-Management\SQL\Triggers) which is used to maintain the audit table
+
+Step5: Run the users script(Car-Rental-Management\SQL\Users) to create the users and grant them access accordingly
+
+Step6: Please run all the view scripts(Car-Rental-Management\SQL\Views) given. 
+This provide you the reports available to Analyst, Support and Audit Team for analysis and reports which focuses on the problem statement given.
+Below are the queries to view the reports,
+Report available to Analyst Team can be view by: select * from analyst_view;
+Report available to Support Team can be view by: select * from support_view;
+Report available to Service Team can be view by: select * from audit_view;
+
+*If executing for *Second Time* then follow below steps:
+
+Step1: Please run the DDL script(Car-Rental-Management\DDL\DropObjects) which will drop all objects
+Step2: Please run the DDL script(Car-Rental-Management\DDL\Bootstrap) which includes, Tables defination and Sequences
+
+Step3: Please compile the package 'utils' (Car-Rental-Management\DML\Packages\utils) which holds all the functions
+
+Step4: Please run all the other package script(Car-Rental-Management\DML\Packages) provided which includes, Package Specifications, Package Body holding all the functions and procedures used to Insert/Update record into the respective tables.
+
+Step5: Run the trigger script(Car-Rental-Management\SQL\Triggers) which is used to maintain the audit table
+
+Step6: Run the users script(Car-Rental-Management\SQL\Users) to create the users and grant them access accordingly
+
+Step7: Please run all the view scripts(Car-Rental-Management\SQL\Views) given
+
+    This provide you the reports available to Analyst, Support and Audit Team for analysis and reports which focuses on the problem statement given.
+    Below are the queries to view the reports,
+    Report available to Analyst Team can be view by: select * from analyst_view;
+    Report available to Support Team can be view by: select * from support_view;
+    Report available to Service Team can be view by: select * from audit_view;
