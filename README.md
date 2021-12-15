@@ -34,8 +34,8 @@ However, only for _demo_ purpose used static values in package/procedure calls
 
  **To _Re-Run_ Scripts Multiple Times**
  
-  - If executing for One Time only then follow **First Time** steps
-  - If already executed and wanted to execute multiple times then follow **Second Time** steps
+  - If executing for One Time **only** then follow _First Time_ steps
+  - If **already** executed and wanted to execute again *multiple* times then follow _Second Time_ steps
   
 > **If Executing For `First` Time:**
 
