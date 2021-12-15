@@ -267,6 +267,15 @@ SET DEFINE OFF;
 REM INSERTING into ADMIN.VIOLATIONS_RECORDS
 SET DEFINE OFF;
 --------------------------------------------------------
+--  DDL for Table AUDIT_DATA
+--------------------------------------------------------
+
+  CREATE TABLE "ADMIN"."AUDIT_DATA" 
+   ( AUDIT_ID number primary key,
+   USERNAME VARCHAR2(50) NOT NULL, 
+   "DATE" TIMESTAMP (6) DEFAULT systimestamp NOT NULL ENABLE,
+	ACTION VARCHAR2(25) not null) ;
+--------------------------------------------------------
 --  Constraints for Table MAINTENANCE
 --------------------------------------------------------
 
@@ -656,3 +665,11 @@ SET DEFINE OFF;
          INCREMENT BY 1
          ORDER;
 ---------------------------------------------------------
+-- SEQUENCE FOR AUDIT_ID_SEQ
+---------------------------------------------------------
+    create sequence AUDIT_ID_SEQ 
+    start with 1 
+    increment by 1
+    order;
+    
+----------------------------------------------------------

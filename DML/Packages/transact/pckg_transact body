@@ -1,5 +1,5 @@
 --------------------------------------------------------
---  File created - Tuesday-December-14-2021   
+--  File created - Wednesday-December-15-2021   
 --------------------------------------------------------
 --------------------------------------------------------
 --  DDL for Package Body PCKG_TRANSACT
@@ -562,7 +562,7 @@
             ROLLBACK;
         ELSE
             -- change stataus of payment as complete
-            PROC_UPDATE_PAYMENTS(vPAY_ID);
+            UPDATE_PAYMENT(vPAY_ID);
         END IF;
         
     EXCEPTION

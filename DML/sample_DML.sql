@@ -3,38 +3,52 @@ set serveroutput on;
 begin
     --INSERT CUSTOMER
     -- customer_id, first_name, last_name, email, contact, license, passport,cust type, DOB
-    --pckg_customer.insert_customer(21,'john','Kennedy','joh.k@northeastern.edu','1215167892','ajjshdn','ajsahdudw','EMPLOYEE','05-JUL-2005');
+    --pckg_customer.insert_customer(786,'Ganesh','Nayak','ganesh.n@northeastern.edu','3456987098','ZXCVB542','LKJHGMN678','EMPLOYEE','02-JUL-1997');
+    
     
     --CUSTOMER ADDRESS
     -- address id, line1, line2, state, city, cust_id, zip, addr type
-    --pckg_customer.insert_customer_address(14,'67- St Germain',null,'FLORIDA','MIAMI',20,'0211466','OFFICE');
+    --pckg_customer.insert_customer_address(50,'GERMAN COLONY',NULL,'TEXAS','DALLAS',786,'34561','HOME');
+    
     
     --UPDATE CUSTOMER
-    --pckg_customer.update_customers(20,'JOHN','Kennedy','joh.k@northeastern.edu','1215167892','ajjshdn','ajsahdudw','EMPLOYEE','05-JUL-1999');
+    --pckg_customer.update_customers(786,'Ganesh','Nayak','ganesh.n@gmail.com','3456987098','ZXCVB542','LKJHGMN678','EMPLOYEE','02-JUL-1997');
+    
     
     --UPADTE ADDRESS
-    --pckg_customer.update_customer_address(12,'67- St Germain',null,'FLORIDA','MIAMI',20,'0211466','OFFICE');
+    --pckg_customer.update_customer_address(50,'HENNY PARK VIEW','APT NO 34','TEXAS','DALLAS',786,'34579','HOME');
+    
     
     --INSERT ACTIVITY activity id, login time, logout time, cust id
-       -- pckg_customer.insert_activity(58800,sysdate,sysdate+1/24,20);
+       -- pckg_customer.insert_activity(12000, sysdate, sysdate+1/24, 786);
+    
     
     --INSERT CAR car id, type, seat capacity, rate, model, make,reg num, cost
-        --pckg_car.insert_car(5,'SEDAN',5,12,'CITY','HONDA','IQR 675',NULL);
+        --pckg_car.insert_car(500, 'SEDAN', 4, 16, 'CITY', 'HONDA','QQR D78', 16000);
+        
         
     --UPDATE CAR
-        --pckg_car.update_car(5,'SEDAN',5,12,'CITY','HONDA','IRR 675',NULL);
+        --pckg_car.update_car(500, 'SEDAN', 4, 17, 'CITY', 'HONDA','QQR D78', 15500);
+        
          
     --INSERT PICKUP POINT pickup point id, state, city, zip, cost, name
-        --pckg_car.insert_pickup_point(2,'FLORIDA','MIAMI','02115',NULL,'Boylston Street');
+        --pckg_car.insert_pickup_point(10, 'TEXAS','AUSTIN','92115', 50000, 'AUSTIN_A1');
+    
     
     --UPDATE PICKUP POINT
-        --pckg_car.update_pickup_point(100000,'ARIZONA','TEMPE','98732',87000,'SQUARE');
+        --pckg_car.update_pickup_point(10, 'TEXAS','AUSTIN','92220', 50000, 'AUSTIN_TX');
+    
     
     --INSERT CARS AT PICK UP
-        --pckg_car.insert_cars_at_pickup(6,7000,5);
+        --pckg_car.insert_cars_at_pickup(15,7012,1047);
+        
         
      --UPDATE CARS AT PICK UP
-        --pckg_car.update_cars_at_pickup(6,7000,2);
+        --pckg_car.update_cars_at_pickup(15, 7012, 1041);
+        
+        
+        
+        
         
     -- DELETE CAR
         --pckg_car.delete_car(5);
