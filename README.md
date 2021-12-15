@@ -31,42 +31,40 @@ However,only for demo purpose we have to use few static values in package/proced
 
 ## Steps
 
-*If Executing For *First Time* then follow below steps:
+**If Executing For *First Time*:**
 
-Step1: Please run the DDL script(Car-Rental-Management\DDL\Bootstrap) which includes, Tables defination and Sequences
+    Step1: Please run the DDL script 'DDL\Bootstrap' which will create all objects required
 
-Step2: Please compile the package 'utils' (Car-Rental-Management\DML\Packages\utils) which holds all the functions
+    Step2: Please compile the package 'utils' from 'DML\Packages\utils'
 
-Step3: Please run all the other package script(Car-Rental-Management\DML\Packages) provided which includes, Package Specifications, Package Body holding all the functions and procedures used to Insert/Update record into the respective tables.
+    Step3: Please run all other package script 'DML\Packages' provided which includes-
+           Package Specifications, Body holding Functions and Procedures for DML
+           
+    Step4: Please run all the view scripts 'SQL\Views'
+    
+    Step5: Run the Users script 'SQL\Users' which creates the Users and Grant them access accordingly
+    
+    Step6: Run the Trigger script 'SQL\Triggers' used for Audit Purpose.
 
-Step4: Run the trigger script(Car-Rental-Management\SQL\Triggers) which is used to maintain the audit table
+**If Executing for *Second Time*:**
 
-Step5: Run the users script(Car-Rental-Management\SQL\Users) to create the users and grant them access accordingly
+    Step1: Please run the DDL script 'DDL\DropObjects' which will drop old objects
+    
+    Step2: Please run the DDL script 'DDL\Bootstrap' which will create all objects required
 
-Step6: Please run all the view scripts(Car-Rental-Management\SQL\Views) given. 
+    Step3: Please compile the package 'utils' from 'DML\Packages\utils'
+
+    Step4: Please run all other package script 'DML\Packages' provided which includes-
+           Package Specifications, Body holding Functions and Procedures for DML
+           
+    Step5: Please run all the view scripts 'SQL\Views'
+    
+    Step6: Run the Users script 'SQL\Users' which creates the Users and Grant them access accordingly
+    
+    Step7: Run the Trigger script 'SQL\Triggers' used for Audit Purpose.
+
 This provide you the reports available to Analyst, Support and Audit Team for analysis and reports which focuses on the problem statement given.
 Below are the queries to view the reports,
 Report available to Analyst Team can be view by: select * from analyst_view;
 Report available to Support Team can be view by: select * from support_view;
 Report available to Service Team can be view by: select * from audit_view;
-
-*If executing for *Second Time* then follow below steps:
-
-Step1: Please run the DDL script(Car-Rental-Management\DDL\DropObjects) which will drop all objects
-Step2: Please run the DDL script(Car-Rental-Management\DDL\Bootstrap) which includes, Tables defination and Sequences
-
-Step3: Please compile the package 'utils' (Car-Rental-Management\DML\Packages\utils) which holds all the functions
-
-Step4: Please run all the other package script(Car-Rental-Management\DML\Packages) provided which includes, Package Specifications, Package Body holding all the functions and procedures used to Insert/Update record into the respective tables.
-
-Step5: Run the trigger script(Car-Rental-Management\SQL\Triggers) which is used to maintain the audit table
-
-Step6: Run the users script(Car-Rental-Management\SQL\Users) to create the users and grant them access accordingly
-
-Step7: Please run all the view scripts(Car-Rental-Management\SQL\Views) given
-
-    This provide you the reports available to Analyst, Support and Audit Team for analysis and reports which focuses on the problem statement given.
-    Below are the queries to view the reports,
-    Report available to Analyst Team can be view by: select * from analyst_view;
-    Report available to Support Team can be view by: select * from support_view;
-    Report available to Service Team can be view by: select * from audit_view;
