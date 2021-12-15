@@ -1,0 +1,49 @@
+create or replace view usage_pattern as
+select
+case
+        when ride_duration >= 0 and ride_duration < 2 then '0-2 Hr'
+        when ride_duration >= 2 and ride_duration < 4 then '2-4 Hr'
+        when ride_duration >= 4 and ride_duration < 6 then '4-6 Hr'
+        when ride_duration >= 6 and ride_duration < 8 then '6-8 Hr'
+        when ride_duration >= 8 and ride_duration <= 10 then '8-10 Hr'
+    end as Frame, over
+from
+(
+select 
+    *
+from 
+(
+    select ride_duration , count(ride_duration) as over
+    from payment_bill
+    where distance > 20 and distance > 0  and ride_duration >= 0 and ride_duration < 2 
+    group by ride_duration
+) 
+UNION
+(
+    select ride_duration , count(ride_duration) as over
+    from payment_bill
+    where distance > 40  and ride_duration >= 2 and  ride_duration < 4
+    group by ride_duration
+) 
+UNION
+(
+    select ride_duration, count(ride_duration) as over
+    from payment_bill
+    where distance > 60  and ride_duration >= 4 and  ride_duration < 6
+    group by ride_duration
+)
+UNION
+(
+    select ride_duration, count(ride_duration) as over
+    from payment_bill
+    where distance > 80  and ride_duration >= 6 and  ride_duration < 8
+    group by ride_duration
+)
+UNION
+(
+    select ride_duration, count(ride_duration) as over
+    from payment_bill
+    where distance > 100  and ride_duration >= 8 and  ride_duration <= 10
+    group by ride_duration
+)
+);
