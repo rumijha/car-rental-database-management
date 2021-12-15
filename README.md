@@ -40,7 +40,7 @@ However, only for demo purpose we have to use few static values in package/proce
 
     Step2: Compile both the package 'utils' and its body 'utils_body' from 'DML\Packages\utils' respectively
 
-    Step3: Run all other package script from 'DML\Packages' provided which includes
+    Step3: Compile all other package script from 'DML\Packages' provided which includes
            Package Specifications, Body holding Functions and Procedures for DML
            
     Step4: Run all the view scripts from 'SQL\Views'
@@ -56,9 +56,9 @@ However, only for demo purpose we have to use few static values in package/proce
     
     Step2: Run the DDL script at 'DDL\Bootstrap' which will create all objects required
 
-    Step3: Compile the package 'utils' from 'DML\Packages\utils'
+    Step3: Compile both the package 'utils' and its body 'utils_body' from 'DML\Packages\utils' respectively
 
-    Step4: Run all other package script from 'DML\Packages' provided which includes
+    Step4: Compile all other package script from 'DML\Packages' provided which includes
            Package Specifications, Body holding Functions and Procedures for DML
            
     Step5: Run all the view scripts from 'SQL\Views'
