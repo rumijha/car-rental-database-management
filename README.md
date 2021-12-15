@@ -32,6 +32,8 @@ However, only for demo purpose we have to use few static values in package/proce
 
 ## Steps
 
+### **Follow the Below Steps If Wanted To Re-Run Scripts Multiple Times**
+
 **If Executing For *First Time*:**
 
     Step1: Run the DDL script 'DDL\Bootstrap' which will create All Objects
@@ -65,9 +67,12 @@ However, only for demo purpose we have to use few static values in package/proce
     
     Step7: Run the Trigger script at 'SQL\Triggers' used for Audit Purpose.
 
+
 This provide you the reports available to Analyst, Support and Audit Team for analysis and reports which focuses on the problem statement given.
 
-**To View The Reports**
+## **To View The Reports**
+
+### **Note - Since there is no data ouput of below commands will be empty**
 
     Report Available To Analyst:
     
