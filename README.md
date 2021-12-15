@@ -38,7 +38,7 @@ However, only for demo purpose we have to use few static values in package/proce
 
     Step1: Run the DDL script 'DDL\Bootstrap' which will create All Objects
 
-    Step2: Compile the package 'utils' at 'DML\Packages\utils'
+    Step2: Compile both the package 'utils' and its body 'utils_body' from 'DML\Packages\utils' respectively
 
     Step3: Run all other package script from 'DML\Packages' provided which includes
            Package Specifications, Body holding Functions and Procedures for DML
