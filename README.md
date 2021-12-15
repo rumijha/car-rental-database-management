@@ -27,41 +27,43 @@ Using RDBMS, provide knowledge and create reports for the business management te
 ## Note
 
 As per business logic we are using sequences to create a primary key id value for each table
-However,only for demo purpose we have to use few static values in package/procedure calls
+
+However, only for demo purpose we have to use few static values in package/procedure calls
 
 ## Steps
 
 **If Executing For *First Time*:**
 
-    Step1: Please run the DDL script 'DDL\Bootstrap' which will create all objects required
+    Step1: Run the DDL script 'DDL\Bootstrap' which will create All Objects
 
-    Step2: Please compile the package 'utils' from 'DML\Packages\utils'
+    Step2: Compile the package 'utils' at 'DML\Packages\utils'
 
-    Step3: Please run all other package script 'DML\Packages' provided which includes-
+    Step3: Run all other package script from 'DML\Packages' provided which includes
            Package Specifications, Body holding Functions and Procedures for DML
            
-    Step4: Please run all the view scripts 'SQL\Views'
+    Step4: Run all the view scripts from 'SQL\Views'
     
-    Step5: Run the Users script 'SQL\Users' which creates the Users and Grant them access accordingly
+    Step5: Run the Users script at 'SQL\Users' which creates the Users and Grant them access accordingly
     
-    Step6: Run the Trigger script 'SQL\Triggers' used for Audit Purpose.
+    Step6: Run the Trigger script at 'SQL\Triggers' used for Audit Purpose.
+
 
 **If Executing For *Second Time*:**
 
-    Step1: Please run the DDL script 'DDL\DropObjects' which will drop old objects
+    Step1: Run the DDL script at 'DDL\DropObjects' which will Drop Old Objects
     
-    Step2: Please run the DDL script 'DDL\Bootstrap' which will create all objects required
+    Step2: Run the DDL script at 'DDL\Bootstrap' which will create all objects required
 
-    Step3: Please compile the package 'utils' from 'DML\Packages\utils'
+    Step3: Compile the package 'utils' from 'DML\Packages\utils'
 
-    Step4: Please run all other package script 'DML\Packages' provided which includes-
+    Step4: Run all other package script from 'DML\Packages' provided which includes
            Package Specifications, Body holding Functions and Procedures for DML
            
-    Step5: Please run all the view scripts 'SQL\Views'
+    Step5: Run all the view scripts from 'SQL\Views'
     
-    Step6: Run the Users script 'SQL\Users' which creates the Users and Grant them access accordingly
+    Step6: Run the Users script at 'SQL\Users' which creates the Users and Grant them access accordingly
     
-    Step7: Run the Trigger script 'SQL\Triggers' used for Audit Purpose.
+    Step7: Run the Trigger script at 'SQL\Triggers' used for Audit Purpose.
 
 This provide you the reports available to Analyst, Support and Audit Team for analysis and reports which focuses on the problem statement given.
 
