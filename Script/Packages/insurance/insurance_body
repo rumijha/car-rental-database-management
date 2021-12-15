@@ -158,6 +158,94 @@ EXCEPTION
   
 END INSERT_PURCHASE_INSURANCE;
 
+FUNCTION PROCESS_PURCHASE_INSURANCE(
+    vCAR_ID IN PURCHASE_INSURANCE.CAR_ID%TYPE, 
+    vINSURANCE_ID IN PURCHASE_INSURANCE.INSURANCE_ID%TYPE, 
+    vPURCHASE_DATE IN PURCHASE_INSURANCE.PURCHASE_DATE%TYPE, 
+    vEXPIRY_DATE IN PURCHASE_INSURANCE.EXPIRY_DATE%TYPE 
+) RETURN VARCHAR2 AS 
+
+    DB_vCAR_ID PURCHASE_INSURANCE.CAR_ID%TYPE;
+    DB_vINSURANCE_ID PURCHASE_INSURANCE.INSURANCE_ID%TYPE;
+    
+    ex_INVALID_CAR_ID EXCEPTION;
+    ex_INVALID_INSURANCE_ID EXCEPTION;
+    ex_INVALID_PURCHASE_DATE EXCEPTION;
+    ex_INVALID_EXPIRY_DATE EXCEPTION;
+
+BEGIN
+    
+    --check if data is null, empty and not appropriate---
+    
+    if vCAR_ID is NULL or LENGTH(vCAR_ID) is NULL then
+        raise ex_INVALID_CAR_ID;
+    end if;
+    
+    if vINSURANCE_ID is NULL or LENGTH(vINSURANCE_ID) is NULL then
+        raise ex_INVALID_INSURANCE_ID;
+    end if;
+    
+    if vPURCHASE_DATE is NULL or to_char(LENGTH(vPURCHASE_DATE)) is NULL then
+        raise ex_INVALID_PURCHASE_DATE;
+    end if;
+    
+    if vEXPIRY_DATE is NULL or to_char(LENGTH(vEXPIRY_DATE)) is NULL then
+        raise ex_INVALID_EXPIRY_DATE;
+    end if;
+    
+    -- check if Car ID, Customer ID exists in CAR table
+    begin
+    select CAR_ID into DB_vCAR_ID from CAR where CAR_ID = vCAR_ID;
+        if DB_vCAR_ID IS NULL OR LENGTH(DB_vCAR_ID) IS NULL THEN
+            raise ex_INVALID_CAR_ID;
+        end if;
+    exception
+        when NO_DATA_FOUND then
+            dbms_output.put_line('Car ID does not exists in Car table !!!');
+            RETURN 'NO';
+        when ex_INVALID_CAR_ID then
+            dbms_output.put_line('Car ID does not exists in Car table !!!');
+            RETURN 'NO';
+    end;
+    
+    begin
+        select INSURANCE_ID into DB_vINSURANCE_ID from INSURANCE where INSURANCE_ID = vINSURANCE_ID;
+        if DB_vINSURANCE_ID IS NULL OR LENGTH(DB_vINSURANCE_ID) IS NULL THEN
+            raise ex_INVALID_INSURANCE_ID;
+        end if;
+    exception
+        when NO_DATA_FOUND then
+            dbms_output.put_line('Insurance ID does not exists in Insurance table !!!');
+            RETURN 'NO';
+        when ex_INVALID_INSURANCE_ID then
+            dbms_output.put_line('Insurance ID does not exists in Insurance table !!!');
+            RETURN 'NO';
+    end;
+    
+    RETURN 'YES';
+    
+EXCEPTION
+
+    when ex_INVALID_CAR_ID then
+        dbms_output.put_line('Please enter the valid Car ID !!!');
+        RETURN 'NO';
+        
+    when ex_INVALID_INSURANCE_ID then
+        dbms_output.put_line('Please enter the valid Insurance ID !!!');
+        RETURN 'NO';
+        
+    when ex_INVALID_PURCHASE_DATE then
+        dbms_output.put_line('Please enter the Purchase Date !!!');
+        RETURN 'NO';
+        
+    when ex_INVALID_EXPIRY_DATE then
+        dbms_output.put_line('Please enter the Expiry Date !!!');
+        RETURN 'NO';
+    
+    RETURN 'NO';
+        
+END PROCESS_PURCHASE_INSURANCE;
+
 END PCKG_INSURANCE;
 
 /
