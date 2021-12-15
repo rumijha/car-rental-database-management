@@ -46,7 +46,7 @@ However,only for demo purpose we have to use few static values in package/proced
     
     Step6: Run the Trigger script 'SQL\Triggers' used for Audit Purpose.
 
-**If Executing for *Second Time*:**
+**If Executing For *Second Time*:**
 
     Step1: Please run the DDL script 'DDL\DropObjects' which will drop old objects
     
@@ -64,7 +64,17 @@ However,only for demo purpose we have to use few static values in package/proced
     Step7: Run the Trigger script 'SQL\Triggers' used for Audit Purpose.
 
 This provide you the reports available to Analyst, Support and Audit Team for analysis and reports which focuses on the problem statement given.
-Below are the queries to view the reports,
-Report available to Analyst Team can be view by: select * from analyst_view;
-Report available to Support Team can be view by: select * from support_view;
-Report available to Service Team can be view by: select * from audit_view;
+
+**To View The Reports**
+
+    Report Available To Analyst:
+    
+            SELECT * FROM ANALYST_VIEW;
+        
+    Report Available To Service/Support:
+    
+            SELECT * FROM SUPPORT_VIEW;
+        
+    Report Available To Security: 
+    
+            SELECT * FROM AUDIT_VIEW;
