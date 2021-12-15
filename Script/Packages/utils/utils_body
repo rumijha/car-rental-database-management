@@ -266,6 +266,21 @@
         DB_NAME||'       '||DB_CITY||'       '||DB_ZIP||'       '||DB_STATE);
   END GET_CAR;
 
+    FUNCTION CHECK_ADDRESS_ID_EXISTS(
+        vADDRESS_ID IN CUSTOMER_ADDRESS.ADDRESS_ID%type  
+    ) RETURN NUMBER AS
+        DB_ADDRESS_ID CUSTOMER_ADDRESS.ADDRESS_ID%type;
+    BEGIN
+        select ADDRESS_ID into DB_ADDRESS_ID from CUSTOMER_ADDRESS where ADDRESS_ID = vADDRESS_ID;
+        if DB_ADDRESS_ID IS NOT NULL then
+            return DB_ADDRESS_ID;
+        end if;
+    EXCEPTION
+        when NO_DATA_FOUND then
+             return 0;
+        when others then
+            RETURN 0;
+    END CHECK_ADDRESS_ID_EXISTS;
 
 END PCKG_UTILS;
 

@@ -1,5 +1,5 @@
 --------------------------------------------------------
---  File created - Sunday-December-12-2021   
+--  File created - Tuesday-December-14-2021   
 --------------------------------------------------------
 --------------------------------------------------------
 --  DDL for Package Body PCKG_SERVICE
@@ -23,7 +23,7 @@
     BEGIN
     
         if vCUSTOMER_ID is not null and vTRANS_ID is not null then
-            if CHECK_CUSTOMER_ID_EXISTS(vCUSTOMER_ID) = 0 or CHECK_TRANS_ID_EXISTS(vTRANS_ID) = 0 then
+            if pckg_utils.CHECK_CUSTOMER_ID_EXISTS(vCUSTOMER_ID) = 0 or pckg_utils.CHECK_TRANS_ID_EXISTS(vTRANS_ID) = 0 then
                 raise no_data_found;
             end if;
         end if;
@@ -253,7 +253,14 @@
             dbms_output.put_line('Feedback Data Could Not Be Inserted !!!');
         
     END INSERT_FEEDBACK;
-
+    
 END PCKG_SERVICE;
 
 /
+
+  GRANT EXECUTE ON "ADMIN"."PCKG_SERVICE" TO "APP_OWNER";
+  GRANT DEBUG ON "ADMIN"."PCKG_SERVICE" TO "APP_OWNER";
+  GRANT EXECUTE ON "ADMIN"."PCKG_SERVICE" TO "DEVELOPER";
+  GRANT DEBUG ON "ADMIN"."PCKG_SERVICE" TO "DEVELOPER";
+  GRANT EXECUTE ON "ADMIN"."PCKG_SERVICE" TO "TESTER";
+  GRANT EXECUTE ON "ADMIN"."PCKG_SERVICE" TO "SERVICE";

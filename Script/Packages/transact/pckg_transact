@@ -1,5 +1,5 @@
 --------------------------------------------------------
---  File created - Sunday-December-12-2021   
+--  File created - Tuesday-December-14-2021   
 --------------------------------------------------------
 --------------------------------------------------------
 --  DDL for Package PCKG_TRANSACT
@@ -8,7 +8,7 @@
   CREATE OR REPLACE EDITIONABLE PACKAGE "ADMIN"."PCKG_TRANSACT" AS 
 
   /* TODO enter package declarations (types, exceptions, methods etc) here */ 
-
+    
     FUNCTION PROCESS_DISCOUNTS(
         vDESCRIPTION IN DISCOUNTS.DESCRIPTION%TYPE, 
         vPERCENTAGE IN DISCOUNTS.PERCENTAGE%TYPE 
@@ -43,7 +43,7 @@
         vDISTANCE IN RIDE_TRANSACTION.DISTANCE%type,
         vSTATUS IN RIDE_TRANSACTION.STATUS%type 
     ) RETURN VARCHAR2;
-
+    
     PROCEDURE INSERT_RIDE_TRANSACTION(
         vTRANS_ID IN RIDE_TRANSACTION.TRANS_ID%type,
         vCUSTOMER_ID IN CUSTOMERS.CUSTOMER_ID%type,
@@ -96,3 +96,10 @@
 END PCKG_TRANSACT;
 
 /
+
+  GRANT EXECUTE ON "ADMIN"."PCKG_TRANSACT" TO "APP_OWNER";
+  GRANT DEBUG ON "ADMIN"."PCKG_TRANSACT" TO "APP_OWNER";
+  GRANT EXECUTE ON "ADMIN"."PCKG_TRANSACT" TO "DEVELOPER";
+  GRANT DEBUG ON "ADMIN"."PCKG_TRANSACT" TO "DEVELOPER";
+  GRANT EXECUTE ON "ADMIN"."PCKG_TRANSACT" TO "TESTER";
+  GRANT EXECUTE ON "ADMIN"."PCKG_TRANSACT" TO "SERVICE";

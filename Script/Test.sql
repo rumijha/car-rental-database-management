@@ -1,5 +1,5 @@
 
-
+set serveroutput on;
 begin
     --INSERT CUSTOMER
     -- customer_id, first_name, last_name, email, contact, license, passport,cust type, DOB
@@ -36,6 +36,15 @@ begin
      --UPDATE CARS AT PICK UP
         --pckg_car.update_cars_at_pickup(6,7000,2);
         
+    -- DELETE CAR
+        --pckg_car.delete_car(5);
+        
+    
+    --INSERT RIDE Transaction -  Trans id, cust id, car at pickup id, start, end, car id, distance, status
+        --pckg_transact.insert_ride_transaction(12,4000,9010,to_timestamp((sysdate)), to_timestamp((sysdate+1/24)),1016,0,'IN PROCESS');
+    
+    --UPDATE  Ride Transaction- Trans id, car at pickup id, start, end, car id, distance, status, customer card, discount id
+        pckg_transact.update_ride_transaction();
     --pckg_utils.show_all_available_cars(to_timestamp((sysdate)), to_timestamp((sysdate+2/24)));
     --pckg_utils.get_car(1009);
 end;

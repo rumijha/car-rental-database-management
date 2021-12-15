@@ -1,5 +1,5 @@
 --------------------------------------------------------
---  File created - Sunday-December-12-2021   
+--  File created - Tuesday-December-14-2021   
 --------------------------------------------------------
 --------------------------------------------------------
 --  DDL for Package PCKG_CAR
@@ -10,6 +10,17 @@
   /* TODO enter package declarations (types, exceptions, methods etc) here */
     
     FUNCTION PROCESS_CAR(
+        vCAR_TYPE IN CAR.CAR_TYPE%type,
+        vMAX_PERSON IN CAR.MAX_PERSON%type,
+        vRATE_PER_HR IN CAR.RATE_PER_HR %type,
+        vMODEL IN CAR.MODEL%type,
+        vCAR_MAKE IN CAR.CAR_MAKE%type,
+        vCAR_NUMBER IN CAR.CAR_NUMBER%type,
+        vCAR_COST IN CAR.CAR_COST%type 
+    ) RETURN VARCHAR2;
+    
+    FUNCTION PROCESS_UPDATE_CAR(
+        vCAR_ID IN CAR.CAR_ID%type,
         vCAR_TYPE IN CAR.CAR_TYPE%type,
         vMAX_PERSON IN CAR.MAX_PERSON%type,
         vRATE_PER_HR IN CAR.RATE_PER_HR %type,
@@ -102,6 +113,17 @@
         vPURCHASE_INSURANCE_ID IN MAINTENANCE.PURCHASE_INSURANCE_ID%TYPE
     );
     
+    PROCEDURE DELETE_CAR (
+        vCAR_ID IN CAR.CAR_ID%type
+    );
+    
 END PCKG_CAR;
 
 /
+
+  GRANT EXECUTE ON "ADMIN"."PCKG_CAR" TO "APP_OWNER";
+  GRANT DEBUG ON "ADMIN"."PCKG_CAR" TO "APP_OWNER";
+  GRANT EXECUTE ON "ADMIN"."PCKG_CAR" TO "DEVELOPER";
+  GRANT DEBUG ON "ADMIN"."PCKG_CAR" TO "DEVELOPER";
+  GRANT EXECUTE ON "ADMIN"."PCKG_CAR" TO "TESTER";
+  GRANT EXECUTE ON "ADMIN"."PCKG_CAR" TO "SERVICE";

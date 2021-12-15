@@ -1,5 +1,5 @@
 --------------------------------------------------------
---  File created - Sunday-December-12-2021   
+--  File created - Tuesday-December-14-2021   
 --------------------------------------------------------
 --------------------------------------------------------
 --  DDL for Package Body PCKG_CAR
@@ -39,7 +39,7 @@
             raise ex_MAX_PERSON;
         end if;
         
-        if vRATE_PER_HR = 0 then
+        if vRATE_PER_HR = 0 or vRATE_PER_HR is NULL then
             raise ex_RATE_PER_HR;
         end if;
         
@@ -58,7 +58,7 @@
         if vCAR_COST = 0 then
             raise ex_COST;
         end if;
-        
+                
         begin
              select CAR_NUMBER into db_CAR_NUMBER from CAR where CAR_NUMBER = vCAR_NUMBER;
              if db_CAR_NUMBER is NOT NULL then
@@ -80,7 +80,7 @@
             dbms_output.put_line('Invalid Max Person !!! Max Count Cannot be Zero');
             RETURN 'NO';
         when ex_RATE_PER_HR then
-            dbms_output.put_line('Invalid Rate Per Hour !!! Rate Per Hour Cannot be Zero');
+            dbms_output.put_line('Invalid Rate Per Hour !!! Rate Per Hour Cannot be Zero/NULL');
             RETURN 'NO';
         when ex_MODEL then
             dbms_output.put_line('Invalid Car Model !!! Car Model Cannot be NULL or Empty');
@@ -113,12 +113,12 @@
     BEGIN
      
         if vCAR_ID is not null and vPICKUP_POINT_ID is not null then
-            if CHECK_CAR_ID_EXISTS(vCAR_ID) = 0 or CHECK_CAR_AT_PICKUP_ID_EXISTS(vCARS_AT_PICKUP_ID) = 0 then
+            if pckg_utils.CHECK_CAR_ID_EXISTS(vCAR_ID) = 0 or pckg_utils.CHECK_PICKUP_POINT_EXISTS(vPICKUP_POINT_ID) = 0 then
                 raise no_data_found;
             end if;
         end if;
             
-        if check_car_at_pickup_exists(vCAR_ID) != 0 then
+        if pckg_utils.check_car_at_pickup_exists(vCAR_ID) != 0 then
             raise ex_duplicate_car;
         end if;
         
@@ -151,6 +151,7 @@
         RETURN 'NO';
         when ex_duplicate_car then
         dbms_output.put_line('Car Already Exist At Other Pickup Point !!!');
+        RETURN 'NO';
         when others then
         dbms_output.put_line(SQLCODE|| ': ' || SQLERRM);
         RETURN 'NO';        
@@ -200,7 +201,7 @@
         end if;
         
         --check if CAR ID exists in the Car table
-        if check_car_id_exists(vCAR_ID) = 0 then
+        if pckg_utils.check_car_id_exists(vCAR_ID) = 0 then
             dbms_output.put_line('CAR ID does not exists in CAR table !!!');
             raise ex_INVALID_CAR_ID;
             return 'NO';
@@ -272,7 +273,7 @@
         end if;
         
         if vCOST is null then
-            raise ex_NAME;
+            raise ex_COST;
         end if;
         
         if vNAME is null then
@@ -319,9 +320,14 @@
 
     -- TODO: Implementation required for PROCEDURE PCKG_CAR.INSERT_CAR
         ex_INVALID EXCEPTION;
+        ex_DUPLICATE_CAR_ID EXCEPTION;
     BEGIN
         if PROCESS_CAR(vCAR_TYPE, vMAX_PERSON, vRATE_PER_HR, vMODEL, vCAR_MAKE, vCAR_NUMBER, vCAR_COST) = 'NO' then
             raise ex_INVALID;
+        end if;
+        
+        if pckg_utils.check_car_id_exists(vCAR_ID) != 0 then 
+            raise ex_DUPLICATE_CAR_ID;
         end if;
         
         insert into CAR values(
@@ -345,7 +351,11 @@
     EXCEPTION
         when ex_INVALID then
             dbms_output.put_line('Car Data Could Not Be Inserted !!!');
-        rollback;
+        when ex_DUPLICATE_CAR_ID then
+            dbms_output.put_line('Duplicate Car Id !!!');
+        when others then
+            dbms_output.put_line('Invalid Operation :' || SQLERRM);
+
   END INSERT_CAR;
 
   PROCEDURE UPDATE_CAR(
@@ -363,7 +373,7 @@
             ex_INVALID EXCEPTION;
     BEGIN
     
-        if PROCESS_CAR(vCAR_TYPE, vMAX_PERSON, vRATE_PER_HR, vMODEL, vCAR_MAKE, vCAR_NUMBER, vCAR_COST) = 'NO' then
+        if PROCESS_UPDATE_CAR(vCAR_ID,vCAR_TYPE, vMAX_PERSON, vRATE_PER_HR, vMODEL, vCAR_MAKE, vCAR_NUMBER, vCAR_COST) = 'NO' then
             raise ex_INVALID;
         end if;
         
@@ -395,13 +405,17 @@
 
     -- TODO: Implementation required for PROCEDURE PCKG_CAR.INSERT_PICKUP_POINT
         ex_INVALID EXCEPTION;
-    
+        ex_DUPLICATE_ID EXCEPTION;
     BEGIN
     
         IF PROCESS_PICKUP_POINTS(trim(vSTATE),trim(vCITY),trim(vZIP),vCOST,trim(vNAME)) = 'NO' then
             raise ex_INVALID;
         END IF;
     
+        if pckg_utils.check_pickup_point_exists(vPICKUP_POINT_ID) != 0 then
+            raise ex_DUPLICATE_ID;
+        end if;
+        
         INSERT INTO PICKUP_POINTS(PICKUP_POINT_ID, STATE, CITY, ZIP, COST, NAME)
         VALUES(
             vPICKUP_POINT_ID,
@@ -422,6 +436,10 @@
     EXCEPTION
         when ex_INVALID then
             dbms_output.put_line('Inserted Data is not as expected !!!'); 
+        when ex_DUPLICATE_ID then
+            dbms_output.put_line('Duplicate Pickup Point Id !!!'); 
+        when others then
+            dbms_output.put_line('Invalid Operation!!!' || SQLERRM); 
 
   END INSERT_PICKUP_POINT;
 
@@ -436,12 +454,16 @@
 
     -- TODO: Implementation required for PROCEDURE PCKG_CAR.UPDATE_PICKUP_POINT
         ex_INVALID EXCEPTION;
-        
+        ex_INVALID_ID EXCEPTION;
     BEGIN
     
         IF PROCESS_PICKUP_POINTS(vSTATE,vCITY,vZIP,vCOST,vNAME) = 'NO' THEN
             RAISE ex_INVALID;
         END IF;
+        
+        if pckg_utils.check_pickup_point_exists(vPICKUP_POINT_ID) = 0 then
+            raise ex_INVALID_ID;
+        end if;
         
         UPDATE PICKUP_POINTS SET STATE = vSTATE, CITY = vCITY, ZIP = vZIP, COST = vCOST, NAME = vNAME WHERE PICKUP_POINT_ID = vPICKUP_POINT_ID;
         
@@ -454,10 +476,12 @@
         END IF;
         
     EXCEPTION
-    
+        when ex_INVALID_ID then
+            dbms_output.put_line('Invalid Pickup Point Id !!!');
         when ex_INVALID then
             dbms_output.put_line('Record not been updated. Please try again !!!');
-
+        when others then
+            dbms_output.put_line('Invalid Operation!!!' || SQLERRM);
   END UPDATE_PICKUP_POINT;
 
   PROCEDURE INSERT_CARS_AT_PICKUP(
@@ -465,22 +489,9 @@
         vPICKUP_POINT_ID IN CARS_AT_PICKUP.PICKUP_POINT_ID%type,
         vCAR_ID IN CARS_AT_PICKUP.CAR_ID%type
     ) AS
+        ex_INVALID EXCEPTION;
   BEGIN
     -- TODO: Implementation required for PROCEDURE PCKG_CAR.INSERT_CARS_AT_PICKUP
-    NULL;
-  END INSERT_CARS_AT_PICKUP;
-
-  PROCEDURE UPDATE_CARS_AT_PICKUP(
-        vCARS_AT_PICKUP_ID CARS_AT_PICKUP.CARS_AT_PICKUP_ID%type,
-        vPICKUP_POINT_ID PICKUP_POINTS.PICKUP_POINT_ID%type,
-        vCAR_ID CAR.CAR_ID%type
-    ) AS
-
-    -- TODO: Implementation required for PROCEDURE PCKG_CAR.UPDATE_CARS_AT_PICKUP
-        ex_INVALID EXCEPTION;
-    
-    BEGIN
-    
         IF PROCESS_CARS_AT_PICKUP(vCARS_AT_PICKUP_ID,vPICKUP_POINT_ID,vCAR_ID) = 'NO' then
             raise ex_INVALID;
         END IF;
@@ -502,6 +513,38 @@
     EXCEPTION
         when ex_INVALID then
             dbms_output.put_line('Inserted Data is not as expected !!!'); 
+
+  END INSERT_CARS_AT_PICKUP;
+
+  PROCEDURE UPDATE_CARS_AT_PICKUP(
+        vCARS_AT_PICKUP_ID CARS_AT_PICKUP.CARS_AT_PICKUP_ID%type,
+        vPICKUP_POINT_ID PICKUP_POINTS.PICKUP_POINT_ID%type,
+        vCAR_ID CAR.CAR_ID%type
+    ) AS
+
+    -- TODO: Implementation required for PROCEDURE PCKG_CAR.UPDATE_CARS_AT_PICKUP
+        ex_INVALID EXCEPTION;
+    
+    BEGIN
+    
+    IF PROCESS_CARS_AT_PICKUP(vCARS_AT_PICKUP_ID,vPICKUP_POINT_ID,vCAR_ID) = 'NO' then
+        raise ex_INVALID;
+    END IF;
+
+    UPDATE CARS_AT_PICKUP
+	SET CAR_ID = vCAR_ID
+    WHERE CARS_AT_PICKUP_ID = vCARS_AT_PICKUP_ID;
+
+    IF SQL%ROWCOUNT != 1 then
+        rollback;
+    ELSE
+        COMMIT;
+        dbms_output.put_line('CARS_ID updated Successfully !!!'); 
+    END IF;
+
+EXCEPTION
+    when ex_INVALID then
+        dbms_output.put_line('Inserted Data is not as expected !!!'); 
 
   END UPDATE_CARS_AT_PICKUP;
 
@@ -546,6 +589,149 @@
 
   END INSERT_MAINTENANCE;
 
+PROCEDURE DELETE_CAR (
+    vCAR_ID IN CAR.CAR_ID%type) 
+    AS
+    ex_null_car_id exception;
+    ex_NO_CAR_FOUND EXCEPTION;
+    ex_INVALID EXCEPTION;
+    
+    BEGIN
+        
+        if pckg_utils.check_car_id_exists(vCAR_ID) = 0 then
+            raise ex_NO_CAR_FOUND;
+        end if;
+        if vCAR_ID is null then
+            raise ex_null_car_id;
+        else
+            delete from car where car_id = vCAR_ID;
+            if SQL%ROWCOUNT !=1 then
+                rollback;
+                raise ex_INVALID;
+            else
+                dbms_output.put_line('CAR_ID: '|| vCAR_ID || ' deleted sucessfully!');
+                commit;
+            end if;
+        end if;
+    
+    
+    EXCEPTION
+        when ex_null_car_id then
+            dbms_output.put_line('Car_Id cannot be null');
+        when ex_NO_CAR_FOUND then
+            dbms_output.put_line('Car Id Do Not Exists');
+        when others then
+            dbms_output.put_line('Error Message: ' || SQLERRM);
+
+END DELETE_CAR;
+
+FUNCTION PROCESS_UPDATE_CAR(
+        vCAR_ID IN CAR.CAR_ID%type,
+        vCAR_TYPE IN CAR.CAR_TYPE%type,
+        vMAX_PERSON IN CAR.MAX_PERSON%type,
+        vRATE_PER_HR IN CAR.RATE_PER_HR %type,
+        vMODEL IN CAR.MODEL%type,
+        vCAR_MAKE IN CAR.CAR_MAKE%type,
+        vCAR_NUMBER IN CAR.CAR_NUMBER%type,
+        vCAR_COST IN CAR.CAR_COST%type 
+    ) RETURN VARCHAR2 AS
+
+    -- TODO: Implementation required for FUNCTION PCKG_CAR.PROCESS_CAR
+        ex_INVALID_CAR_TYPE EXCEPTION;
+        ex_MAX_PERSON EXCEPTION;
+        ex_RATE_PER_HR EXCEPTION;
+        ex_MODEL EXCEPTION;
+        ex_CAR_MAKE EXCEPTION;
+        ex_CAR_NUMBER EXCEPTION;
+        ex_COST EXCEPTION;
+        ex_DUPLICATE_CAR_NUMBER EXCEPTION;
+        ex_NO_CAR_ID_FOUND EXCEPTION;
+        
+        db_CAR_NUMBER CAR.CAR_NUMBER%type;
+        DB_CAR_ID CAR.CAR_ID%type;
+    BEGIN
+        
+        if vCAR_TYPE is NULL or LENGTH(trim(vCAR_TYPE)) IS NULL then
+            raise ex_INVALID_CAR_TYPE;
+        end if;
+        
+        if vMAX_PERSON = 0 then
+            raise ex_MAX_PERSON;
+        end if;
+        
+        if vRATE_PER_HR = 0 or vRATE_PER_HR is NULL then
+            raise ex_RATE_PER_HR;
+        end if;
+        
+        if vMODEL is NULL or LENGTH(trim(vMODEL)) is NULL then
+            raise ex_MODEL;
+        end if;
+        
+        if vCAR_MAKE is NULL or LENGTH(trim(vCAR_MAKE)) is NULL then 
+            raise ex_CAR_MAKE;
+        end if;
+        
+        if vCAR_NUMBER is NULL or LENGTH(trim(vCAR_NUMBER)) is NULL then 
+            raise ex_CAR_NUMBER;
+        end if;
+        
+        if vCAR_COST = 0 then
+            raise ex_COST;
+        end if;
+        
+        if pckg_utils.check_car_id_exists(vCAR_ID) =0 then
+            raise ex_NO_CAR_ID_FOUND;
+        end if;
+        
+        begin
+             select CAR_NUMBER, CAR_ID into db_CAR_NUMBER, DB_CAR_ID from CAR where CAR_NUMBER = vCAR_NUMBER;
+             if db_CAR_NUMBER is NOT NULL and DB_CAR_ID != vCAR_ID then
+                raise ex_DUPLICATE_CAR_NUMBER;
+            end if;
+        exception
+            when ex_DUPLICATE_CAR_NUMBER then
+                raise ex_DUPLICATE_CAR_NUMBER;
+            when NO_DATA_FOUND then
+                return 'YES';
+        end;
+        
+        RETURN 'YES';
+    EXCEPTION
+        when ex_INVALID_CAR_TYPE then
+            dbms_output.put_line('Invalid Car Type !!! Car Type Cannot be NULL or Empty');
+            RETURN 'NO';
+        when ex_MAX_PERSON then
+            dbms_output.put_line('Invalid Max Person !!! Max Count Cannot be Zero');
+            RETURN 'NO';
+        when ex_RATE_PER_HR then
+            dbms_output.put_line('Invalid Rate Per Hour !!! Rate Per Hour Cannot be Zero/NULL');
+            RETURN 'NO';
+        when ex_MODEL then
+            dbms_output.put_line('Invalid Car Model !!! Car Model Cannot be NULL or Empty');
+            RETURN 'NO';
+        when ex_CAR_NUMBER then
+            dbms_output.put_line('Invalid Car Number !!! Car Number Cannot be NULL or Empty');
+            RETURN 'NO';
+        when ex_COST then
+            dbms_output.put_line('Invalid Car Cost !!! Car Cost Cannot Be Zero');
+            RETURN 'NO';
+        when ex_DUPLICATE_CAR_NUMBER then
+            dbms_output.put_line('Duplicate Car Number Found !!!!');
+            RETURN 'NO';
+        when ex_NO_CAR_ID_FOUND then
+            dbms_output.put_line('Invalid Car Id !!!!');
+            RETURN 'NO';
+        when others then
+            RETURN 'NO';
+  END PROCESS_UPDATE_CAR;
+
 END PCKG_CAR;
 
 /
+
+  GRANT EXECUTE ON "ADMIN"."PCKG_CAR" TO "APP_OWNER";
+  GRANT DEBUG ON "ADMIN"."PCKG_CAR" TO "APP_OWNER";
+  GRANT EXECUTE ON "ADMIN"."PCKG_CAR" TO "DEVELOPER";
+  GRANT DEBUG ON "ADMIN"."PCKG_CAR" TO "DEVELOPER";
+  GRANT EXECUTE ON "ADMIN"."PCKG_CAR" TO "TESTER";
+  GRANT EXECUTE ON "ADMIN"."PCKG_CAR" TO "SERVICE";

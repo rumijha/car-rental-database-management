@@ -1,5 +1,5 @@
 --------------------------------------------------------
---  File created - Sunday-December-12-2021   
+--  File created - Tuesday-December-14-2021   
 --------------------------------------------------------
 --------------------------------------------------------
 --  DDL for Package PCKG_SERVICE
@@ -39,7 +39,14 @@
         v_COMMENTS IN FEEDBACK.COMMENTS%TYPE, 
         v_FEEDBACK_DATE IN FEEDBACK.FEEDBACK_DATE%TYPE, 
         v_TRANS_ID IN FEEDBACK.TRANS_ID%TYPE);
-    
+        
 END PCKG_SERVICE;
 
 /
+
+  GRANT EXECUTE ON "ADMIN"."PCKG_SERVICE" TO "APP_OWNER";
+  GRANT DEBUG ON "ADMIN"."PCKG_SERVICE" TO "APP_OWNER";
+  GRANT EXECUTE ON "ADMIN"."PCKG_SERVICE" TO "DEVELOPER";
+  GRANT DEBUG ON "ADMIN"."PCKG_SERVICE" TO "DEVELOPER";
+  GRANT EXECUTE ON "ADMIN"."PCKG_SERVICE" TO "TESTER";
+  GRANT EXECUTE ON "ADMIN"."PCKG_SERVICE" TO "SERVICE";

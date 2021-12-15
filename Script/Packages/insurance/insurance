@@ -1,5 +1,5 @@
 --------------------------------------------------------
---  File created - Sunday-December-12-2021   
+--  File created - Tuesday-December-14-2021   
 --------------------------------------------------------
 --------------------------------------------------------
 --  DDL for Package PCKG_INSURANCE
@@ -41,3 +41,10 @@
 END PCKG_INSURANCE;
 
 /
+
+  GRANT EXECUTE ON "ADMIN"."PCKG_INSURANCE" TO "APP_OWNER";
+  GRANT DEBUG ON "ADMIN"."PCKG_INSURANCE" TO "APP_OWNER";
+  GRANT EXECUTE ON "ADMIN"."PCKG_INSURANCE" TO "DEVELOPER";
+  GRANT DEBUG ON "ADMIN"."PCKG_INSURANCE" TO "DEVELOPER";
+  GRANT EXECUTE ON "ADMIN"."PCKG_INSURANCE" TO "TESTER";
+  GRANT EXECUTE ON "ADMIN"."PCKG_INSURANCE" TO "SERVICE";

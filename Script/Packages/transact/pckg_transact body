@@ -1,5 +1,5 @@
 --------------------------------------------------------
---  File created - Sunday-December-12-2021   
+--  File created - Tuesday-December-14-2021   
 --------------------------------------------------------
 --------------------------------------------------------
 --  DDL for Package Body PCKG_TRANSACT
@@ -68,7 +68,7 @@
             raise ex_INVALID_TRANS_ID;
         END IF;
         
-        IF CHECK_TRANS_ID_EXISTS(vTRANS_ID) = 0 THEN
+        IF PCKG_UTILS.CHECK_TRANS_ID_EXISTS(vTRANS_ID) = 0 THEN
             raise ex_INVALID_TRANS_ID;
         END IF;
         
@@ -166,30 +166,39 @@
         ex_CAR_ID_NOT_EXISTS EXCEPTION;
         ex_INVALID_DISTANCE EXCEPTION;
         ex_INVALID_STATUS EXCEPTION;
+        ex_CAR_ID_NULL EXCEPTION;
     BEGIN
     
-        if check_trans_id_exists(vTRANS_ID) != 0  then
+        if PCKG_UTILS.CHECK_trans_id_exists(vTRANS_ID) != 0  then
             raise ex_TRANS_ID_EXISTS;
         end if;
         
-        if check_customer_id_exists(vCUSTOMER_ID) = 0 then
+        if PCKG_UTILS.CHECK_customer_id_exists(vCUSTOMER_ID) = 0 then
             raise ex_CUSTOMER_ID_NOT_EXISTS;
         end if;
     
-        if check_car_at_pickup_id_exists(vCARS_AT_PICKUP_ID) = 0 then
+        if PCKG_UTILS.CHECK_car_at_pickup_id_exists(vCARS_AT_PICKUP_ID) = 0 then
             raise ex_CARS_AT_PICKUP_ID_NOT_EXISTS;
         end if;
         
-        if check_car_id_exists(vCAR_ID) = 0 then
+        if vCAR_ID is NULL then
+            raise ex_CAR_ID_NULL;
+        end if;
+        
+        if PCKG_UTILS.CHECK_car_id_exists(vCAR_ID) = 0 then
             raise ex_CAR_ID_NOT_EXISTS;
         end if;
-          
+        
+        if vSTART_TIME is NULL or vEND_TIME is NULL then
+            raise ex_INVALID_START_DATE;
+        end if;
+        
         if (vSTART_TIME < (sysdate)) or 
         (vEND_TIME < (sysdate)) or 
         (vSTART_TIME > vEND_TIME) then
             raise ex_INVALID_START_DATE;
         end if;
-        
+                
         if vDISTANCE != 0 or vDISTANCE is NULL then
             raise ex_INVALID_DISTANCE;
         end if;
@@ -221,6 +230,9 @@
         when ex_INVALID_STATUS then
             dbms_output.put_line('Invalid Status !!! Status Should Be "IN PROCESS" Only');
             RETURN 'NO';
+        when ex_CAR_ID_NULL then
+            dbms_output.put_line('Car Id Cannot Be NULL!!! Cant Process Transaction');
+            RETURN 'NO';
         when others then
             dbms_output.put_line('otehrs');
             RETURN 'NO';
@@ -243,17 +255,21 @@
         ex_CAR_ID_NOT_EXISTS EXCEPTION;
         ex_INVALID_DISTANCE EXCEPTION;
         ex_INVALID_STATUS EXCEPTION;
+        ex_CAR_ID_NULL EXCEPTION;
     BEGIN
         
-        if check_trans_id_exists(vTRANS_ID) = 0 then
+        if PCKG_UTILS.CHECK_trans_id_exists(vTRANS_ID) = 0 then
             raise ex_NO_TRANS_ID_FOUND;
         end if;
         
-        if check_car_at_pickup_id_exists(vCARS_AT_PICKUP_ID) = 0 then
+        if PCKG_UTILS.CHECK_car_at_pickup_id_exists(vCARS_AT_PICKUP_ID) = 0 then
             raise ex_NO_CARS_AT_PICKUP_ID_FOUND;
         end if;
         
-        if check_car_id_exists(vCAR_ID) = 0 then
+        if vCAR_ID is NULL then
+            raise ex_CAR_ID_NULL;
+        end if;
+        if PCKG_UTILS.CHECK_car_id_exists(vCAR_ID) = 0 then
             raise ex_CAR_ID_NOT_EXISTS;
         end if;
             
@@ -291,7 +307,10 @@
             RETURN 'NO';
         when ex_INVALID_STATUS then
             dbms_output.put_line('Invalid Status!!!');
-            RETURN 'NO';     
+            RETURN 'NO';
+        when ex_CAR_ID_NULL then
+            dbms_output.put_line('Car Id Cannot Be NULL!!! Cant Process Transaction');
+            RETURN 'NO';
         when others then
             RETURN 'NO';
 
@@ -317,7 +336,7 @@
             raise ex_INVALID;
         end if;
     
-        if CHECK_CAR_AVAILABILITY(vCAR_ID, vSTART_TIME, vEND_TIME) != 0 then
+        if PCKG_UTILS.CHECK_CAR_AVAILABILITY(vCAR_ID, vSTART_TIME, vEND_TIME) != 0 then
             raise ex_CAR_NOT_AVAILABLE;
         end if;
         
@@ -419,7 +438,7 @@
         elsif vSTATUS = 'UPDATED' then     
             if DB_START_TIME != vSTART_TIME or DB_END_TIME != vEND_TIME or DB_CAR_ID != vCAR_ID or 
                 DB_CARS_AT_PICKUP_ID!= vCARS_AT_PICKUP_ID then
-                if check_car_availability(vCAR_ID, vSTART_TIME, vEND_TIME) NOT IN ( vTRANS_ID, 0) then
+                if PCKG_UTILS.CHECK_car_availability(vCAR_ID, vSTART_TIME, vEND_TIME) NOT IN ( vTRANS_ID, 0) then
                     raise ex_CAR_NOT_AVAILABLE;
                 else  
                     update RIDE_TRANSACTION SET 
@@ -657,3 +676,10 @@
 END PCKG_TRANSACT;
 
 /
+
+  GRANT EXECUTE ON "ADMIN"."PCKG_TRANSACT" TO "APP_OWNER";
+  GRANT DEBUG ON "ADMIN"."PCKG_TRANSACT" TO "APP_OWNER";
+  GRANT EXECUTE ON "ADMIN"."PCKG_TRANSACT" TO "DEVELOPER";
+  GRANT DEBUG ON "ADMIN"."PCKG_TRANSACT" TO "DEVELOPER";
+  GRANT EXECUTE ON "ADMIN"."PCKG_TRANSACT" TO "TESTER";
+  GRANT EXECUTE ON "ADMIN"."PCKG_TRANSACT" TO "SERVICE";
