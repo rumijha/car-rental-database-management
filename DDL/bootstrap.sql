@@ -8,20 +8,30 @@
 --  DDL for Table ACTIVITY
 --------------------------------------------------------
 
-  CREATE TABLE "ADMIN"."ACTIVITY" 
-   (	"ACTIVITY_ID" NUMBER(25,0), 
-	"LOGIN_TIME" DATE, 
-	"LOGOUT_TIME" DATE, 
-	"CUSTOMER_ID" NUMBER(25,0)
-   )  DEFAULT COLLATION "USING_NLS_COMP" SEGMENT CREATION DEFERRED 
-  PCTFREE 10 PCTUSED 40 INITRANS 10 MAXTRANS 255 
- NOCOMPRESS LOGGING
-  TABLESPACE "DATA" ;
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_tables where table_name='ACTIVITY';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'CREATE TABLE ACTIVITY (ACTIVITY_ID NUMBER(25,0), LOGIN_TIME DATE, LOGOUT_TIME DATE, CUSTOMER_ID NUMBER(25,0))';
+    else 
+        dbms_output.put_line('Table Activity already exists');
+    end if;
+  end;
 --------------------------------------------------------
 --  DDL for Table CAR
 --------------------------------------------------------
 
-  CREATE TABLE "ADMIN"."CAR" 
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_tables where table_name='CAR';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'CREATE TABLE "ADMIN"."CAR" 
    (	"CAR_ID" NUMBER(25,0), 
 	"CAR_TYPE" VARCHAR2(50 BYTE) COLLATE "USING_NLS_COMP", 
 	"MAX_PERSON" NUMBER(2,0) DEFAULT (4), 
@@ -33,24 +43,47 @@
    )  DEFAULT COLLATION "USING_NLS_COMP" SEGMENT CREATION DEFERRED 
   PCTFREE 10 PCTUSED 40 INITRANS 10 MAXTRANS 255 
  NOCOMPRESS LOGGING
-  TABLESPACE "DATA" ;
+  TABLESPACE "DATA"' ;
+  else 
+        dbms_output.put_line('Table CAR already exists');
+    end if;
+  end;
 --------------------------------------------------------
 --  DDL for Table CARS_AT_PICKUP
 --------------------------------------------------------
 
-  CREATE TABLE "ADMIN"."CARS_AT_PICKUP" 
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_tables where table_name='CARS_AT_PICKUP';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'CREATE TABLE "ADMIN"."CARS_AT_PICKUP" 
    (	"CARS_AT_PICKUP_ID" NUMBER(25,0), 
 	"PICKUP_POINT_ID" NUMBER(25,0), 
 	"CAR_ID" NUMBER(25,0)
    )  DEFAULT COLLATION "USING_NLS_COMP" SEGMENT CREATION DEFERRED 
   PCTFREE 10 PCTUSED 40 INITRANS 10 MAXTRANS 255 
  NOCOMPRESS LOGGING
-  TABLESPACE "DATA" ;
+  TABLESPACE "DATA"' ;
+  else 
+        dbms_output.put_line('Table CARS_AT_PICKUP already exists');
+    end if;
+  end;
+  
 --------------------------------------------------------
 --  DDL for Table CUSTOMERS
 --------------------------------------------------------
 
-  CREATE TABLE "ADMIN"."CUSTOMERS" 
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_tables where table_name='CUSTOMERS';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'CREATE TABLE "ADMIN"."CUSTOMERS" 
    (	"CUSTOMER_ID" NUMBER(25,0), 
 	"FIRST_NAME" VARCHAR2(50 BYTE) COLLATE "USING_NLS_COMP", 
 	"LAST_NAME" VARCHAR2(50 BYTE) COLLATE "USING_NLS_COMP", 
@@ -63,12 +96,23 @@
    )  DEFAULT COLLATION "USING_NLS_COMP" SEGMENT CREATION DEFERRED 
   PCTFREE 10 PCTUSED 40 INITRANS 10 MAXTRANS 255 
  NOCOMPRESS LOGGING
-  TABLESPACE "DATA" ;
+  TABLESPACE "DATA"' ;
+  else 
+        dbms_output.put_line('Table CUSTOMERS already exists');
+    end if;
+  end;
 --------------------------------------------------------
 --  DDL for Table CUSTOMER_ADDRESS
 --------------------------------------------------------
 
-  CREATE TABLE "ADMIN"."CUSTOMER_ADDRESS" 
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_tables where table_name='CUSTOMER_ADDRESS';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'CREATE TABLE "ADMIN"."CUSTOMER_ADDRESS" 
    (	"ADDRESS_ID" NUMBER(25,0), 
 	"ADDRESS_LINE1" VARCHAR2(50 BYTE) COLLATE "USING_NLS_COMP", 
 	"ADDRESS_LINE2" VARCHAR2(50 BYTE) COLLATE "USING_NLS_COMP", 
@@ -76,28 +120,50 @@
 	"CITY" VARCHAR2(50 BYTE) COLLATE "USING_NLS_COMP", 
 	"CUSTOMER_ID" NUMBER(25,0), 
 	"ZIP_CODE" VARCHAR2(10 BYTE) COLLATE "USING_NLS_COMP", 
-	"ADDRESS_TYPE" VARCHAR2(20 BYTE) COLLATE "USING_NLS_COMP" DEFAULT 'HOME'
+	"ADDRESS_TYPE" VARCHAR2(20 BYTE) COLLATE "USING_NLS_COMP" DEFAULT "HOME"
    )  DEFAULT COLLATION "USING_NLS_COMP" SEGMENT CREATION DEFERRED 
   PCTFREE 10 PCTUSED 40 INITRANS 10 MAXTRANS 255 
  NOCOMPRESS LOGGING
-  TABLESPACE "DATA" ;
+  TABLESPACE "DATA"' ;
+  else 
+        dbms_output.put_line('Table CUSTOMER_ADDRESS already exists');
+    end if;
+  end;
 --------------------------------------------------------
 --  DDL for Table DISCOUNTS
 --------------------------------------------------------
 
-  CREATE TABLE "ADMIN"."DISCOUNTS" 
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_tables where table_name='DISCOUNTS';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'CREATE TABLE "ADMIN"."DISCOUNTS" 
    (	"DISCOUNT_ID" NUMBER(25,0), 
 	"DESCRIPTION" VARCHAR2(100 BYTE) COLLATE "USING_NLS_COMP", 
 	"PERCENTAGE" NUMBER(3,0)
    )  DEFAULT COLLATION "USING_NLS_COMP" SEGMENT CREATION DEFERRED 
   PCTFREE 10 PCTUSED 40 INITRANS 10 MAXTRANS 255 
  NOCOMPRESS LOGGING
-  TABLESPACE "DATA" ;
+  TABLESPACE "DATA"' ;
+  else 
+        dbms_output.put_line('Table DISCOUNTS already exists');
+    end if;
+  end;
 --------------------------------------------------------
 --  DDL for Table FEEDBACK
 --------------------------------------------------------
 
-  CREATE TABLE "ADMIN"."FEEDBACK" 
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_tables where table_name='FEEDBACK';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'CREATE TABLE "ADMIN"."FEEDBACK" 
    (	"FEEDBACK_ID" NUMBER(25,0), 
 	"RATINGS" NUMBER(2,0), 
 	"COMMENTS" VARCHAR2(50 BYTE) COLLATE "USING_NLS_COMP", 
@@ -106,12 +172,23 @@
    )  DEFAULT COLLATION "USING_NLS_COMP" SEGMENT CREATION DEFERRED 
   PCTFREE 10 PCTUSED 40 INITRANS 10 MAXTRANS 255 
  NOCOMPRESS LOGGING
-  TABLESPACE "DATA" ;
+  TABLESPACE "DATA"' ;
+  else 
+        dbms_output.put_line('Table FEEDBACK already exists');
+    end if;
+  end;
 --------------------------------------------------------
 --  DDL for Table INSURANCE
 --------------------------------------------------------
 
-  CREATE TABLE "ADMIN"."INSURANCE" 
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_tables where table_name='INSURANCE';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'CREATE TABLE "ADMIN"."INSURANCE" 
    (	"INSURANCE_ID" NUMBER(25,0), 
 	"SUMMARY" VARCHAR2(50 BYTE) COLLATE "USING_NLS_COMP", 
 	"INSURANCE_TYPE" VARCHAR2(50 BYTE) COLLATE "USING_NLS_COMP", 
@@ -119,12 +196,23 @@
    )  DEFAULT COLLATION "USING_NLS_COMP" SEGMENT CREATION DEFERRED 
   PCTFREE 10 PCTUSED 40 INITRANS 10 MAXTRANS 255 
  NOCOMPRESS LOGGING
-  TABLESPACE "DATA" ;
+  TABLESPACE "DATA"' ;
+  else 
+        dbms_output.put_line('Table INSURANCE already exists');
+    end if;
+  end;
 --------------------------------------------------------
 --  DDL for Table MAINTENANCE
 --------------------------------------------------------
 
-  CREATE TABLE "ADMIN"."MAINTENANCE" 
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_tables where table_name='MAINTENANCE';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'CREATE TABLE "ADMIN"."MAINTENANCE" 
    (	"MAINTENANCE_ID" NUMBER(25,0), 
 	"SUMMARY" VARCHAR2(50 BYTE) COLLATE "USING_NLS_COMP", 
 	"MAINTENANCE_DATE" DATE, 
@@ -134,12 +222,23 @@
    )  DEFAULT COLLATION "USING_NLS_COMP" SEGMENT CREATION DEFERRED 
   PCTFREE 10 PCTUSED 40 INITRANS 10 MAXTRANS 255 
  NOCOMPRESS LOGGING
-  TABLESPACE "DATA" ;
+  TABLESPACE "DATA"' ;
+  else 
+        dbms_output.put_line('Table MAINTENANCE already exists');
+    end if;
+  end;
 --------------------------------------------------------
 --  DDL for Table PAYMENTS
 --------------------------------------------------------
 
-  CREATE TABLE "ADMIN"."PAYMENTS" 
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_tables where table_name='PAYMENTS';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'CREATE TABLE "ADMIN"."PAYMENTS" 
    (	"PAY_ID" NUMBER(25,0), 
 	"PAY_DATE" DATE DEFAULT sysdate, 
 	"CUSTOMER_CARD" VARCHAR2(50 BYTE), 
@@ -149,12 +248,23 @@
    )  DEFAULT COLLATION "USING_NLS_COMP" SEGMENT CREATION DEFERRED 
   PCTFREE 10 PCTUSED 40 INITRANS 10 MAXTRANS 255 
  NOCOMPRESS LOGGING
-  TABLESPACE "DATA" ;
+  TABLESPACE "DATA"' ;
+  else 
+        dbms_output.put_line('Table PAYMENTS already exists');
+    end if;
+  end;
 --------------------------------------------------------
 --  DDL for Table PICKUP_POINTS
 --------------------------------------------------------
 
-  CREATE TABLE "ADMIN"."PICKUP_POINTS" 
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_tables where table_name='PICKUP_POINTS';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'CREATE TABLE "ADMIN"."PICKUP_POINTS" 
    (	"PICKUP_POINT_ID" NUMBER(25,0), 
 	"STATE" VARCHAR2(50 BYTE) COLLATE "USING_NLS_COMP", 
 	"CITY" VARCHAR2(50 BYTE) COLLATE "USING_NLS_COMP", 
@@ -164,12 +274,23 @@
    )  DEFAULT COLLATION "USING_NLS_COMP" SEGMENT CREATION DEFERRED 
   PCTFREE 10 PCTUSED 40 INITRANS 10 MAXTRANS 255 
  NOCOMPRESS LOGGING
-  TABLESPACE "DATA" ;
+  TABLESPACE "DATA"' ;
+  else 
+        dbms_output.put_line('Table PICKUP_POINTS already exists');
+    end if;
+  end;
 --------------------------------------------------------
 --  DDL for Table PURCHASE_INSURANCE
 --------------------------------------------------------
 
-  CREATE TABLE "ADMIN"."PURCHASE_INSURANCE" 
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_tables where table_name='PURCHASE_INSURANCE';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'CREATE TABLE "ADMIN"."PURCHASE_INSURANCE" 
    (	"PURCHASE_INSURANCE_ID" NUMBER(25,0), 
 	"CAR_ID" NUMBER(25,0), 
 	"INSURANCE_ID" NUMBER(25,0), 
@@ -178,12 +299,23 @@
    )  DEFAULT COLLATION "USING_NLS_COMP" SEGMENT CREATION DEFERRED 
   PCTFREE 10 PCTUSED 40 INITRANS 10 MAXTRANS 255 
  NOCOMPRESS LOGGING
-  TABLESPACE "DATA" ;
+  TABLESPACE "DATA"' ;
+  else 
+        dbms_output.put_line('Table PURCHASE_INSURANCE already exists');
+    end if;
+  end;
 --------------------------------------------------------
 --  DDL for Table RIDE_TRANSACTION
 --------------------------------------------------------
 
-  CREATE TABLE "ADMIN"."RIDE_TRANSACTION" 
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_tables where table_name='RIDE_TRANSACTION';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'CREATE TABLE "ADMIN"."RIDE_TRANSACTION" 
    (	"TRANS_ID" NUMBER(25,0), 
 	"CUSTOMER_ID" NUMBER(25,0), 
 	"CARS_AT_PICKUP_ID" NUMBER(25,0), 
@@ -192,16 +324,27 @@
 	"END_TIME" TIMESTAMP (6), 
 	"CAR_ID" NUMBER(25,0), 
 	"DISTANCE" NUMBER DEFAULT 0, 
-	"STATUS" VARCHAR2(20 BYTE) COLLATE "USING_NLS_COMP" DEFAULT 'IN PROCESS'
+	"STATUS" VARCHAR2(20 BYTE) COLLATE "USING_NLS_COMP" DEFAULT "IN PROCESS"
    )  DEFAULT COLLATION "USING_NLS_COMP" SEGMENT CREATION DEFERRED 
   PCTFREE 10 PCTUSED 40 INITRANS 10 MAXTRANS 255 
  NOCOMPRESS LOGGING
-  TABLESPACE "DATA" ;
+  TABLESPACE "DATA"' ;
+  else 
+        dbms_output.put_line('Table RIDE_TRANSACTION already exists');
+    end if;
+  end;
 --------------------------------------------------------
 --  DDL for Table SUPPORT
 --------------------------------------------------------
 
-  CREATE TABLE "ADMIN"."SUPPORT" 
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_tables where table_name='SUPPORT';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'CREATE TABLE "ADMIN"."SUPPORT" 
    (	"SUPPORT_ID" NUMBER(25,0), 
 	"STATUS" VARCHAR2(15 BYTE) COLLATE "USING_NLS_COMP", 
 	"CUSTOMER_ID" NUMBER(25,0), 
@@ -209,23 +352,45 @@
    )  DEFAULT COLLATION "USING_NLS_COMP" SEGMENT CREATION DEFERRED 
   PCTFREE 10 PCTUSED 40 INITRANS 10 MAXTRANS 255 
  NOCOMPRESS LOGGING
-  TABLESPACE "DATA" ;
+  TABLESPACE "DATA"' ;
+  else 
+        dbms_output.put_line('Table SUPPORT already exists');
+    end if;
+  end;
 --------------------------------------------------------
 --  DDL for Table VIOLATIONS
 --------------------------------------------------------
 
-  CREATE TABLE "ADMIN"."VIOLATIONS" 
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_tables where table_name='VIOLATIONS';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'CREATE TABLE "ADMIN"."VIOLATIONS" 
    (	"VIOLATION_ID" NUMBER(25,0), 
 	"DESCRIPTION" VARCHAR2(50 BYTE) COLLATE "USING_NLS_COMP"
    )  DEFAULT COLLATION "USING_NLS_COMP" SEGMENT CREATION DEFERRED 
   PCTFREE 10 PCTUSED 40 INITRANS 10 MAXTRANS 255 
  NOCOMPRESS LOGGING
-  TABLESPACE "DATA" ;
+  TABLESPACE "DATA"' ;
+  else 
+        dbms_output.put_line('Table VIOLATIONS already exists');
+    end if;
+  end;
 --------------------------------------------------------
 --  DDL for Table VIOLATIONS_RECORDS
 --------------------------------------------------------
 
-  CREATE TABLE "ADMIN"."VIOLATIONS_RECORDS" 
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_tables where table_name='VIOLATIONS_RECORDS';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'CREATE TABLE "ADMIN"."VIOLATIONS_RECORDS" 
    (	"RECORD_ID" NUMBER(25,0), 
 	"RECORD_DATE" DATE, 
 	"CUSTOMER_ID" NUMBER(25,0), 
@@ -233,7 +398,32 @@
    )  DEFAULT COLLATION "USING_NLS_COMP" SEGMENT CREATION DEFERRED 
   PCTFREE 10 PCTUSED 40 INITRANS 10 MAXTRANS 255 
  NOCOMPRESS LOGGING
-  TABLESPACE "DATA" ;
+  TABLESPACE "DATA"' ;
+  else 
+        dbms_output.put_line('Table VIOLATIONS_RECORDS already exists');
+    end if;
+  end;
+--------------------------------------------------------
+--  DDL for Table AUDIT_DATA
+--------------------------------------------------------
+
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_tables where table_name='AUDIT_DATA';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'CREATE TABLE "ADMIN"."AUDIT_DATA" 
+   ( AUDIT_ID number primary key,
+   USERNAME VARCHAR2(50) NOT NULL, 
+   "DATE" TIMESTAMP (6) DEFAULT systimestamp NOT NULL ENABLE,
+	ACTION VARCHAR2(25) not null)' ;
+  else 
+        dbms_output.put_line('Table AUDIT_DATA already exists');
+    end if;
+  end;
+  
 REM INSERTING into ADMIN.ACTIVITY
 SET DEFINE OFF;
 REM INSERTING into ADMIN.CAR
@@ -266,15 +456,7 @@ REM INSERTING into ADMIN.VIOLATIONS
 SET DEFINE OFF;
 REM INSERTING into ADMIN.VIOLATIONS_RECORDS
 SET DEFINE OFF;
---------------------------------------------------------
---  DDL for Table AUDIT_DATA
---------------------------------------------------------
 
-  CREATE TABLE "ADMIN"."AUDIT_DATA" 
-   ( AUDIT_ID number primary key,
-   USERNAME VARCHAR2(50) NOT NULL, 
-   "DATE" TIMESTAMP (6) DEFAULT systimestamp NOT NULL ENABLE,
-	ACTION VARCHAR2(25) not null) ;
 --------------------------------------------------------
 --  Constraints for Table MAINTENANCE
 --------------------------------------------------------
@@ -532,139 +714,325 @@ SET DEFINE OFF;
 -- SEQUENCE FOR ACTIVITY_ID
 ---------------------------------------------------------
 
-    CREATE SEQUENCE ACTIVITY_ID_SEQ
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_objects where object_name='ACTIVITY_ID_SEQ';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'CREATE SEQUENCE ACTIVITY_ID_SEQ
          START WITH 1
          INCREMENT BY 1
-         ORDER;
-
+         ORDER';
+  else 
+        dbms_output.put_line('Sequence ACTIVITY_ID_SEQ already exists');
+    end if;
+  end;
 ---------------------------------------------------------
 -- SEQUENCE FOR ADDRESS_ID
 ---------------------------------------------------------
 
-    CREATE SEQUENCE ADDRESS_ID_SEQ
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_objects where object_name='ADDRESS_ID_SEQ';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'CREATE SEQUENCE ADDRESS_ID_SEQ
          START WITH 11111
          INCREMENT BY 1
-         ORDER;
-
+         ORDER';
+	  else 
+        dbms_output.put_line('Sequence ADDRESS_ID_SEQ already exists');
+    end if;
+  end;
 ---------------------------------------------------------
 -- SEQUENCE FOR CAR_ID_SEQ
 ---------------------------------------------------------
-    CREATE SEQUENCE CAR_ID_SEQ
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_objects where object_name='CAR_ID_SEQ';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'CREATE SEQUENCE CAR_ID_SEQ
         START WITH 1001
         INCREMENT BY 1
-        ORDER;
+        ORDER';
+	  else 
+        dbms_output.put_line('Sequence CAR_ID_SEQ already exists');
+    end if;
+  end;
 ---------------------------------------------------------
 -- SEQUENCE FOR CARS_AT_PICKUP_ID_SEQ
 ---------------------------------------------------------
 
-    CREATE SEQUENCE CARS_AT_PICKUP_ID_SEQ
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_objects where object_name='CARS_AT_PICKUP_ID_SEQ';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'CREATE SEQUENCE CARS_AT_PICKUP_ID_SEQ
          START WITH 9000
          INCREMENT BY 1
-         ORDER;
+         ORDER';
+	  else 
+        dbms_output.put_line('Sequence CARS_AT_PICKUP_ID_SEQ already exists');
+    end if;
+  end;
          
 ---------------------------------------------------------
 -- SEQUENCE FOR CUSTOMER_ID
 ---------------------------------------------------------
 
-    CREATE SEQUENCE CUST_ID_SEQ
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_objects where object_name='CUST_ID_SEQ';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'CREATE SEQUENCE CUST_ID_SEQ
         START WITH 1001
         INCREMENT BY 1
-        ORDER;
+        ORDER';
+	  else 
+        dbms_output.put_line('Sequence CUST_ID_SEQ already exists');
+    end if;
+  end;
         
 ---------------------------------------------------------
 -- SEQUENCE FOR DISCOUNT_ID_SEQ
 ---------------------------------------------------------
-    CREATE SEQUENCE DISCOUNT_ID_SEQ
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_objects where object_name='DISCOUNT_ID_SEQ';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'CREATE SEQUENCE DISCOUNT_ID_SEQ
          START WITH 100
          INCREMENT BY 1
-         ORDER;
+         ORDER';
+	  else 
+        dbms_output.put_line('Sequence DISCOUNT_ID_SEQ already exists');
+    end if;
+  end;
 
 ---------------------------------------------------------
 -- SEQUENCE FOR FEEDBACK_ID_SEQ
 ---------------------------------------------------------
-    CREATE SEQUENCE FEEDBACK_ID_SEQ
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_objects where object_name='FEEDBACK_ID_SEQ';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'CREATE SEQUENCE FEEDBACK_ID_SEQ
          START WITH 1001
          INCREMENT BY 1
-         ORDER;
+         ORDER';
+	  else 
+        dbms_output.put_line('Sequence FEEDBACK_ID_SEQ already exists');
+    end if;
+  end;
        
 ---------------------------------------------------------
 -- SEQUENCE FOR INSURANCE_ID_SEQ
 ---------------------------------------------------------
 
-    CREATE SEQUENCE INSURANCE_ID_SEQ
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_objects where object_name='INSURANCE_ID_SEQ';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'CREATE SEQUENCE INSURANCE_ID_SEQ
          START WITH 50001
          INCREMENT BY 1
-         ORDER;
+         ORDER';
+	  else 
+        dbms_output.put_line('Sequence INSURANCE_ID_SEQ already exists');
+    end if;
+  end;
          
 ---------------------------------------------------------
 -- SEQUENCE FOR RECORD_ID_SEQ
 ---------------------------------------------------------
 
-    CREATE SEQUENCE RECORD_ID_SEQ
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_objects where object_name='RECORD_ID_SEQ';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'CREATE SEQUENCE RECORD_ID_SEQ
          START WITH 101
          INCREMENT BY 1
-         ORDER;
+         ORDER';
+	  else 
+        dbms_output.put_line('Sequence RECORD_ID_SEQ already exists');
+    end if;
+  end;
 
 ---------------------------------------------------------
 -- SEQUENCE FOR MAINTENANCE_ID_SEQ
 ---------------------------------------------------------
 
-    CREATE SEQUENCE MAINTENANCE_ID_SEQ
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_objects where object_name='MAINTENANCE_ID_SEQ';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'CREATE SEQUENCE MAINTENANCE_ID_SEQ
          START WITH 5000
          INCREMENT BY 1
-         ORDER;
+         ORDER';
+	  else 
+        dbms_output.put_line('Sequence MAINTENANCE_ID_SEQ already exists');
+    end if;
+  end;
 
 ---------------------------------------------------------
 -- SEQUENCE FOR PURCHASE_INSURANCE_ID_SEQ
 ---------------------------------------------------------
 
-    CREATE SEQUENCE PURCHASE_INSURANCE_ID_SEQ
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_objects where object_name='PURCHASE_INSURANCE_ID_SEQ';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'CREATE SEQUENCE PURCHASE_INSURANCE_ID_SEQ
          START WITH 1
          INCREMENT BY 1
-         ORDER;
+         ORDER';
+	  else 
+        dbms_output.put_line('Sequence PURCHASE_INSURANCE_ID_SEQ already exists');
+    end if;
+  end;
          
 ---------------------------------------------------------
 -- SEQUENCE FOR TRANS_ID_SEQ
 ---------------------------------------------------------
 
-    CREATE SEQUENCE TRANS_ID_SEQ
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_objects where object_name='TRANS_ID_SEQ';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'CREATE SEQUENCE TRANS_ID_SEQ
         START WITH 101
         INCREMENT BY 1
-        ORDER;
+        ORDER';
+	  else 
+        dbms_output.put_line('Sequence TRANS_ID_SEQ already exists');
+    end if;
+  end;
 
 ---------------------------------------------------------
 -- SEQUENCE FOR VIOLATION_ID_SEQ
 ---------------------------------------------------------
 
-    CREATE SEQUENCE VIOLATION_ID_SEQ
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_objects where object_name='VIOLATION_ID_SEQ';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'CREATE SEQUENCE VIOLATION_ID_SEQ
          START WITH 1
          INCREMENT BY 1
-         ORDER;
+         ORDER';
+	  else 
+        dbms_output.put_line('Sequence VIOLATION_ID_SEQ already exists');
+    end if;
+  end;
 
 ---------------------------------------------------------
 -- SEQUENCE FOR PAYMENT_ID_SEQ
 ---------------------------------------------------------
-    CREATE SEQUENCE PAY_ID_SEQ
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_objects where object_name='PAY_ID_SEQ';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'CREATE SEQUENCE PAY_ID_SEQ
          START WITH 1
          INCREMENT BY 1
-         ORDER;
+         ORDER';
+	  else 
+        dbms_output.put_line('Sequence PAY_ID_SEQ already exists');
+    end if;
+  end;
 
 ---------------------------------------------------------
 -- SEQUENCE FOR SUPPORT_ID_SEQ
 ---------------------------------------------------------
-    CREATE SEQUENCE SUPPORT_ID_SEQ
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_objects where object_name='SUPPORT_ID_SEQ';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'CREATE SEQUENCE SUPPORT_ID_SEQ
          START WITH 1
          INCREMENT BY 1
-         ORDER;
+         ORDER';
+	  else 
+        dbms_output.put_line('Sequence SUPPORT_ID_SEQ already exists');
+    end if;
+  end;
              
 ---------------------------------------------------------
 -- SEQUENCE FOR PICKUP_POINT_ID_SEQ
 ---------------------------------------------------------
-    CREATE SEQUENCE PICKUP_POINT_ID_SEQ
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_objects where object_name='PICKUP_POINT_ID_SEQ';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'CREATE SEQUENCE PICKUP_POINT_ID_SEQ
          START WITH 7000
          INCREMENT BY 1
-         ORDER;
+         ORDER';
+	  else 
+        dbms_output.put_line('Sequence PICKUP_POINT_ID_SEQ already exists');
+    end if;
+  end;
 ---------------------------------------------------------
 -- SEQUENCE FOR AUDIT_ID_SEQ
 ---------------------------------------------------------
-create sequence AUDIT_ID_SEQ start with 1 increment by 1;
+  
+  set serveroutput on;
+  DECLARE
+  cnt number;
+  begin
+  cnt :=0;
+  select count(*) into cnt from user_objects where object_name='AUDIT_ID_SEQ';
+    if cnt = 0 then
+        EXECUTE IMMEDIATE 'create sequence AUDIT_ID_SEQ start with 1 increment by 1';
+	  else 
+        dbms_output.put_line('Sequence AUDIT_ID_SEQ already exists');
+    end if;
+  end;
