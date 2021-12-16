@@ -44,7 +44,7 @@ drop view payment_bill;
 drop view prevalent_car_types;
 drop view support_view;
 drop view usage_pattern;
-
+drop view revenue_2021_per_quarter;
 ----------------------------------------------
 -- Drooping Packages
 ----------------------------------------------
