@@ -601,9 +601,6 @@ FUNCTION PROCESS_UPDATE_CUSTOMER(
                     RETURN 'NO';
             end;
         
-        if pckg_utils.CHECK_PASSSPORT_EXISTS(vPASSPORT_NUMBER) != '0'  then
-            raise INVALID_PASSPORT_NUMBER;
-        end if;
         
         RETURN 'YES';
     

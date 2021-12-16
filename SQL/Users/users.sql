@@ -163,7 +163,7 @@ SELECT USER FROM DUAL;
     CREATE USER JESSY IDENTIFIED BY Blender12345;
 
 
-    select * from dba_users where username in ('HARRY', 'JARVIS', 'PETER', 'TOM', 'ROOT', 'JESSY');
+  --  select * from dba_users where username in ('HARRY', 'JARVIS', 'PETER', 'TOM', 'ROOT', 'JESSY');
 
 -----------------------------------------
 -- ######################################
