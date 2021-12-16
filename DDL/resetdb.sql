@@ -92,6 +92,12 @@ drop sequence support_id_seq;
 drop sequence trans_id_seq;
 drop sequence violation_id_seq;
 
+---------------------------------------------
+-- Drop Index
+---------------------------------------------
+drop index CARS_AT_PICKUP_INDEX;
+drop index RIDE_TRANSACTION_INDEX;
+
 ----------------------------------------------
 -- Dropping Tables
 ----------------------------------------------
