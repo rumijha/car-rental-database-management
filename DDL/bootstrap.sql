@@ -2439,11 +2439,7 @@ FUNCTION PROCESS_UPDATE_CUSTOMER(
                     dbms_output.put_line('Duplicate License Number!!!');
                     RETURN 'NO';
             end;
-        
-        if pckg_utils.CHECK_PASSSPORT_EXISTS(vPASSPORT_NUMBER) != '0'  then
-            raise INVALID_PASSPORT_NUMBER;
-        end if;
-        
+                
         RETURN 'YES';
     
     EXCEPTION
