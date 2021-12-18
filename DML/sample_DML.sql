@@ -1,5 +1,6 @@
 
 set serveroutput on;
+
 begin
     --INSERT CUSTOMER
     -- customer_id, first_name, last_name, email, contact, license, passport,cust type, DOB
@@ -48,14 +49,7 @@ begin
         --pckg_car.delete_car(600);
         
     
-    --INSERT RIDE Transaction -  Trans id, cust id, car at pickup id, start, end, car id, distance, status
-        --pckg_transact.insert_ride_transaction(17, 786, 15, to_timestamp((sysdate)), to_timestamp((sysdate+1/24)),500, 0, 'IN PROCESS');
-    
-    --UPDATE  Ride Transaction- Trans id, car at pickup id, start, end, car id, distance, status, customer card, discount id
-       --pckg_transact.update_ride_transaction(17, 15, to_timestamp((sysdate+1/24)), to_timestamp((sysdate+2/24)), 500, 0,'UPDATED',NULL, NULL);
-       
-    --COMPLETE RIDE TRANSACTION- Trans id, car at pickup id, start, end, car id, distance, status, customer card, discount id
-       --pckg_transact.update_ride_transaction(17, 15, to_timestamp((sysdate+1/24)), to_timestamp((sysdate+2/24)), 500, 26,'COMPLETED','1234-1234-1234-1234',NULL);
+
     
     --INSERT violations- violation id description
         --pckg_violations.insert_violations(22,'Traffic Signal Jump');
@@ -69,4 +63,26 @@ begin
     
     --GET CAR - car id
         --pckg_utils.get_car(500);
+    
+    --INSERT RIDE Transaction -  Trans id, cust id, car at pickup id, start, end, car id, distance, status
+    --pckg_transact.insert_ride_transaction(17, 786, 15, to_timestamp((sysdate)), to_timestamp((sysdate+1/24)),500, 0, 'IN PROCESS');
+    
+    --UPDATE  Ride Transaction- Trans id, car at pickup id, start, end, car id, distance, status, customer card, discount id
+       --pckg_transact.update_ride_transaction(17, 15, to_timestamp((sysdate+1/24)), to_timestamp((sysdate+2/24)), 500, 0,'UPDATED',NULL, NULL);
+       
+    --COMPLETE RIDE TRANSACTION- Trans id, car at pickup id, start, end, car id, distance, status, customer card, discount id
+       --pckg_transact.update_ride_transaction(17, 15, to_timestamp((sysdate+1/24)), to_timestamp((sysdate+2/24)), 500, 26,'COMPLETED','1234-1234-1234-1234',NULL);
+    
+end;
+
+
+
+
+
+begin
+        ---TEST CASES FOR FALSE INPUTS
+    ----pckg_customer.insert_customer(786,'Beemla','Nayak','ganesh.nnortheastern.edu',3456987098,'ZXCVB542','LKJHGMN678','EMPLOYEE','02-JUL-1997');
+    ----pckg_customer.insert_customer(7861,'Beemla','Nayak','ganesh.n@northeastern.edu',3456887098,'ZXCVB542','LKJHGMN678','EMPLOYEE','02-JUL-1997');
+    
+    --pckg_car.insert_car(1052, 'SEDAN', 4, 16, 'CITY', 'HONDA','QQR D78', 15800);
 end;
