@@ -40,38 +40,20 @@ However, only for _demo_ purpose used static values in package/procedure calls
 > **If Executing For `First` Time:**
 
     Step1: Run the DDL script 'DDL\bootstrap' which will create All Objects
-
-    Step2: Compile both the package 'utils' and its body 'utils_body' from 'DML\Packages\utils\' respectively
-
-    Step3: Compile all other remaining packages from 'DML\Packages\' which includes
-           Package Specifications, Body holding Functions and Procedures for DML
-           
-    Step4: Run the view script from 'SQL\Views\' which create all the views and reports
-    
-    Step5: Run the Users script from 'SQL\Users\' which creates the Users and Grant them access accordingly
-    
-    Step6: Run the Trigger script from 'SQL\Triggers\' used for Audit Purpose.
-    
-    Step7: Uncomment individual package calls and excecute one by one from the DML script 'DML\sample_DML' to perform sample DML operations
+  
+    Step2: Run the Users script from 'SQL\Users\' which creates the Users and Grant them access accordingly
+        
+    Step3: Uncomment individual package calls and excecute one by one from the DML script 'DML\sample_DML' to perform sample DML operations
 
 > **If Executing For `Second` Time:**
 
     Step1: Run the DDL script at 'DDL\resetdb' which will Drop Old Objects
     
     Step2: Run the DDL script 'DDL\bootstrap' which will create All Objects
-
-    Step3: Compile both the package 'utils' and its body 'utils_body' from 'DML\Packages\utils\' respectively
-
-    Step4: Compile all other remaining packages from 'DML\Packages\' which includes
-           Package Specifications, Body holding Functions and Procedures for DML
-           
-    Step5: Run the view script from 'SQL\Views\' which create all the views and reports
-    
-    Step6: Run the Users script from 'SQL\Users\' which creates the Users and Grant them access accordingly
-    
-    Step7: Run the Trigger script from 'SQL\Triggers\' used for Audit Purpose.
-
-    Step8: Uncomment individual package call and excecute one by one from the DML script 'DML\sample_DML' to perform sample DML operations
+  
+    Step3: Run the Users script from 'SQL\Users\' which creates the Users and Grant them access accordingly
+        
+    Step4: Uncomment individual package calls and excecute one by one from the DML script 'DML\sample_DML' to perform sample DML operations
     
 
 This provide you the reports available to Analyst, Support and Audit Team for analysis and reports which focuses on the problem statement given.
