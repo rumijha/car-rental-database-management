@@ -419,7 +419,7 @@ from car,
              when distance between 31 and 40 then '31-40 Miles'
              when distance between 41 and 50 then '41-50 Miles'
              when distance between 51 and 60 then '51-60 Miles'
-             when distance > 61 '61+ Miles'
+             when distance > 61 then '61+ Miles'
              when distance is null then 'IGNORE'
         END as distance, car_id,count(distance) as total 
         from ride_transaction group by distance, car_id
